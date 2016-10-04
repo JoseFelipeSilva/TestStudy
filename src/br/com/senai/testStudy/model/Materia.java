@@ -1,9 +1,9 @@
 package br.com.senai.testStudy.model;
 
 public class Materia {
-	Integer idMateria;
-	Disciplina disciplina;
-	String nomeMateria;
+	private Integer idMateria;
+	private Disciplina disciplina;
+	private String nomeMateria;
 
 	public Integer getIdMateria() {
 		return idMateria;

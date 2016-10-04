@@ -3,13 +3,13 @@ package br.com.senai.testStudy.model;
 import java.sql.Date;
 
 public class Historico {
-	Integer idHistorico;
-	Aluno aluno;
-	Prova prova;
-	Double notaProva;
-	Date dataProvaHistorico;
-	Double notaSimulado;
-	Date dataSimuladoHistorico;
+	private Integer idHistorico;
+	private Aluno aluno;
+	private Prova prova;
+	private Double notaProva;
+	private Date dataProvaHistorico;
+	private Double notaSimulado;
+	private Date dataSimuladoHistorico;
 
 	public Integer getIdHistorico() {
 		return idHistorico;

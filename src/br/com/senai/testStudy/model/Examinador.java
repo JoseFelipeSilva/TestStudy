@@ -1,7 +1,7 @@
 package br.com.senai.testStudy.model;
 
 public class Examinador extends Pessoa {
-	Integer idExaminador;
+	private Integer idExaminador;
 
 	public Integer getIdExaminador() {
 		return idExaminador;

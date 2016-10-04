@@ -7,7 +7,7 @@
 <title>bem vindo ADM</title>
 </head>
 <body>
-	<a href="formADM">Adicionar um ADM</a>
+	<a href="formADM">Adicionar um ADM</a> <br /><br />
 	<a href="listandoADM">listar ADM</a>
 </body>
 </html>

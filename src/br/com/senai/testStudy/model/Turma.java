@@ -1,9 +1,9 @@
 package br.com.senai.testStudy.model;
 
 public class Turma {
-	Integer idTurma;
-	EscolaCliente escolaTurma;
-	String nomeTurma;
+	private Integer idTurma;
+	private EscolaCliente escolaTurma;
+	private String nomeTurma;
 
 	public Integer getIdTurma() {
 		return idTurma;

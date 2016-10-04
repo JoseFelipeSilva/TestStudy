@@ -3,41 +3,14 @@ package br.com.senai.testStudy.model;
 import java.sql.Date;
 
 public class QuestaoProva {
-	Integer idQuestaoProva;
-	Integer usoQuestao; // Quantas vezes a questão já foi usada
-	Date ultimoUsoQuestao;
-	String visualizacaoQuestao; // Mostra se a questão está disponível para ser
+	private Integer idQuestaoProva;
+	private Integer usoQuestao; // Quantas vezes a questão já foi usada
+	private Date ultimoUsoQuestao;
+	private String visualizacaoQuestao; // Mostra se a questão está disponível para ser
 								// usada novamente
-	String corpoQuestao;
-	String tituloQuestao;
-	String tipoQuestao; // Se a questão é de alternativa ou dissertativa
-	Disciplina disciplina;
-	Materia materia;
-	String dificuldadeQuestao;
-
-	public Disciplina getDisciplina() {
-		return disciplina;
-	}
-
-	public void setDisciplina(Disciplina disciplina) {
-		this.disciplina = disciplina;
-	}
-
-	public Materia getMateria() {
-		return materia;
-	}
-
-	public void setMateria(Materia materia) {
-		this.materia = materia;
-	}
-
-	public String getDificuldadeQuestao() {
-		return dificuldadeQuestao;
-	}
-
-	public void setDificuldadeQuestao(String dificuldadeQuestao) {
-		this.dificuldadeQuestao = dificuldadeQuestao;
-	}
+	private String corpoQuestao;
+	private String tituloQuestao;
+	private String tipoQuestao; // Se a questão é de alternativa ou dissertativa
 
 	public Integer getIdQuestaoProva() {
 		return idQuestaoProva;

@@ -39,6 +39,25 @@
 	<a href="ListagemAluno">Lista de alunos</a>
 	
 	
+	<br /><br /><br />
+	<a href="newProva">Adicionar prova</a>
+	<br /><br />
+	<a href="ListagemProva">Lista de provas</a>
+	
+	
+	<br /><br /><br />
+	<a href="newProvaAgendada">Adicionar prova agendada</a>
+	<br /><br />
+	<a href="ListagemProvaAgendada">Lista de provas agendadas</a>
+	
+	
+	<br /><br /><br />
+	<a href="newHistorico">Adicionar historico</a>
+	<br /><br />
+	<a href="ListagemHistorico">Lista de historico</a>
+	
+	
+	
 	
 </body>
 </html>

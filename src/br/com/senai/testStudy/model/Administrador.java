@@ -1,7 +1,7 @@
 package br.com.senai.testStudy.model;
 
 public class Administrador extends Pessoa {
-	Integer idAdm;
+	private Integer idAdm;
 
 	public Integer getIdAdm() {
 		return idAdm;

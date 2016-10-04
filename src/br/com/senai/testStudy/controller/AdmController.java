@@ -14,20 +14,20 @@ import br.com.senai.testStudy.model.Administrador;
 @Controller
 public class AdmController {
 	private final AdministradorDAO ADMDAO;
-	
+
 	@Autowired
-	public AdmController(AdministradorDAO ADMDAO){
+	public AdmController(AdministradorDAO ADMDAO) {
 		this.ADMDAO = ADMDAO;
 	}
-	
+
 	@RequestMapping("formADM")
-	public String formAddADm(){
+	public String formAddADm() {
 		return "formCadAdm";
 	}
-	
+
 	@RequestMapping("adicionaAdm")
-	public String addADM(Administrador adm, MultipartFile arquivo){
-		if(!arquivo.isEmpty()){
+	public String addADM(Administrador adm, MultipartFile arquivo) {
+		if (!arquivo.isEmpty()) {
 			try {
 				adm.setFoto(arquivo.getBytes());
 			} catch (IOException e) {
@@ -35,27 +35,51 @@ public class AdmController {
 			}
 		}
 		ADMDAO.adicionar(adm);
-		return"sucesso";
+		return "sucesso";
 	}
+
 	@RequestMapping("listandoADM")
-	public String lista(Model model){
+	public String lista(Model model) {
 		model.addAttribute("listaADM", ADMDAO.listar());
 		return "listaADM";
 	}
+
 	@RequestMapping("alterandoadm")
-	public String alterando(Integer id, Model model){
+	public String alterando(Integer id, Model model) {
 		model.addAttribute("buscaId", ADMDAO.buscarID(id));
 		return "formAlterADM";
 	}
+
 	@RequestMapping("alteraADM")
-	public String alterar(Administrador adm){
+	public String alterar(Administrador adm) {
 		ADMDAO.alterar(adm);
 		return "sucesso";
 	}
+
 	@RequestMapping("removeadm")
-	public String remover(Administrador adm){
+	public String remover(Administrador adm) {
 		ADMDAO.remover(adm);
 		return "sucesso";
 	}
-	
+
+	@RequestMapping("alteraPhotoADM")
+	public String altPhotoPagaAdm(Model model, Administrador adm) {
+		model.addAttribute("adm", ADMDAO.buscarID(adm.getIdAdm()));
+		return "AlteraFotoAdministrador";
+	}
+
+	@RequestMapping("alterandoFotoDeAdm")
+	public String alterarFotoAdm(Model model, MultipartFile arquivo,
+			Administrador adm) {
+		if (!arquivo.isEmpty()) {
+			try {
+				adm.setFoto(arquivo.getBytes());
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		ADMDAO.alterarFoto(adm);
+		model.addAttribute("listaADM", ADMDAO.listar());
+		return "listaADM";
+	}
 }

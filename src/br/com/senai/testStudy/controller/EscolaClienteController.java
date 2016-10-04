@@ -40,9 +40,10 @@ public class EscolaClienteController {
 	}
 
 	@RequestMapping("removerEscola")
-	public String removerEscola(EscolaCliente escola) {
+	public String removerEscola(Model model, EscolaCliente escola) {
 		dao.remover(escola);
-		return "redirect:WebContent/WEB-INF/views/listaEscolaCliente.jsp";
+		model.addAttribute("listaSchools", dao.listar());
+		return "listaEscolaCliente";
 	}
 
 	@RequestMapping("atualizarEscola")
@@ -57,9 +58,9 @@ public class EscolaClienteController {
 		model.addAttribute("listaSchools", dao.listar());
 		return "listaEscolaCliente";
 	}
-	
+
 	@RequestMapping("backToListOfSchools")
-	public String voltarListaEscola(Model model){
+	public String voltarListaEscola(Model model) {
 		model.addAttribute("listaSchools", dao.listar());
 		return "listaEscolaCliente";
 	}

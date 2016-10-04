@@ -1,8 +1,8 @@
 package br.com.senai.testStudy.model;
 
 public class Professor extends Pessoa {
-	Integer idProfessor;
-	EscolaCliente escolaProfessor;
+	private Integer idProfessor;
+	private EscolaCliente escolaProfessor;
 
 	public Integer getIdProfessor() {
 		return idProfessor;

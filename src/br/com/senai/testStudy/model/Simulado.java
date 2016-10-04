@@ -1,11 +1,9 @@
 package br.com.senai.testStudy.model;
 
-import java.sql.Date;
-
 public class Simulado {
-	Integer idSimulado;
-	Aluno alunoSimulado;
-	String visualizacaoSimulado; // Se o simulado está visível para o público em
+	private Integer idSimulado;
+	private Aluno alunoSimulado;
+	private String visualizacaoSimulado; // Se o simulado está visível para o público em
 									// geral
 
 	public Integer getIdSimulado() {

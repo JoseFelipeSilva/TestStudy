@@ -1,12 +1,12 @@
 package br.com.senai.testStudy.model;
 
 public class EscolaCliente {
-	Integer idEmp;
-	String cnpjEmp;
-	String emailEmp;
-	String nomeEmp;
-	String telefoneEmp;
-	String nomeEmpresarialEmp; // CORRESPONDE A RAZÃO SOCIAL DA EMPRESA
+	private Integer idEmp;
+	private String cnpjEmp;
+	private String emailEmp;
+	private String nomeEmp;
+	private String telefoneEmp;
+	private String nomeEmpresarialEmp; // CORRESPONDE A RAZÃO SOCIAL DA EMPRESA
 
 	public Integer getIdEmp() {
 		return idEmp;

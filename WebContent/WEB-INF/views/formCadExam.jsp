@@ -5,6 +5,25 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Cadastro de examinador</title>
+<script type="text/javascript">
+window.onload=function(){
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
+	var yyyy = today.getFullYear();
+	 if(dd<10){
+	        dd='0'+dd
+	    } 
+	    if(mm<10){
+	        mm='0'+mm
+	    } 
+
+	today = yyyy+'-'+mm+'-'+dd;
+	document.getElementById("datefield").setAttribute("max", today);
+	}
+</script>
+
+
 </head>
 <body>
 	<form action="adicionaExam" enctype="multipart/form-data" method="post">
@@ -26,7 +45,7 @@
 			placeholder="Sem pontuação" required /><br />
 	</p>
 	<p>
-		<strong>Data de nascimento: </strong> <input type="date" name="nascimento"
+		<strong>Data de nascimento: </strong> <input id="datefield" min="1930-01-01" type="date" name="nascimento"
 			placeholder="Sem pontuação" required /><br />
 	</p>
 	<p>

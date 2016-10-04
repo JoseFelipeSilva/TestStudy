@@ -1,16 +1,15 @@
 package br.com.senai.testStudy.model;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
+import java.sql.Time;
 
 public class RealizacaoSimulado {
-	Integer idRealizacaoSimulado;
-	Simulado idSimulado;
-	Date dataRealizacao;
-	LocalDateTime horaInicio;
-	LocalDateTime horaTermino;
-	Date dataInicio;
-	Date dataTermino;
+	private Integer idRealizacaoSimulado;
+	private Simulado idSimulado;
+	private Time horaInicio;
+	private Time horaTermino;
+	private Date dataInicio;
+	private Date dataTermino;
 
 	public Integer getIdRealizacaoSimulado() {
 		return idRealizacaoSimulado;
@@ -28,27 +27,19 @@ public class RealizacaoSimulado {
 		this.idSimulado = idSimulado;
 	}
 
-	public Date getDataRealizacao() {
-		return dataRealizacao;
-	}
-
-	public void setDataRealizacao(Date dataRealizacao) {
-		this.dataRealizacao = dataRealizacao;
-	}
-
-	public LocalDateTime getHoraInicio() {
+	public Time getHoraInicio() {
 		return horaInicio;
 	}
 
-	public void setHoraInicio(LocalDateTime horaInicio) {
+	public void setHoraInicio(Time horaInicio) {
 		this.horaInicio = horaInicio;
 	}
 
-	public LocalDateTime getHoraTermino() {
+	public Time getHoraTermino() {
 		return horaTermino;
 	}
 
-	public void setHoraTermino(LocalDateTime horaTermino) {
+	public void setHoraTermino(Time horaTermino) {
 		this.horaTermino = horaTermino;
 	}
 

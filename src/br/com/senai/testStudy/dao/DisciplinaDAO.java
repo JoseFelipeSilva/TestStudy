@@ -18,7 +18,7 @@ import br.com.senai.testStudy.util.MetodosBasicos;
 
 @Repository
 public class DisciplinaDAO implements MetodosBasicos<Disciplina> {
-	private static Connection CONEXAO;
+	private final Connection CONEXAO;
 	private static final String ADICIONAR = "INSERT INTO disciplina (nome_disciplina) VALUES (?)";
 	private static final String ALTERAR = "UPDATE disciplina SET nome_disciplina=? WHERE id_disciplina=?";
 	private static final String LISTAR = "SELECT * FROM disciplina";
