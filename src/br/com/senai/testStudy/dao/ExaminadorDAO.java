@@ -18,7 +18,7 @@ import br.com.senai.testStudy.util.MetodosBasicos;
 
 @Repository
 public class ExaminadorDAO implements MetodosBasicos<Examinador> {
-	private static Connection CONEXAO;
+	private final Connection CONEXAO;
 	private static final String ADD = "INSERT INTO examinador"
 			+ " (sexo_examinador, email_examinador, foto_examinador,"
 			+ " nascimento_examinador, cpf_examinador, rg_examinador,"
@@ -29,24 +29,26 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 			+ "nascimento_examinador=?, cpf_examinador=?, rg_examinador=?, nome_examinador=?"
 			+ " WHERE id_examinador=?";
 	private static final String EXCLUIR = "DELETE FROM examinador WHERE id_examinador = ?";
-	
+	private static final String ALT_FOTO = "UPDATE examinador SET foto_examinador = ? WHERE id_examinador = ?";
+
 	@Autowired
-	 public ExaminadorDAO(DataSource dataSource) {
+	public ExaminadorDAO(DataSource dataSource) {
 		try {
 			this.CONEXAO = dataSource.getConnection();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 	}
+
 	@Override
 	public void adicionar(Examinador examinador) {
 		try {
 			PreparedStatement stmt = CONEXAO.prepareStatement(ADD);
-			
+
 			stmt.setString(1, examinador.getSexo());
 			stmt.setString(2, examinador.getEmail());
 			stmt.setBlob(3, (examinador.getFoto() == null) ? null
-					: new ByteArrayInputStream(examinador.getFoto()));	
+					: new ByteArrayInputStream(examinador.getFoto()));
 			stmt.setDate(4, examinador.getNascimento());
 			stmt.setString(5, examinador.getCpf());
 			stmt.setString(6, examinador.getRg());
@@ -57,7 +59,7 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
-		
+
 	}
 
 	@Override
@@ -70,9 +72,7 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
-		
-		
-		
+
 	}
 
 	@Override
@@ -91,7 +91,7 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
-		
+
 	}
 
 	@Override
@@ -111,14 +111,15 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 				exam.setNascimento(rs.getDate("nascimento_examinador"));
 				exam.setNome(rs.getString("nome_examinador"));
 				exam.setSenha(rs.getString("senha_examinador"));
+
 				examinadores.add(exam);
 			}
 			stmt.close();
 			rs.close();
+			return examinadores;
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
-		return examinadores;
 	}
 
 	@Override
@@ -141,11 +142,26 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 				exam.setSenha(rs.getString("senha_examinador"));
 			}
 			stmt.close();
-			rs.close();
+			return exam;
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
-		return exam;
 	}
-	
+
+	// ALTERA FOTO
+	public void alterarFoto(Examinador exam) {
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(ALT_FOTO);
+
+			stmt.setBlob(1, (exam.getFoto() == null) ? null
+					: new ByteArrayInputStream(exam.getFoto()));
+			stmt.setInt(2, exam.getIdExaminador());
+
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException erro) {
+			throw new RuntimeException(erro);
+		}
+	}
+
 }

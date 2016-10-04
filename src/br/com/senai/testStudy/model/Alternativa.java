@@ -1,10 +1,10 @@
 package br.com.senai.testStudy.model;
 
 public class Alternativa {
-	Integer idAlternativa;
-	QuestaoProva questaoAlternativa;
-	String corpoAlternativa;
-	String certa;
+	private Integer idAlternativa;
+	private QuestaoProva questaoAlternativa;
+	private String corpoAlternativa;
+	private String certa;
 
 	public Integer getIdAlternativa() {
 		return idAlternativa;

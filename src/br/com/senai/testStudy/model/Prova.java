@@ -1,5 +1,7 @@
 package br.com.senai.testStudy.model;
 
+import java.sql.Date;
+
 public class Prova {
 
 	private Integer idProva;
@@ -7,6 +9,7 @@ public class Prova {
 	private String dificuldade;
 	private Integer nQuestoes;
 	private String nomeProva;
+	private Date dataProva;
 
 	public String getNomeProva() {
 		return nomeProva;
@@ -46,6 +49,14 @@ public class Prova {
 
 	public void setnQuestoes(Integer nQuestoes) {
 		this.nQuestoes = nQuestoes;
+	}
+
+	public Date getDataProva() {
+		return dataProva;
+	}
+
+	public void setDataProva(Date dataProva) {
+		this.dataProva = dataProva;
 	}
 
 }

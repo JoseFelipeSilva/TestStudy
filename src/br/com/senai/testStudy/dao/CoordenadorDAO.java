@@ -25,7 +25,7 @@ public class CoordenadorDAO implements MetodosBasicos<Coordenador> {
 			+ " cpf_coord = ?, nascimento_coord = ?, id_escola = ? WHERE id_coord = ?";
 	private final static String LISTAR = "SELECT c.id_coord, c.nome_coord, c.email_coord, c.senha_coord, c.foto_coord, c.sexo_coord, "
 			+ "c.nascimento_coord, c.cpf_coord, c.rg_coord, e.nome_emp, e.id_escola_cliente FROM coordenador AS c, escola_cliente AS e "
-			+ "WHERE id_escola_cliente = id_escola";	
+			+ "WHERE id_escola_cliente = id_escola ORDER BY c.id_coord ASC";	
 	private final static String BUSCAR = "SELECT c.id_coord, c.nome_coord, c.email_coord, c.senha_coord, c.foto_coord, c.sexo_coord, "
 			+ "c.nascimento_coord, c.cpf_coord, c.rg_coord, e.nome_emp, e.id_escola_cliente FROM coordenador AS c, escola_cliente AS e "
 			+ "WHERE id_escola_cliente = id_escola AND id_coord = ?";
@@ -121,8 +121,8 @@ public class CoordenadorDAO implements MetodosBasicos<Coordenador> {
 
 			while (rs.next()) {
 				EscolaCliente escola = new EscolaCliente();
-				escola.setIdEmp(rs.getInt("id_escola_cliente"));
 				escola.setNomeEmp(rs.getString("nome_emp"));
+				escola.setIdEmp(rs.getInt("id_escola_cliente"));
 
 				Coordenador c = new Coordenador();
 				c.setIdCoord(rs.getInt("id_coord"));

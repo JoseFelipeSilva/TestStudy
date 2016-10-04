@@ -2,7 +2,6 @@ package br.com.senai.testStudy.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -16,11 +15,10 @@ import br.com.senai.testStudy.util.MetodosBasicos;
 
 @Repository
 public class AlternativaDAO implements MetodosBasicos<Alternativa> {
-	Connection CONEXAO;
-	
+	private final Connection CONEXAO;
 	private static final String ADICIONAR = "INSERT INTO alternativa (id_questao, corpo_alternativa, certa_prova) VALUES"
 			+ "((SELECT max(id_questao) FROM questao_prova), ?, ?)";
-	
+
 	@Autowired
 	public AlternativaDAO(DataSource dataSource) {
 		try {
@@ -28,7 +26,7 @@ public class AlternativaDAO implements MetodosBasicos<Alternativa> {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
-		
+
 	}
 
 	@Override
@@ -42,20 +40,19 @@ public class AlternativaDAO implements MetodosBasicos<Alternativa> {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
-		
+
 	}
-	
 
 	@Override
 	public void remover(Alternativa object) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void alterar(Alternativa object) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

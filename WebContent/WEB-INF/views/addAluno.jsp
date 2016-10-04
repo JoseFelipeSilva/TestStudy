@@ -6,6 +6,25 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
+
+<script type="text/javascript">
+window.onload=function(){
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
+	var yyyy = today.getFullYear();
+	 if(dd<10){
+	        dd='0'+dd
+	    } 
+	    if(mm<10){
+	        mm='0'+mm
+	    } 
+
+	today = yyyy+'-'+mm+'-'+dd;
+	document.getElementById("datefield").setAttribute("max", today);
+	}
+</script>
+
 </head>
 <body>
 	<br /><br />
@@ -31,14 +50,14 @@
 		<br /><br />
 		
 		<strong>Data de nascimento:</strong><br />
-		<input type="date" name="nascAluno" required/>
+		<input id="datefield" type="date" name="nascAluno" min="1990-01-01" required/>
 		<br /><br />
 		
 		<strong>Foto de perfil:</strong><br />
 		<input type="file" name="arquivo" accept="image/jpeg" required/>
 		<br /><br />
 				
-		<strong>Escola atrelada:</strong>
+		<strong>Turma do aluno:</strong>
 		<select name="idTurma">
 			<option value=0>--SELECIONE UMA TURMA--</option>
 		<c:forEach items="${LTurmas}" var="t">

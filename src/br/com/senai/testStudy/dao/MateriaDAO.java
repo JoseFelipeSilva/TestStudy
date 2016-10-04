@@ -18,7 +18,7 @@ import br.com.senai.testStudy.util.MetodosBasicos;
 
 @Repository
 public class MateriaDAO implements MetodosBasicos<Materia> {
-	private static Connection CONEXAO;
+	private final Connection CONEXAO;
 	private static final String ADICIONAR = "INSERT INTO materia (id_disciplina, nome_materia) VALUES"
 			+ "(?, ?) ";
 	private static final String LISTAR_DISC = "SELECT * FROM disciplina";

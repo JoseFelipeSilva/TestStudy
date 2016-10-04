@@ -1,9 +1,9 @@
 package br.com.senai.testStudy.model;
 
 public class QuestaoSimulado {
-	Integer idQuestaoSimulado;
-	String corpoQuestaoSimulado;
-	String tituloQuestaoSimulado;
+	private Integer idQuestaoSimulado;
+	private String corpoQuestaoSimulado;
+	private String tituloQuestaoSimulado;
 
 	public Integer getIdQuestaoSimulado() {
 		return idQuestaoSimulado;

@@ -24,7 +24,7 @@ public class ProfessorDAO implements MetodosBasicos<Professor> {
 	private final static String EXCLUIR = "DELETE FROM professor WHERE id_professor = ?";
 	private final static String LISTAR = "SELECT p.id_professor, p.id_escola_cliente, p.sexo_professor, p.email_professor, p.foto_professor, p.rg_professor, "
 			+ "p.cpf_professor,	p.nascimento_professor, p.nome_professor, p.senha_professor, e.nome_emp, "
-			+ "e.id_escola_cliente FROM professor AS p, escola_cliente AS e WHERE e.id_escola_cliente = p.id_escola_cliente";
+			+ "e.id_escola_cliente FROM professor AS p, escola_cliente AS e WHERE e.id_escola_cliente = p.id_escola_cliente ORDER BY p.id_professor ASC";
 	private final static String ALTERAR = "UPDATE professor SET nome_professor = ?, email_professor = ?, sexo_professor = ?, senha_professor = ?, "
 			+ "rg_professor = ?, cpf_professor = ?, nascimento_professor = ?, id_escola_cliente = ? WHERE id_professor = ?";
 	private final static String BUSCAR = "SELECT p.id_professor, p.id_escola_cliente, p.sexo_professor, p.email_professor, p.foto_professor, p.rg_professor, "
@@ -117,8 +117,8 @@ public class ProfessorDAO implements MetodosBasicos<Professor> {
 
 			while (rs.next()) {
 				EscolaCliente escola = new EscolaCliente();
-				escola.setIdEmp(rs.getInt("id_escola_cliente"));
 				escola.setNomeEmp(rs.getString("nome_emp"));
+				escola.setIdEmp(rs.getInt("id_escola_cliente"));
 
 				Professor p = new Professor();
 				p.setIdProfessor(rs.getInt("id_professor"));

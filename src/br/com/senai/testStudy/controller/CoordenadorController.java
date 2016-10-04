@@ -52,9 +52,10 @@ public class CoordenadorController {
 	}
 
 	@RequestMapping("removerCoordenador")
-	public String removerCoordenador(Coordenador coord) {
+	public String removerCoordenador(Model model, Coordenador coord) {
 		dao.remover(coord);
-		return "sucessoPage";
+		model.addAttribute("LCoord", dao.listar());
+		return "listaCoordenador";
 	}
 
 	@RequestMapping("alterarCoordenador")

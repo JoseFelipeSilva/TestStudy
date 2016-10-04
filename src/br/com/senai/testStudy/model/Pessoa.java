@@ -5,15 +5,14 @@ import java.sql.Date;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
 abstract class Pessoa {
-
-	String nome;
-	String sexo;
-	String email;
-	String cpf;
-	String rg;
-	Date nascimento;
-	String senha;
-	byte[] foto;
+	private String nome;
+	private String sexo;
+	private String email;
+	private String cpf;
+	private String rg;
+	private Date nascimento;
+	private String senha;
+	private byte[] foto;
 
 	public String getNome() {
 		return nome;
@@ -78,7 +77,8 @@ abstract class Pessoa {
 	public void setFoto(byte[] foto) {
 		this.foto = foto;
 	}
-	
+
+	// METODO DE RETORNA A FOTO EM CODIGO
 	public String getFoto64() {
 		String encodedImage = Base64.encode(foto);
 		return encodedImage;

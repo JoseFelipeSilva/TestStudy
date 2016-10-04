@@ -1,8 +1,8 @@
 package br.com.senai.testStudy.model;
 
 public class Disciplina {
-	Integer idDisciplina;
-	String nomeDisciplina;
+	private Integer idDisciplina;
+	private String nomeDisciplina;
 
 	public Integer getIdDisciplina() {
 		return idDisciplina;

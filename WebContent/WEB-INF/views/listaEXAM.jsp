@@ -11,6 +11,7 @@
 	<table>
 		<tr>
 			<th>ID</th>
+			<th>FOTO</th>
 			<th>Nome</th>
 			<th>E-mail</th>
 			<th></th>
@@ -19,10 +20,11 @@
 			<c:forEach items="${listaEXAM}" var="exam">
 				<tr>
 					<td>${exam.idExaminador }</td>
+					<td><a href="alteraPhotoExaminador?idExaminador=${exam.idExaminador}"><img src="data:image/jpeg;base64,${exam.foto64}" id="fotoPerfil" height="100px" width="140px"></a></td>
 					<td>${exam.nome }</td>
 					<td>${exam.email }</td>
-					<td><a href="removeexam?idExaminador=${exam.idExaminador }"/>Remover </td>
-					<td><a href="alterandoexam?idExaminador=${exam.idExaminador }"/>alterar </td>
+					<td><a href="removeexam?idExaminador=${exam.idExaminador}">Remover</a></td>
+					<td><a href="alterandoexam?idExaminador=${exam.idExaminador}">alterar</a></td>
 				</tr>			
 			</c:forEach>
 		</tr>
