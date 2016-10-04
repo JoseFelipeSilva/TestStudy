@@ -2,11 +2,11 @@ package br.com.senai.testStudy.model;
 
 public class Prova {
 
-	Integer idProva;
-	Professor professorprova;
-	String dificuldade;
-	String nQuestoes;
-	String nomeProva;
+	private Integer idProva;
+	private Professor professor;
+	private String dificuldade;
+	private Integer nQuestoes;
+	private String nomeProva;
 
 	public String getNomeProva() {
 		return nomeProva;
@@ -24,12 +24,12 @@ public class Prova {
 		this.idProva = idProva;
 	}
 
-	public Professor getProfessorprova() {
-		return professorprova;
+	public Professor getProfessor() {
+		return professor;
 	}
 
-	public void setProfessorprova(Professor professorprova) {
-		this.professorprova = professorprova;
+	public void setProfessor(Professor professor) {
+		this.professor = professor;
 	}
 
 	public String getDificuldade() {
@@ -40,11 +40,11 @@ public class Prova {
 		this.dificuldade = dificuldade;
 	}
 
-	public String getnQuestoes() {
+	public Integer getnQuestoes() {
 		return nQuestoes;
 	}
 
-	public void setnQuestoes(String nQuestoes) {
+	public void setnQuestoes(Integer nQuestoes) {
 		this.nQuestoes = nQuestoes;
 	}
 

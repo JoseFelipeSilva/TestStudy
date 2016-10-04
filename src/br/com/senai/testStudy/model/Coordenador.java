@@ -1,8 +1,16 @@
 package br.com.senai.testStudy.model;
 
 public class Coordenador extends Pessoa {
-	Integer idCoord;
-	EscolaCliente escolaCliente;
+	private Integer idCoord;
+	private EscolaCliente escola;
+
+	public EscolaCliente getEscola() {
+		return escola;
+	}
+
+	public void setEscola(EscolaCliente escola) {
+		this.escola = escola;
+	}
 
 	public Integer getIdCoord() {
 		return idCoord;
@@ -10,14 +18,6 @@ public class Coordenador extends Pessoa {
 
 	public void setIdCoord(Integer idCoord) {
 		this.idCoord = idCoord;
-	}
-
-	public EscolaCliente getEscolaCliente() {
-		return escolaCliente;
-	}
-
-	public void setEscolaCliente(EscolaCliente escolaCliente) {
-		this.escolaCliente = escolaCliente;
 	}
 
 }

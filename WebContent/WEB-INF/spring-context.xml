@@ -27,6 +27,7 @@
 		<property name="url" value="jdbc:mysql://localhost/teststudy"></property>
 		<property name="username" value="root"></property>
 		<property name="password" value="root"></property>
+		<property name="MaxTotal" value="15"></property>
 	</bean>
 	
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
