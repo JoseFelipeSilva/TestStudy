@@ -29,6 +29,9 @@ public class MateriaDAO implements MetodosBasicos<Materia> {
 			+ " disciplina.id_disciplina AND materia.id_materia = ?";
 	private static final String ALTERAR = "UPDATE materia SET id_disciplina = ?,"
 			+ " nome_materia = ? where id_materia = ?";
+	private static final String LISTAR_DISC_MAT_WS = "SELECT  materia.*, disciplina.*"
+			+ " FROM materia, disciplina WHERE materia.id_disciplina = "
+			+ "disciplina.id_disciplina AND materia.id_disciplina";
 
 	@Autowired
 	public MateriaDAO(DataSource dataSource) {
@@ -38,6 +41,32 @@ public class MateriaDAO implements MetodosBasicos<Materia> {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	/*public List<Materia> disciplinaMateria(){
+		List<Materia> disciplinas = new ArrayList<Materia>();
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(LISTAR_DISC_MAT_WS);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				Disciplina d = new Disciplina();
+				d.setIdDisciplina(rs.getInt("id_disciplina"));
+				d.setNomeDisciplina(rs.getString("nome_disciplina"));
+				
+				Materia m = new Materia();
+				m.setIdMateria(rs.getInt("id_materia"));
+				m.setNomeMateria(rs.getString("nome_materia"));
+				m.setDisciplina(d);
+				
+				disciplinas.add(m);
+				
+			}
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return disciplinas;
+	}*/
 
 	public List<Disciplina> listarDisc() {
 		List<Disciplina> disciplinas = new ArrayList<Disciplina>();

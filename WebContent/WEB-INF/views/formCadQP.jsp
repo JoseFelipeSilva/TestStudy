@@ -9,6 +9,46 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://code.google.com/p/jquery-cascade"></script>
 
+	<script type="text/javascript">	
+		
+		$(document).ready(function () {
+			$.getJSON('http://localhost:8080/TestStudy/service/materia/lista', function (data) {
+				var items = [];
+				var options = '<option value="">escolha uma disciplina</option>';	
+				
+				$.each(data, function (key, val) {
+					options += '<option value="' + val.disciplina.idDisciplina + '">' + val.disciplina.nomeDisciplina + '</option>';
+				});					
+				$("#idDisciplina").html(options);				
+				
+				$("#idDisciplina").change(function () {				
+			
+					var options_cidades = '';
+					var str = "";					
+					
+					$("#idDisciplina option:selected").each(function () {
+						str += $(this).text();
+						
+					});
+					
+					$.each(data, function (key, val) {
+						if(val.nome == str) {							
+							$.each(val.materia, function (key_city, val_city) {
+								options_cidades += '<option value="' + val_city + '">' + val_city + '</option>';
+							});							
+						}
+					});
+
+					$("#idMateria").html(options_cidades);
+					
+				}).change();		
+			
+			});
+		
+		});
+		
+	</script>		
+	
 </head>
 <body>
 	<form action="adicionaQP">
@@ -16,13 +56,10 @@
 		
 		<strong>Corpo: </strong> <input type="text" name="corpoQuestao" required /><br />
 		
-		<strong>Disciplina</strong><select name="idDisciplina" id="idDisciplina">
-						<c:forEach items="${disc}" var="disc">
-							<option value="${disc.idDisciplina}">${disc.nomeDisciplina}</option>
-						</c:forEach>
+		<strong>Disciplina</strong><select name="nomeDisciplina" id="idDisciplina">
 					</select></br>
 	
-		<select name="idMateria" disabled></select>
+		<select name="nomeMateria" id="idMateria" ></select></br>
 					
 		<strong>Dificuldade: </strong> <input type="text" name="dificuldadeQuestao" required /><br />
 		

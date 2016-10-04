@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import br.com.senai.testStudy.model.Disciplina;
+import br.com.senai.testStudy.model.DisciplinaMateriaWS;
 import br.com.senai.testStudy.util.MetodosBasicos;
 
 @Repository
@@ -24,6 +25,7 @@ public class DisciplinaDAO implements MetodosBasicos<Disciplina> {
 	private static final String BUSCAR = "SELECT * FROM disciplina WHERE id_disciplina=?";
 	private static final String EXCLUIR = "DELETE FROM disciplina WHERE id_disciplina=?";
 	
+	
 	@Autowired
 	public DisciplinaDAO(DataSource dataSource) {
 		try {
@@ -32,6 +34,22 @@ public class DisciplinaDAO implements MetodosBasicos<Disciplina> {
 			throw new RuntimeException(e);
 		}
 	}
+	
+/*	public List<DisciplinaMateriaWS> disciplinaMateria(){
+		List<DisciplinaMateriaWS> disciplinas = new ArrayList<DisciplinaMateriaWS>();
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(LISTAR_DISC_MAT_WS);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				Disciplina d = new Disciplina();
+				d.setIdDisciplina(rs.getInt("id_disciplina"));
+				d.setNomeDisciplina(rs.getString("nome_disciplina"));
+				
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}*/
 
 	@Override
 	public void adicionar(Disciplina disciplina) {
