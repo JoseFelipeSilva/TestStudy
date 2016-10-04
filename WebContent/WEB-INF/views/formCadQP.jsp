@@ -9,46 +9,44 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://code.google.com/p/jquery-cascade"></script>
 
-	<script type="text/javascript">	
-		
-		$(document).ready(function () {
-			$.getJSON('http://localhost:8080/TestStudy/service/materia/lista', function (data) {
-				var items = [];
-				var options = '<option value="">escolha uma disciplina</option>';	
-				
-				$.each(data, function (key, val) {
-					options += '<option value="' + val.disciplina.idDisciplina + '">' + val.disciplina.nomeDisciplina + '</option>';
-				});					
-				$("#idDisciplina").html(options);				
-				
-				$("#idDisciplina").change(function () {				
-			
-					var options_cidades = '';
-					var str = "";					
-					
-					$("#idDisciplina option:selected").each(function () {
-						str += $(this).text();
-						
-					});
-					
-					$.each(data, function (key, val) {
-						if(val.nome == str) {							
-							$.each(val.materia, function (key_city, val_city) {
-								options_cidades += '<option value="' + val_city + '">' + val_city + '</option>';
-							});							
-						}
-					});
+<script type="text/javascript">
+	function consultaDisciplinas() {
+		// Recupera o id da lista de selects de Assunto
+		var idDisciplina = document
+				.getElementById("idDisciplina");
+		// Recupera o nome do valor selecionado na lista de Disciplina
+		var selectedValue = idDisciplina.options[idDisciplina.selectedIndex].text;
+		// Insere a disciplina selecionada em outro form para enviá-la e compará-la no banco de dados
+		var aux = document.getElementById("aux");
+		aux.value = selectedValue;
+		document.getElementById("botao").click();
 
-					$("#idMateria").html(options_cidades);
-					
-				}).change();		
-			
-			});
-		
-		});
-		
-	</script>		
+	}
 	
+	function verifica() {
+
+		// Recupera o id da lista de selects de Assunto
+		var idMateria = document.getElementById("idMateria");
+		// Recupera o nome do valor selecionado na lista de Assunto
+		var valorSelecionadoAssunto = idMateria.options[idMateria.selectedIndex].text;
+		// Recupera o id da lista de selects de Disciplina
+		var idDisciplina = document
+				.getElementById("selectBoxDisciplina");
+		// Recupera o nome do valor selecionado na lista de Disciplina
+		var valorSelecionadoDisciplina = idDisciplina.options[idDisciplina.selectedIndex].text;
+		// Compara e faz a validação se a Disciplina não foi selecionada
+		if (valorSelecionadoDisciplina == "Selecione uma Disciplina") {
+			alert("Disciplina inválida");
+			return false;
+		}
+		// Compara e faz a validação se o Assunto não foi selecionado
+		if (valorSelecionadoAssunto == "Selecione um Assunto") {
+			alert("Assunto inválido");
+			return false;
+		}
+		return false;
+	}
+</script>
 </head>
 <body>
 	<form action="adicionaQP">
@@ -56,10 +54,24 @@
 		
 		<strong>Corpo: </strong> <input type="text" name="corpoQuestao" required /><br />
 		
-		<strong>Disciplina</strong><select name="nomeDisciplina" id="idDisciplina">
+		<strong>Disciplina</strong><select name="nomeDisciplina" id="idDisciplina" onchange="consultaDisciplinas();">
+					<c:forEach items="${disc}" var="disc">
+							<option value="${disc.idDisciplina}">${disc.nomeDisciplina}</option>
+						</c:forEach>
 					</select></br>
+					
+		<form action="consultarAssuntos">
+		<input id="aux" type="text" name="nome" hidden="true"> <input
+			id="botao" type="submit" hidden="true">
+	</form>
 	
-		<select name="nomeMateria" id="idMateria" ></select></br>
+	<label>Assunto</label> <select id="idMateria">
+				<option value="${assunto.id}">Selecione um Assunto</option>
+				<c:forEach items="${assuntos}" var="assunto">
+					<option value="${assunto.id}">${assunto.nome}</option>
+				</c:forEach>
+			</select>
+	
 					
 		<strong>Dificuldade: </strong> <input type="text" name="dificuldadeQuestao" required /><br />
 		
