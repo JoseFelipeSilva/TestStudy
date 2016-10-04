@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.senai.testStudy.dao.DisciplinaDAO;
 import br.com.senai.testStudy.dao.MateriaDAO;
 import br.com.senai.testStudy.model.Disciplina;
+import br.com.senai.testStudy.model.DisciplinaMateriaWS;
 import br.com.senai.testStudy.model.Materia;
 
 @RestController
@@ -18,13 +20,13 @@ import br.com.senai.testStudy.model.Materia;
 public class WebServiceMateria {
 	
 	@Autowired
-	MateriaDAO dao;
+	DisciplinaDAO dao;
 	
-	/*@RequestMapping(value = "/lista", method = RequestMethod.GET, headers = "accept=application/json;charset=utf-8")
-	public List<Materia> lista(Model model) {
-		model.addAttribute("disc",dao.listarDisc());
+	@RequestMapping(value = "/lista", method = RequestMethod.GET, headers = "accept=application/json;charset=utf-8")
+	public List<DisciplinaMateriaWS> lista(Model model) {
+		model.addAttribute("disc",dao.disciplinaMateria());
 		return dao.disciplinaMateria();
 
-	}*/
+	}
 
 }
