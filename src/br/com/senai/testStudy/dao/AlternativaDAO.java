@@ -34,7 +34,7 @@ public class AlternativaDAO implements MetodosBasicos<Alternativa> {
 		try {
 			PreparedStatement stmt = CONEXAO.prepareStatement(ADICIONAR);
 			stmt.setString(1, a.getCorpoAlternativa());
-			stmt.setString(2, "c");
+			stmt.setString(2, a.getCerta());
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e) {

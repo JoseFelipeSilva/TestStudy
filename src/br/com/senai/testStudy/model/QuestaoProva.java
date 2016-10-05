@@ -6,11 +6,30 @@ public class QuestaoProva {
 	private Integer idQuestaoProva;
 	private Integer usoQuestao; // Quantas vezes a questão já foi usada
 	private Date ultimoUsoQuestao;
-	private String visualizacaoQuestao; // Mostra se a questão está disponível para ser
-								// usada novamente
+	private String visualizacaoQuestao; // Mostra se a questão está disponível
+										// para ser
+	// usada novamente
 	private String corpoQuestao;
 	private String tituloQuestao;
 	private String tipoQuestao; // Se a questão é de alternativa ou dissertativa
+	private Materia materia;
+	private String dificuldade;
+
+	public Materia getMateria() {
+		return materia;
+	}
+
+	public void setMateria(Materia materia) {
+		this.materia = materia;
+	}
+
+	public String getDificuldade() {
+		return dificuldade;
+	}
+
+	public void setDificuldade(String dificuldade) {
+		this.dificuldade = dificuldade;
+	}
 
 	public Integer getIdQuestaoProva() {
 		return idQuestaoProva;

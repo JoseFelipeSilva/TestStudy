@@ -29,9 +29,9 @@ public class MateriaDAO implements MetodosBasicos<Materia> {
 			+ " disciplina.id_disciplina AND materia.id_materia = ?";
 	private static final String ALTERAR = "UPDATE materia SET id_disciplina = ?,"
 			+ " nome_materia = ? where id_materia = ?";
-	private static final String LISTAR_DISC_MAT_WS = "SELECT  materia.*, disciplina.*"
-			+ " FROM materia, disciplina WHERE materia.id_disciplina = "
-			+ "disciplina.id_disciplina AND materia.id_disciplina";
+	private static final String LISTAR_MATERIA = "SELECT materia.*, disciplina.*"
+			+ " FROM materia,disciplina WHERE materia.id_disciplina = disciplina.id_disciplina AND materia.id_disciplina = ?";
+	
 
 	@Autowired
 	public MateriaDAO(DataSource dataSource) {
@@ -42,10 +42,11 @@ public class MateriaDAO implements MetodosBasicos<Materia> {
 		}
 	}
 	
-	/*public List<Materia> disciplinaMateria(){
-		List<Materia> disciplinas = new ArrayList<Materia>();
+	public List<Materia> listarMateria(Disciplina disc ){
+		List<Materia> materias	= new ArrayList<Materia>();
 		try {
-			PreparedStatement stmt = CONEXAO.prepareStatement(LISTAR_DISC_MAT_WS);
+			PreparedStatement stmt = CONEXAO.prepareStatement(LISTAR_MATERIA);
+			stmt.setInt(1, disc.getIdDisciplina());
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				Disciplina d = new Disciplina();
@@ -56,17 +57,16 @@ public class MateriaDAO implements MetodosBasicos<Materia> {
 				m.setIdMateria(rs.getInt("id_materia"));
 				m.setNomeMateria(rs.getString("nome_materia"));
 				m.setDisciplina(d);
-				
-				disciplinas.add(m);
-				
+				materias.add(m);
 			}
 			stmt.close();
 			rs.close();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
-		return disciplinas;
-	}*/
+		
+		return materias;
+	}
 
 	public List<Disciplina> listarDisc() {
 		List<Disciplina> disciplinas = new ArrayList<Disciplina>();
@@ -153,7 +153,7 @@ public class MateriaDAO implements MetodosBasicos<Materia> {
 		Disciplina d = null;
 		Materia m = null;
 		try {
-			PreparedStatement stmt = CONEXAO.prepareStatement(BUSCAR);
+			PreparedStatement stmt = CONEXAO.prepareStatement(LISTAR_MATERIA);
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {

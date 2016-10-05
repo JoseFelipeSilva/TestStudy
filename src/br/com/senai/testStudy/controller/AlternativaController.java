@@ -20,7 +20,20 @@ public class AlternativaController {
 	
 	@RequestMapping("cadastrarAlternativa")
 	public String cadastrarAlter( Alternativa a, QuestaoProva qp){
-		DAO.adicionar(a);
+		System.out.println(a.getCorpoAlternativa());
+		String[] lista;
+		lista = a.getCorpoAlternativa().split(",");
+		for (int i = 0; i < lista.length; i++) {
+			if (i == 0) {
+				a.setCerta("C");
+				a.setCorpoAlternativa(lista[i]);
+				DAO.adicionar(a);
+			}if(i != 0){
+				a.setCerta("E");
+				a.setCorpoAlternativa(lista[i]);
+				DAO.adicionar(a);
+			}
+		}
 		return "sucesso";
 	}
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import br.com.senai.testStudy.dao.QuestaoProvaDAO;
 import br.com.senai.testStudy.model.Disciplina;
+import br.com.senai.testStudy.model.Materia;
 import br.com.senai.testStudy.model.QuestaoProva;
 
 @Controller
@@ -35,7 +36,9 @@ public class QuestaoProvaController {
 	 */
 
 	@RequestMapping("adicionaQP")
-	public String adicionaQP(QuestaoProva qp) {
+	public String adicionaQP(QuestaoProva qp, Materia m, Disciplina d) {
+		m.setDisciplina(d);
+		qp.setMateria(m);
 		DAO.adicionar(qp);
 		if (qp.getTipoQuestao().equals("obj")) {
 

@@ -19,11 +19,13 @@ public class MateriaController {
 
 	}
 	
+	
 	@RequestMapping("formMateria")
 	public String formAdd(Model model){
 		model.addAttribute("disc", dao.listarDisc());
 		return "formCadMat";
 	}
+	
 	@RequestMapping("cadMateria")
 	public String cadMat(Materia m, Disciplina d){
 		m.setDisciplina(d);
@@ -46,5 +48,12 @@ public class MateriaController {
 		m.setDisciplina(d);
 		dao.alterar(m);
 		return "sucesso";
+	}
+	@RequestMapping("consultarMateria")
+	public String consultar(Model modelo, Disciplina d){
+		modelo.addAttribute("materia", dao.listarMateria(d));
+		modelo.addAttribute("disc", dao.listarDisc());
+		modelo.addAttribute("disciplinaSelecionada", dao.buscarID(d.getIdDisciplina()));
+		return "formCadQP";
 	}
 }

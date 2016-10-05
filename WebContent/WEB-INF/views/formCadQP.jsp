@@ -15,7 +15,7 @@
 		var idDisciplina = document
 				.getElementById("idDisciplina");
 		// Recupera o nome do valor selecionado na lista de Disciplina
-		var selectedValue = idDisciplina.options[idDisciplina.selectedIndex].text;
+		var selectedValue = idDisciplina.options[idDisciplina.selectedIndex].value;
 		// Insere a disciplina selecionada em outro form para enviá-la e compará-la no banco de dados
 		var aux = document.getElementById("aux");
 		aux.value = selectedValue;
@@ -28,10 +28,10 @@
 		// Recupera o id da lista de selects de Assunto
 		var idMateria = document.getElementById("idMateria");
 		// Recupera o nome do valor selecionado na lista de Assunto
-		var valorSelecionadoAssunto = idMateria.options[idMateria.selectedIndex].text;
+		var valorSelecionadoAssunto = idMateria.options[idMateria.selectedIndex].value;
 		// Recupera o id da lista de selects de Disciplina
 		var idDisciplina = document
-				.getElementById("selectBoxDisciplina");
+				.getElementById("idDisciplina");
 		// Recupera o nome do valor selecionado na lista de Disciplina
 		var valorSelecionadoDisciplina = idDisciplina.options[idDisciplina.selectedIndex].text;
 		// Compara e faz a validação se a Disciplina não foi selecionada
@@ -54,26 +54,29 @@
 		
 		<strong>Corpo: </strong> <input type="text" name="corpoQuestao" required /><br />
 		
-		<strong>Disciplina</strong><select name="nomeDisciplina" id="idDisciplina" onchange="consultaDisciplinas();">
+		<strong>Disciplina</strong><select name="idDisciplina" id="idDisciplina" onchange="consultaDisciplinas();">
+							<option value="0">Selecione uma disciplina</option>
 					<c:forEach items="${disc}" var="disc">
-							<option value="${disc.idDisciplina}">${disc.nomeDisciplina}</option>
+					<c:if test="${disc.idDisciplina == disciplinaSelecionada.disciplina.idDisciplina}">
+						<option selected="selected" value="${disc.idDisciplina}">${disc.nomeDisciplina}</option>
+					</c:if>
+					<c:if test="${disc.idDisciplina != disciplinaSelecionada.disciplina.idDisciplina}">
+						<option value="${disc.idDisciplina}">${disc.nomeDisciplina}</option>
+					</c:if>
 						</c:forEach>
 					</select></br>
 					
-		<form action="consultarAssuntos">
-		<input id="aux" type="text" name="nome" hidden="true"> <input
-			id="botao" type="submit" hidden="true">
-	</form>
+		
 	
-	<label>Assunto</label> <select id="idMateria">
-				<option value="${assunto.id}">Selecione um Assunto</option>
-				<c:forEach items="${assuntos}" var="assunto">
-					<option value="${assunto.id}">${assunto.nome}</option>
+	<label>Materia</label> <select id="idMateria" name="idMateria" >
+				<option value="0">Selecione um Assunto</option>
+				<c:forEach items="${materia}" var="m">
+					<option value="${m.idMateria}">${m.nomeMateria}</option>
 				</c:forEach>
 			</select>
 	
 					
-		<strong>Dificuldade: </strong> <input type="text" name="dificuldadeQuestao" required /><br />
+		<strong>Dificuldade: </strong> <input type="text" name="dificuldade" required /><br />
 		
 		<strong>Tipo da questão: </strong><br /> <input type="radio" name="tipoQuestao"
 			value="obj" required />Objetiva<br /> <input type="radio"
@@ -82,6 +85,10 @@
 			
 			<input type="submit" value="enviar">
 	
+	</form>
+	<form action="consultarMateria">
+		<input id="aux" type="text" name="idDisciplina" hidden="true"> <input
+			id="botao" type="submit" hidden="true">
 	</form>
 </body>
 </html>
