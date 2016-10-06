@@ -50,9 +50,6 @@
 </head>
 <body>
 	<form action="adicionaQP">
-		<strong>Titulo: </strong> <input type="text" name="tituloQuestao" required /><br />
-		
-		<strong>Corpo: </strong> <input type="text" name="corpoQuestao" required /><br />
 		
 		<strong>Disciplina</strong><select name="idDisciplina" id="idDisciplina" onchange="consultaDisciplinas();">
 							<option value="0">Selecione uma disciplina</option>
@@ -68,15 +65,35 @@
 					
 		
 	
-	<label>Materia</label> <select id="idMateria" name="idMateria" >
+	<strong>Materia</strong> <select id="idMateria" name="idMateria" >
 				<option value="0">Selecione um Assunto</option>
 				<c:forEach items="${materia}" var="m">
 					<option value="${m.idMateria}">${m.nomeMateria}</option>
 				</c:forEach>
-			</select>
+			</select></br>
+		<strong>Titulo: </strong> <input type="text" name="tituloQuestao" required /><br />
+		
+		<strong>Corpo: </strong> <input type="text" name="corpoQuestao" required /><br />
+		
+		
 	
+		
 					
-		<strong>Dificuldade: </strong> <input type="text" name="dificuldade" required /><br />
+		<strong>Dificuldade da questão: </strong><br />
+		 <input type="radio" name="dificuldade" value="1" required />1
+		 <input type="radio" name="dificuldade" value="2" required />2
+		 <input type="radio" name="dificuldade" value="3" required />3
+		 <input type="radio" name="dificuldade" value="4" required />4
+		 <input type="radio" name="dificuldade" value="5" required />5
+		 <input type="radio" name="dificuldade" value="6" required />6
+		 <input type="radio" name="dificuldade" value="7" required />7
+		 <input type="radio" name="dificuldade" value="8" required />8
+		 <input type="radio" name="dificuldade" value="9" required />9
+		 <input type="radio" name="dificuldade" value="10" required />10<br/>
+			
+			<strong>Deseja tornar esta questão pública?</br></strong>(a questão publica será enviada para um examinador)<br /> <input type="radio" name="disponibilidadeQuestao"
+			value="disp" required />Sim<br /> <input type="radio"
+			name="disponibilidadeQuestao" value="priv" required />Não<br />
 		
 		<strong>Tipo da questão: </strong><br /> <input type="radio" name="tipoQuestao"
 			value="obj" required />Objetiva<br /> <input type="radio"

@@ -13,7 +13,10 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import br.com.senai.testStudy.model.Disciplina;
 import br.com.senai.testStudy.model.Examinador;
+import br.com.senai.testStudy.model.Materia;
+import br.com.senai.testStudy.model.QuestaoProva;
 import br.com.senai.testStudy.util.MetodosBasicos;
 
 @Repository
@@ -30,6 +33,15 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 			+ " WHERE id_examinador=?";
 	private static final String EXCLUIR = "DELETE FROM examinador WHERE id_examinador = ?";
 	private static final String ALT_FOTO = "UPDATE examinador SET foto_examinador = ? WHERE id_examinador = ?";
+	private static final String LISTAR_QUESTOES_PENDENTES = "SELECT questao_prova.*, disciplina.*, materia.* FROM "
+			+ "questao_prova, materia, disciplina WHERE questao_prova.disponibilidade_questao"
+			+ " = 'disp' AND status_questao = 'enviado' AND questao_prova.disciplina_questao = "
+			+ "disciplina.id_disciplina AND questao_prova.materia_questao = materia.id_materia;";
+	// COMANDO RESPONSÁVEL POR BUSCAR UMA QUESTÃO PARA TER O STATUS ALTERADO
+	private static final String BUSCAR_QUESTAO_ID = "SELECT questao_prova.*, disciplina.*, materia.*"
+			+ " FROM questao_prova, materia, disciplina WHERE questao_prova.disponibilidade_questao"
+			+ " = 'disp' AND status_questao = 'enviado' AND questao_prova.disciplina_questao ="
+			+ " disciplina.id_disciplina AND questao_prova.materia_questao = materia.id_materia AND questao_prova.id_questao = ?";
 
 	@Autowired
 	public ExaminadorDAO(DataSource dataSource) {
@@ -38,6 +50,83 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public QuestaoProva buscarQuestao(Integer id){
+		QuestaoProva qp = null;
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(BUSCAR_QUESTAO_ID);
+			stmt.setInt(1, id);
+			ResultSet rs = stmt.executeQuery();
+			if(rs.next()){
+				Disciplina d = new Disciplina();
+				d.setIdDisciplina(rs.getInt("id_disciplina"));
+				d.setNomeDisciplina(rs.getString("nome_disciplina"));
+				
+				Materia m = new Materia();
+				m.setIdMateria(rs.getInt("id_materia"));
+				m.setNomeMateria(rs.getString("nome_materia"));
+				m.setDisciplina(d);
+				
+				QuestaoProva q = new QuestaoProva();
+				q.setCorpoQuestao(rs.getString("corpo_questao"));
+				q.setDificuldade(rs.getInt("dificuldade"));
+				q.setDisponibilidadeQuestao(rs.getString("disponibilidade_questao"));
+				q.setIdQuestaoProva(rs.getInt("id_questao"));
+				q.setMateria(m);
+				q.setStatusQuestao(rs.getString("status_questao"));
+				q.setTipoQuestao(rs.getString("tipo_questao"));
+				q.setTituloQuestao(rs.getString("titulo_questao"));
+				q.setUltimoUsoQuestao(rs.getDate("ultimo_uso_questao"));
+				q.setUsoQuestao(rs.getInt("uso_questao"));
+				q.setVisualizacaoQuestao(rs.getString("visualizacao_questao"));
+				
+			}
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return qp;
+	}
+	
+	public List<QuestaoProva> listarPendencias(){
+		List<QuestaoProva> questoes = new ArrayList<QuestaoProva>();
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(LISTAR_QUESTOES_PENDENTES);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				Disciplina d = new Disciplina();
+				d.setIdDisciplina(rs.getInt("id_disciplina"));
+				d.setNomeDisciplina(rs.getString("nome_disciplina"));
+				
+				Materia m = new Materia();
+				m.setIdMateria(rs.getInt("id_materia"));
+				m.setNomeMateria(rs.getString("nome_materia"));
+				m.setDisciplina(d);
+				
+				QuestaoProva q = new QuestaoProva();
+				q.setCorpoQuestao(rs.getString("corpo_questao"));
+				q.setDificuldade(rs.getInt("dificuldade"));
+				q.setDisponibilidadeQuestao(rs.getString("disponibilidade_questao"));
+				q.setIdQuestaoProva(rs.getInt("id_questao"));
+				q.setMateria(m);
+				q.setStatusQuestao(rs.getString("status_questao"));
+				q.setTipoQuestao(rs.getString("tipo_questao"));
+				q.setTituloQuestao(rs.getString("titulo_questao"));
+				q.setUltimoUsoQuestao(rs.getDate("ultimo_uso_questao"));
+				q.setUsoQuestao(rs.getInt("uso_questao"));
+				q.setVisualizacaoQuestao(rs.getString("visualizacao_questao"));
+				questoes.add(q);
+				
+			}
+			
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return questoes;
 	}
 
 	@Override

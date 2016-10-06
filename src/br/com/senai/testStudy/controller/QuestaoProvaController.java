@@ -39,6 +39,11 @@ public class QuestaoProvaController {
 	public String adicionaQP(QuestaoProva qp, Materia m, Disciplina d) {
 		m.setDisciplina(d);
 		qp.setMateria(m);
+		if(qp.getDisponibilidadeQuestao().equals("disp")){
+			qp.setStatusQuestao("enviado");
+		} else if(qp.getDisponibilidadeQuestao().equals("priv")){
+			qp.setStatusQuestao("privada");
+		}
 		DAO.adicionar(qp);
 		if (qp.getTipoQuestao().equals("obj")) {
 

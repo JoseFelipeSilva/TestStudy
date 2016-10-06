@@ -8,6 +8,7 @@
 </head>
 <body>
 	<a href="formExam">Adicionar examinador</a> <br /><br />
-	<a href="listandoExam">Listar Examinadores</a>
+	<a href="listandoExam">Listar Examinadores</a><br/><br/>
+	<a href="pendenciasExam">Visualizar pendências</a>
 </body>
 </html>

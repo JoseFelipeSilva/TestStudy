@@ -2,6 +2,8 @@ package br.com.senai.testStudy.controller;
 
 import java.io.IOException;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import br.com.senai.testStudy.dao.ExaminadorDAO;
 import br.com.senai.testStudy.model.Examinador;
+import br.com.senai.testStudy.model.QuestaoProva;
 
 @Controller
 public class ExamController {
@@ -81,5 +84,23 @@ public class ExamController {
 		dao.alterarFoto(exam);
 		model.addAttribute("listaEXAM", dao.listar());
 		return "listaEXAM";
+	}
+	
+	// MÉTODO RESPONSÁVEL POR LISTAR TODAS AS QUESTÕES A SEREM ANALISADAS PELO EXAMINADOR
+	@RequestMapping("pendenciasExam")
+	public String pendenciaExam(HttpSession sessao, Examinador exam, Model modelo){
+		exam.setNome("Daniel");
+		exam.setCpf("45336757861");
+		exam.setEmail("daniel@daniel");
+		sessao.setAttribute("examLogado", exam);
+		modelo.addAttribute("pendencias", dao.listarPendencias());
+		return"listaQuestoesPendentesEXAM"; 
+	}
+	// MÉTODO RESPONSÁVEL POR RETORNAR A PÁGINA DE ALTERAÇÃO DE STATUS DA QUESTÃO
+	@RequestMapping("alterarStatus")
+	public String alteraStatus(QuestaoProva qp){
+		dao.buscarQuestao(qp.getIdQuestaoProva());
+		return "formAlterStatusQP";
+		// TODO fazer o formulário de alteração do status !!!!
 	}
 }

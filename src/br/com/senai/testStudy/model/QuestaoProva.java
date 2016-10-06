@@ -13,7 +13,27 @@ public class QuestaoProva {
 	private String tituloQuestao;
 	private String tipoQuestao; // Se a questão é de alternativa ou dissertativa
 	private Materia materia;
-	private String dificuldade;
+	private Integer dificuldade;
+	private String disponibilidadeQuestao; // Se a questão estará disponível para o público em geral
+	private String statusQuestao; // diz respeito ao status da questão em relação ao examinador (pendente, vista, aceita, rejeitada...)
+	
+	
+
+	public String getDisponibilidadeQuestao() {
+		return disponibilidadeQuestao;
+	}
+
+	public void setDisponibilidadeQuestao(String disponibilidadeQuestao) {
+		this.disponibilidadeQuestao = disponibilidadeQuestao;
+	}
+
+	public String getStatusQuestao() {
+		return statusQuestao;
+	}
+
+	public void setStatusQuestao(String statusQuestao) {
+		this.statusQuestao = statusQuestao;
+	}
 
 	public Materia getMateria() {
 		return materia;
@@ -23,11 +43,11 @@ public class QuestaoProva {
 		this.materia = materia;
 	}
 
-	public String getDificuldade() {
+	public Integer getDificuldade() {
 		return dificuldade;
 	}
 
-	public void setDificuldade(String dificuldade) {
+	public void setDificuldade(Integer dificuldade) {
 		this.dificuldade = dificuldade;
 	}
 

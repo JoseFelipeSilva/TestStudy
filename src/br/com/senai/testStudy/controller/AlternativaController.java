@@ -20,7 +20,6 @@ public class AlternativaController {
 	
 	@RequestMapping("cadastrarAlternativa")
 	public String cadastrarAlter( Alternativa a, QuestaoProva qp){
-		System.out.println(a.getCorpoAlternativa());
 		String[] lista;
 		lista = a.getCorpoAlternativa().split(",");
 		for (int i = 0; i < lista.length; i++) {
