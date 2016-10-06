@@ -10,7 +10,7 @@ import br.com.senai.testStudy.model.Disciplina;
 
 @Controller
 public class DisciplinaController {
-	private static DisciplinaDAO dao;
+	private final DisciplinaDAO dao;
 	@Autowired
 	public DisciplinaController(DisciplinaDAO dao) {
 		this.dao = dao;

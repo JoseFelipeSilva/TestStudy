@@ -12,7 +12,7 @@ import br.com.senai.testStudy.model.QuestaoProva;
 
 @Controller
 public class QuestaoProvaController {
-	private static QuestaoProvaDAO DAO;
+	private final QuestaoProvaDAO DAO;
 
 	@Autowired
 	public QuestaoProvaController(QuestaoProvaDAO DAO) {
