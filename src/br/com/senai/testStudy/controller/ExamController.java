@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
+import br.com.senai.testStudy.dao.DisciplinaDAO;
 import br.com.senai.testStudy.dao.ExaminadorDAO;
 import br.com.senai.testStudy.model.Examinador;
 import br.com.senai.testStudy.model.QuestaoProva;
@@ -17,14 +18,19 @@ import br.com.senai.testStudy.model.QuestaoProva;
 @Controller
 public class ExamController {
 	private final ExaminadorDAO dao;
+	private DisciplinaDAO discdao;
 
 	@Autowired
-	public ExamController(ExaminadorDAO dao) {
+	public ExamController(ExaminadorDAO dao, DisciplinaDAO discdao) {
 		this.dao = dao;
+		this.discdao = discdao;
 	}
 
 	@RequestMapping("formExam")
-	public String formAdd() {
+	public String formAdd(Model model) {
+		
+		// TODO criar o método listarPadrao e usar no lugar do listar
+		model.addAttribute("disciplina", discdao.listar());
 		return "formCadExam";
 	}
 
@@ -98,9 +104,9 @@ public class ExamController {
 	}
 	// MÉTODO RESPONSÁVEL POR RETORNAR A PÁGINA DE ALTERAÇÃO DE STATUS DA QUESTÃO
 	@RequestMapping("alterarStatus")
-	public String alteraStatus(QuestaoProva qp){
-		dao.buscarQuestao(qp.getIdQuestaoProva());
+	public String alteraStatus(QuestaoProva qp, Model modelo){
+		modelo.addAttribute("infoQuestao",dao.buscarQuestao(qp.getIdQuestaoProva()));
+		modelo.addAttribute("infoAlternativa",dao.buscarAlter(qp.getIdQuestaoProva()));
 		return "formAlterStatusQP";
-		// TODO fazer o formulário de alteração do status !!!!
 	}
 }

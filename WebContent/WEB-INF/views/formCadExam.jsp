@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -60,6 +61,12 @@ window.onload=function(){
 			value="Masc" required />Masculino<br /> <input type="radio"
 			name="sexo" value="Fem" required />Feminino<br />
 	</p>
+	
+		<strong>Disciplina</strong><select name="idDisciplina" >
+						<c:forEach items="${disciplina}" var="disc">
+							<option value="${disc.idDisciplina}">${disc.nomeDisciplina}</option>
+						</c:forEach>
+					</select>
 	<input type="submit" value="enviar">
 	</form>
 </body>

@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import br.com.senai.testStudy.model.Alternativa;
 import br.com.senai.testStudy.model.Disciplina;
 import br.com.senai.testStudy.model.Examinador;
 import br.com.senai.testStudy.model.Materia;
@@ -42,6 +43,11 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 			+ " FROM questao_prova, materia, disciplina WHERE questao_prova.disponibilidade_questao"
 			+ " = 'disp' AND status_questao = 'enviado' AND questao_prova.disciplina_questao ="
 			+ " disciplina.id_disciplina AND questao_prova.materia_questao = materia.id_materia AND questao_prova.id_questao = ?";
+	// COMANDO RESPONSÁVEL POR BUSCAR AS ALTERNATIVAS DA QUESTÃO PARA TER O STATUS ALTERADO
+	private static final String BUSCAR_ALT_ID = "select * from alternativa, questao_prova, disciplina"
+			+ ", materia WHERE questao_prova.id_questao = alternativa.id_questao"
+			+ " AND alternativa.id_questao = ? AND questao_prova.disciplina_questao = "
+			+ "disciplina.id_disciplina AND materia.id_materia = questao_prova.materia_questao";
 
 	@Autowired
 	public ExaminadorDAO(DataSource dataSource) {
@@ -50,6 +56,53 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public List<Alternativa> buscarAlter(Integer id){
+		List<Alternativa> alternativas = new ArrayList<Alternativa>();
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(BUSCAR_ALT_ID);
+			stmt.setInt(1, id);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				Disciplina d = new Disciplina();
+				d.setIdDisciplina(rs.getInt("id_disciplina"));
+				d.setNomeDisciplina(rs.getString("nome_disciplina"));
+				
+				Materia m = new Materia();
+				m.setIdMateria(rs.getInt("id_materia"));
+				m.setNomeMateria(rs.getString("nome_materia"));
+				m.setDisciplina(d);
+				
+				
+				QuestaoProva qp = new QuestaoProva();
+				qp.setCorpoQuestao(rs.getString("corpo_questao"));
+				qp.setDificuldade(rs.getInt("dificuldade"));
+				qp.setDisponibilidadeQuestao(rs.getString("disponibilidade_questao"));
+				qp.setIdQuestaoProva(rs.getInt("id_questao"));
+				qp.setMateria(m);
+				qp.setStatusQuestao(rs.getString("status_questao"));
+				qp.setTipoQuestao(rs.getString("tipo_questao"));
+				qp.setTituloQuestao(rs.getString("titulo_questao"));
+				qp.setUltimoUsoQuestao(rs.getDate("ultimo_uso_questao"));
+				qp.setUsoQuestao(rs.getInt("uso_questao"));
+				qp.setVisualizacaoQuestao(rs.getString("visualizacao_questao"));
+				
+				Alternativa a = new Alternativa();
+				a.setCerta(rs.getString("certa_prova"));
+				a.setCorpoAlternativa(rs.getString("corpo_alternativa"));
+				a.setIdAlternativa(rs.getInt("id_alternativa"));
+				a.setQuestaoAlternativa(qp);
+				
+				alternativas.add(a);
+			}
+			
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return alternativas;
 	}
 	
 	public QuestaoProva buscarQuestao(Integer id){
@@ -68,18 +121,18 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 				m.setNomeMateria(rs.getString("nome_materia"));
 				m.setDisciplina(d);
 				
-				QuestaoProva q = new QuestaoProva();
-				q.setCorpoQuestao(rs.getString("corpo_questao"));
-				q.setDificuldade(rs.getInt("dificuldade"));
-				q.setDisponibilidadeQuestao(rs.getString("disponibilidade_questao"));
-				q.setIdQuestaoProva(rs.getInt("id_questao"));
-				q.setMateria(m);
-				q.setStatusQuestao(rs.getString("status_questao"));
-				q.setTipoQuestao(rs.getString("tipo_questao"));
-				q.setTituloQuestao(rs.getString("titulo_questao"));
-				q.setUltimoUsoQuestao(rs.getDate("ultimo_uso_questao"));
-				q.setUsoQuestao(rs.getInt("uso_questao"));
-				q.setVisualizacaoQuestao(rs.getString("visualizacao_questao"));
+				qp = new QuestaoProva();
+				qp.setCorpoQuestao(rs.getString("corpo_questao"));
+				qp.setDificuldade(rs.getInt("dificuldade"));
+				qp.setDisponibilidadeQuestao(rs.getString("disponibilidade_questao"));
+				qp.setIdQuestaoProva(rs.getInt("id_questao"));
+				qp.setMateria(m);
+				qp.setStatusQuestao(rs.getString("status_questao"));
+				qp.setTipoQuestao(rs.getString("tipo_questao"));
+				qp.setTituloQuestao(rs.getString("titulo_questao"));
+				qp.setUltimoUsoQuestao(rs.getDate("ultimo_uso_questao"));
+				qp.setUsoQuestao(rs.getInt("uso_questao"));
+				qp.setVisualizacaoQuestao(rs.getString("visualizacao_questao"));
 				
 			}
 			stmt.close();

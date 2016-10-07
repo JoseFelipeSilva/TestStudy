@@ -20,7 +20,7 @@ import br.com.senai.testStudy.util.MetodosBasicos;
 @Repository
 public class DisciplinaDAO implements MetodosBasicos<Disciplina> {
 	private final Connection CONEXAO;
-	private static final String ADICIONAR = "INSERT INTO disciplina (nome_disciplina) VALUES (?)";
+	private static final String ADICIONAR = "INSERT INTO disciplina(nome_disciplina, padrao_disciplina, escola_disciplina)VALUES(?,?,?)";
 	private static final String ALTERAR = "UPDATE disciplina SET nome_disciplina=? WHERE id_disciplina=?";
 	private static final String LISTAR = "SELECT * FROM disciplina";
 	private static final String BUSCAR = "SELECT * FROM disciplina WHERE id_disciplina=?";
@@ -74,6 +74,8 @@ public class DisciplinaDAO implements MetodosBasicos<Disciplina> {
 		try {
 			PreparedStatement stmt = CONEXAO.prepareStatement(ADICIONAR);
 			stmt.setString(1, disciplina.getNomeDisciplina());
+			stmt.setString(2, disciplina.getPadraoDisciplina());
+			stmt.setInt(3, disciplina.getEscola().getIdEmp());
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e) {
