@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import br.com.senai.testStudy.model.Alternativa;
 import br.com.senai.testStudy.model.Disciplina;
+import br.com.senai.testStudy.model.EscolaCliente;
 import br.com.senai.testStudy.model.Examinador;
 import br.com.senai.testStudy.model.Materia;
 import br.com.senai.testStudy.model.QuestaoProva;
@@ -26,7 +27,7 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 	private static final String ADD = "INSERT INTO examinador"
 			+ " (sexo_examinador, email_examinador, foto_examinador,"
 			+ " nascimento_examinador, cpf_examinador, rg_examinador,"
-			+ " nome_examinador, senha_examinador) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+			+ " nome_examinador, senha_examinador, disciplina_examinador) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String LISTAR = "SELECT * FROM examinador";
 	private static final String BUSCAR = "SELECT * FROM examinador WHERE id_examinador =?";
 	private static final String ALTERAR = "UPDATE examinador SET sexo_examinador=?, email_examinador=?,"
@@ -48,6 +49,7 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 			+ ", materia WHERE questao_prova.id_questao = alternativa.id_questao"
 			+ " AND alternativa.id_questao = ? AND questao_prova.disciplina_questao = "
 			+ "disciplina.id_disciplina AND materia.id_materia = questao_prova.materia_questao";
+	private static final String LISTAR_DISC_PADRAO = "SELECT * FROM disciplina where padrao_disciplina = 'padrao'";
 
 	@Autowired
 	public ExaminadorDAO(DataSource dataSource) {
@@ -56,6 +58,30 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public List<Disciplina> discPadrao(){
+		List<Disciplina> disciplinas = new ArrayList<Disciplina>();
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(LISTAR_DISC_PADRAO);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				EscolaCliente escola = new EscolaCliente();
+				escola.setIdEmp(1);
+				Disciplina d = new Disciplina();
+				d.setEscola(escola);
+				d.setIdDisciplina(rs.getInt("id_disciplina"));
+				d.setNomeDisciplina(rs.getString("nome_disciplina"));
+				d.setPadraoDisciplina(rs.getString("padrao_disciplina"));
+				disciplinas.add(d);
+			}
+			
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return disciplinas;
 	}
 	
 	public List<Alternativa> buscarAlter(Integer id){
@@ -196,6 +222,7 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 			stmt.setString(6, examinador.getRg());
 			stmt.setString(7, examinador.getNome());
 			stmt.setString(8, examinador.getSenha());
+			stmt.setInt(9, examinador.getDisciplinaExaminador().getIdDisciplina());
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e) {

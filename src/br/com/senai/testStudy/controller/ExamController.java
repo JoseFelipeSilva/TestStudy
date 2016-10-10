@@ -12,30 +12,31 @@ import org.springframework.web.multipart.MultipartFile;
 
 import br.com.senai.testStudy.dao.DisciplinaDAO;
 import br.com.senai.testStudy.dao.ExaminadorDAO;
+import br.com.senai.testStudy.model.Disciplina;
 import br.com.senai.testStudy.model.Examinador;
 import br.com.senai.testStudy.model.QuestaoProva;
 
 @Controller
 public class ExamController {
 	private final ExaminadorDAO dao;
-	private DisciplinaDAO discdao;
+
 
 	@Autowired
-	public ExamController(ExaminadorDAO dao, DisciplinaDAO discdao) {
+	public ExamController(ExaminadorDAO dao) {
 		this.dao = dao;
-		this.discdao = discdao;
 	}
 
 	@RequestMapping("formExam")
 	public String formAdd(Model model) {
 		
-		// TODO criar o método listarPadrao e usar no lugar do listar
-		model.addAttribute("disciplina", discdao.listar());
+		// MÉTODO RESPONSÁVEL POR LISTAR AS DISCIPLINAS PADRÃO PARA SEREM ASSOCIADAS AO EXAMINADOR
+		model.addAttribute("disciplina", dao.discPadrao());
 		return "formCadExam";
 	}
 
 	@RequestMapping("adicionaExam")
-	public String addExam(Examinador exam, MultipartFile arquivo) {
+	public String addExam(Examinador exam, MultipartFile arquivo, Disciplina d) {
+		exam.setDisciplinaExaminador(d);
 		if (!arquivo.isEmpty()) {
 			try {
 				exam.setFoto(arquivo.getBytes());
