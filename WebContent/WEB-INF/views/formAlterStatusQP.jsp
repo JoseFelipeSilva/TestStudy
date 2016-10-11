@@ -8,6 +8,8 @@
 <title>Alterar status da questão</title>
 </head>
 <body>
+<form action="alteraStatus">
+	<input type="hidden" name="idQuestaoProva" value="${infoQuestao.idQuestaoProva }">
 	<strong>Título da questão</strong><br/>
 	<p>${infoQuestao.tituloQuestao }</p><br/> <br/>
 	<strong>Corpo da questão</strong>
@@ -17,5 +19,15 @@
 	<c:forEach items = "${infoAlternativa }" var="infoAlternativa">
 	<p>${infoAlternativa.corpoAlternativa } || ${infoAlternativa.certa }</p>
 	</c:forEach>
+	<strong>Status</strong>
+	<select name="statusQuestao">
+		<option>--Altere o status da questão--</option>
+		<option>Aceita</option>
+		<option>Negada</option>
+		<option>Em aberto</option>
+	</select><br/><br/>
+	
+	<input type="submit" value="enviar">
+	</form>
 </body>
 </html>

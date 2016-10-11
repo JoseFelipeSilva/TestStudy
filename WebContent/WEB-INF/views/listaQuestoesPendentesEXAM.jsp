@@ -33,7 +33,7 @@
 			<td>${p.dificuldade}</td>
 			<td>${p.materia.disciplina.idDisciplina}</td>
 			<td>${p.materia.idMateria}</td>
-			<td><a href="alterarStatus?idQuestaoProva=${p.idQuestaoProva}">Alterar status</a></td>
+			<td><a href="alterandoStatus?idQuestaoProva=${p.idQuestaoProva}">Alterar status</a></td>
 		</tr>
 		</c:forEach>
 	</table>

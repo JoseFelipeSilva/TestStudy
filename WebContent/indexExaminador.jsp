@@ -9,6 +9,7 @@
 <body>
 	<a href="formExam">Adicionar examinador</a> <br /><br />
 	<a href="listandoExam">Listar Examinadores</a><br/><br/>
-	<a href="pendenciasExam">Visualizar pendências</a>
+	<a href="pendenciasExam">Visualizar pendências novas</a><br/><br/>
+	<a href="pendenciasAntigasExam">Visualizar pendências antigas</a>
 </body>
 </html>

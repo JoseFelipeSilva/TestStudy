@@ -96,18 +96,32 @@ public class ExamController {
 	// MÉTODO RESPONSÁVEL POR LISTAR TODAS AS QUESTÕES A SEREM ANALISADAS PELO EXAMINADOR
 	@RequestMapping("pendenciasExam")
 	public String pendenciaExam(HttpSession sessao, Examinador exam, Model modelo){
+		Disciplina d = new Disciplina();
+		d.setIdDisciplina(1);
+		d.setNomeDisciplina("Matemática");
+		
+		exam.setIdExaminador(2);
 		exam.setNome("Daniel");
 		exam.setCpf("45336757861");
 		exam.setEmail("daniel@daniel");
+		exam.setDisciplinaExaminador(d);
 		sessao.setAttribute("examLogado", exam);
-		modelo.addAttribute("pendencias", dao.listarPendencias());
+		modelo.addAttribute("pendencias", dao.listarPendencias(exam.getDisciplinaExaminador().getIdDisciplina()));
 		return"listaQuestoesPendentesEXAM"; 
 	}
 	// MÉTODO RESPONSÁVEL POR RETORNAR A PÁGINA DE ALTERAÇÃO DE STATUS DA QUESTÃO
-	@RequestMapping("alterarStatus")
+	@RequestMapping("alterandoStatus")
 	public String alteraStatus(QuestaoProva qp, Model modelo){
 		modelo.addAttribute("infoQuestao",dao.buscarQuestao(qp.getIdQuestaoProva()));
 		modelo.addAttribute("infoAlternativa",dao.buscarAlter(qp.getIdQuestaoProva()));
 		return "formAlterStatusQP";
+	}
+	
+	// MÉTODO RESPONSÁVEL POR ALTERAR O STATUS DA QUESTÃO
+	@RequestMapping("alteraStatus")
+	public String alterStatus(QuestaoProva qp, HttpSession s, Examinador e){
+		e = (Examinador) s.getAttribute("examLogado");
+		dao.alteraStatus(qp, e.getIdExaminador());
+		return "sucessoPage";
 	}
 }

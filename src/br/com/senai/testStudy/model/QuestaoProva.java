@@ -14,10 +14,20 @@ public class QuestaoProva {
 	private String tipoQuestao; // Se a questão é de alternativa ou dissertativa
 	private Materia materia;
 	private Integer dificuldade;
-	private String disponibilidadeQuestao; // Se a questão estará disponível para o público em geral
-	private String statusQuestao; // diz respeito ao status da questão em relação ao examinador (pendente, vista, aceita, rejeitada...)
-	
-	
+	private String disponibilidadeQuestao; // Se a questão estará disponível
+											// para o público em geral
+	private String statusQuestao; // diz respeito ao status da questão em
+									// relação ao examinador (pendente, vista,
+									// aceita, rejeitada...)
+	private Professor autorQuestao;
+
+	public Professor getAutorQuestao() {
+		return autorQuestao;
+	}
+
+	public void setAutorQuestao(Professor autorQuestao) {
+		this.autorQuestao = autorQuestao;
+	}
 
 	public String getDisponibilidadeQuestao() {
 		return disponibilidadeQuestao;

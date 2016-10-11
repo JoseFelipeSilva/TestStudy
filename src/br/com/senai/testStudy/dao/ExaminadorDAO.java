@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +36,10 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 			+ " WHERE id_examinador=?";
 	private static final String EXCLUIR = "DELETE FROM examinador WHERE id_examinador = ?";
 	private static final String ALT_FOTO = "UPDATE examinador SET foto_examinador = ? WHERE id_examinador = ?";
-	private static final String LISTAR_QUESTOES_PENDENTES = "SELECT questao_prova.*, disciplina.*, materia.* FROM "
-			+ "questao_prova, materia, disciplina WHERE questao_prova.disponibilidade_questao"
-			+ " = 'disp' AND status_questao = 'enviado' AND questao_prova.disciplina_questao = "
-			+ "disciplina.id_disciplina AND questao_prova.materia_questao = materia.id_materia;";
+	private static final String LISTAR_QUESTOES_PENDENTES = "SELECT questao_prova.*, disciplina.*, materia.* "
+			+ "FROM questao_prova, materia, disciplina, examinador WHERE status_questao = "
+			+ "'enviado' AND disciplina_questao = examinador.disciplina_examinador"
+			+ " AND examinador.disciplina_examinador = ? GROUP BY id_questao";
 	// COMANDO RESPONSÁVEL POR BUSCAR UMA QUESTÃO PARA TER O STATUS ALTERADO
 	private static final String BUSCAR_QUESTAO_ID = "SELECT questao_prova.*, disciplina.*, materia.*"
 			+ " FROM questao_prova, materia, disciplina WHERE questao_prova.disponibilidade_questao"
@@ -50,6 +51,7 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 			+ " AND alternativa.id_questao = ? AND questao_prova.disciplina_questao = "
 			+ "disciplina.id_disciplina AND materia.id_materia = questao_prova.materia_questao";
 	private static final String LISTAR_DISC_PADRAO = "SELECT * FROM disciplina where padrao_disciplina = 'padrao'";
+	private static final String ALTERAR_STATUS = "UPDATE questao_prova SET status_questao = ?, examinador_responsavel_questao = ? WHERE id_questao = ?";
 
 	@Autowired
 	public ExaminadorDAO(DataSource dataSource) {
@@ -57,6 +59,19 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 			this.CONEXAO = dataSource.getConnection();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
+		}
+	}
+	
+	public void alteraStatus(QuestaoProva qp, Integer id){
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(ALTERAR_STATUS);
+			stmt.setString(1, qp.getStatusQuestao());
+			stmt.setInt(2, id);
+			stmt.setInt(3, qp.getIdQuestaoProva());
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e1) {
+			throw new RuntimeException(e1);
 		}
 	}
 	
@@ -169,10 +184,11 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 		return qp;
 	}
 	
-	public List<QuestaoProva> listarPendencias(){
+	public List<QuestaoProva> listarPendencias(Integer id){
 		List<QuestaoProva> questoes = new ArrayList<QuestaoProva>();
 		try {
 			PreparedStatement stmt = CONEXAO.prepareStatement(LISTAR_QUESTOES_PENDENTES);
+			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				Disciplina d = new Disciplina();

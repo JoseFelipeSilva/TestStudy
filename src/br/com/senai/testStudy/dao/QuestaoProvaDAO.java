@@ -22,8 +22,9 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 	Connection CONEXAO;
 	
 	private static final String ADICIONAR = "INSERT INTO questao_prova( visualizacao_questao,"
-			+ " corpo_questao, titulo_questao, tipo_questao, disciplina_questao, dificuldade, materia_questao, disponibilidade_questao, status_questao)"
-			+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			+ " corpo_questao, titulo_questao, tipo_questao, disciplina_questao, dificuldade, materia_questao, disponibilidade_questao, status_questao, examinador_responsavel_questao"
+			+ ", autor_questao)"
+			+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String LISTAR = "SELECT * FROM questao_prova";
 	private static final String BUSCAR = "SELECT * FROM questao_prova WHERE id_questao = ?";
 	private static final String ALTERAR = "UPDATE questao_prova SET corpo_questao=?, titulo_questao=?"
@@ -56,6 +57,8 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 			stmt.setInt(7, qp.getMateria().getIdMateria());
 			stmt.setString(8, qp.getDisponibilidadeQuestao());
 			stmt.setString(9, qp.getStatusQuestao());
+			stmt.setInt(10, 1);
+			stmt.setInt(11, qp.getAutorQuestao().getIdProfessor());
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e) {
