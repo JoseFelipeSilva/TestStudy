@@ -7,9 +7,9 @@ import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 public class Aluno {
 	private Integer idAluno;
 	private String nomeAluno;
-	private String emailAluno;
+	private String email;
 	private String rgAluno;
-	private String senhaAluno;
+	private String senha;
 	private String sexoAluno;
 	private Date nascAluno;
 	private Turma turmaAluno;
@@ -31,12 +31,12 @@ public class Aluno {
 		this.nomeAluno = nomeAluno;
 	}
 
-	public String getEmailAluno() {
-		return emailAluno;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setEmailAluno(String emailAluno) {
-		this.emailAluno = emailAluno;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getRgAluno() {
@@ -47,12 +47,12 @@ public class Aluno {
 		this.rgAluno = rgAluno;
 	}
 
-	public String getSenhaAluno() {
-		return senhaAluno;
+	public String getSenha() {
+		return senha;
 	}
 
-	public void setSenhaAluno(String senhaAluno) {
-		this.senhaAluno = senhaAluno;
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 
 	public String getSexoAluno() {

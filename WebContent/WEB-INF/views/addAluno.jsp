@@ -37,7 +37,7 @@ window.onload=function(){
 		<br /><br />
 		
 		<strong>Email do aluno:</strong><br />
-		<input type="email" name="emailAluno" maxlength="255" required/>
+		<input type="email" name="email" maxlength="255" required/>
 		<br /><br />
 		
 		<strong>RG do aluno:</strong><br />
@@ -70,6 +70,6 @@ window.onload=function(){
 	</form>
 	
 	<br /><br />
-	<a href="backToIndex">Voltar</a>
+	<a href="backToIndexCoordenador">Voltar</a>
 </body>
 </html>

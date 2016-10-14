@@ -78,6 +78,6 @@ window.onload=function(){
 	</form>
 	
 	<br /><br />
-	<a href="backToIndex">Voltar</a>
+	<a href="backToIndexCoordenador">Voltar</a>
 </body>
 </html>

@@ -4,11 +4,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>questão</title>
 </head>
 <body>
-	<a href="formMateria">Adicionar matéria</a></br>
-	<a href="listandoMat">Listar matéria</a>
+	<br /><br />
+	<h1>PAGINA ALUNO</h1>
+	<br /><br /><br />
 	
+	
+	<br /><br /><br />
+	<a href="logoff">Sair</a>
 </body>
 </html>

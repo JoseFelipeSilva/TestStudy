@@ -32,14 +32,58 @@ public class ProfessorDAO implements MetodosBasicos<Professor> {
 			+ "e.id_escola_cliente FROM professor AS p, escola_cliente AS e WHERE e.id_escola_cliente = p.id_escola_cliente AND "
 			+ "p.id_professor = ?";
 	private final static String ALT_FOTO = "UPDATE professor SET foto_professor = ? WHERE id_professor = ?";
+	private final static String LOGIN = "SELECT p.id_professor, p.id_escola_cliente, p.sexo_professor, p.email_professor, p.foto_professor, p.rg_professor, "
+			+ "p.cpf_professor,	p.nascimento_professor, p.nome_professor, p.senha_professor, e.nome_emp, "
+			+ "e.id_escola_cliente FROM professor AS p, escola_cliente AS e WHERE p.senha_professor = ? AND p.email_professor = ?";
 
 	// CONEXAO
 	private final Connection CONEXAO;
-	
+
 	@Autowired
 	public ProfessorDAO(DataSource dtSource) {
 		try {
 			this.CONEXAO = dtSource.getConnection();
+		} catch (SQLException erro) {
+			throw new RuntimeException(erro);
+		}
+	}
+
+	// METODO DE LOGIN
+	public Professor existeProf(Professor prof) {
+		if (prof == null) {
+			throw new IllegalArgumentException(
+					"NÃO EXISTE ESSE PROFESSOR, NÃO FOI POSSIVEL FAZER LOGIN");
+		}
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(LOGIN);
+
+			stmt.setString(1, prof.getSenha());
+			stmt.setString(2, prof.getEmail());
+
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				EscolaCliente escola = new EscolaCliente();
+				escola.setIdEmp(rs.getInt("id_escola_cliente"));
+				escola.setNomeEmp(rs.getString("nome_emp"));
+
+				prof = new Professor();
+				prof.setIdProfessor(rs.getInt("id_professor"));
+				prof.setNome(rs.getString("nome_professor"));
+				prof.setEmail(rs.getString("email_professor"));
+				prof.setSenha(rs.getString("senha_professor"));
+				prof.setCpf(rs.getString("cpf_professor"));
+				prof.setRg(rs.getString("rg_professor"));
+				prof.setSexo(rs.getString("sexo_professor"));
+				prof.setFoto(rs.getBytes("foto_professor"));
+				prof.setNascimento(rs.getDate("nascimento_professor"));
+				prof.setEscolaProfessor(escola);
+			} else {
+				prof = null;
+			}
+			rs.close();
+			stmt.close();
+			return prof;
 		} catch (SQLException erro) {
 			throw new RuntimeException(erro);
 		}
@@ -58,7 +102,8 @@ public class ProfessorDAO implements MetodosBasicos<Professor> {
 			stmt.setString(5, prof.getRg());
 			stmt.setString(6, prof.getCpf());
 			stmt.setDate(7, prof.getNascimento());
-			stmt.setBlob(8, (prof.getFoto() == null) ? null : new ByteArrayInputStream(prof.getFoto()));
+			stmt.setBlob(8, (prof.getFoto() == null) ? null
+					: new ByteArrayInputStream(prof.getFoto()));
 			stmt.setInt(9, prof.getEscolaProfessor().getIdEmp());
 
 			stmt.execute();
@@ -180,7 +225,8 @@ public class ProfessorDAO implements MetodosBasicos<Professor> {
 		try {
 			PreparedStatement stmt = CONEXAO.prepareStatement(ALT_FOTO);
 
-			stmt.setBlob(1, (prof.getFoto() == null) ? null : new ByteArrayInputStream(prof.getFoto()));
+			stmt.setBlob(1, (prof.getFoto() == null) ? null
+					: new ByteArrayInputStream(prof.getFoto()));
 			stmt.setInt(2, prof.getIdProfessor());
 
 			stmt.execute();

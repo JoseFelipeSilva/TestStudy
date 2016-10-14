@@ -8,12 +8,10 @@
 </head>
 <body>
 	<br />
-	<h1>PAGE OF TESTES</h1>
+	<h1>LOGIN PAGE</h1>
 	<br /><br /><br />
-	<a href="newEscolaCliente">Adicionar escola-cliente</a>
-	<br /><br />
-	<a href="listagemEscolaCliente">Lista de escolas-cliente</a>
 	
+<<<<<<< HEAD
 	<br /><br /><br />
 	<a href="newCoordenador">Adicionar Coordenador</a>
 	<br /><br />
@@ -57,6 +55,18 @@
 	
 	
 	
+=======
+	<form method="post" action="logar">
+		<strong>Email:</strong><br />
+		<input type="email" name="email" required/>
+	
+		<br /><br /><br />
+		<strong>Senha:</strong><br />
+		<input type="password" name="senha" required/>
+		<br /><br /><br /><br />
+		<input type="submit" value="Logar" />	
+	</form>	
+>>>>>>> branch 'master' of https://github.com/JoseFelipeSilva/TestStudy
 	
 </body>
 </html>

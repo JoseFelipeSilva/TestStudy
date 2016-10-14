@@ -42,6 +42,7 @@ public class AdministradorDAO implements MetodosBasicos<Administrador> {
 	private static final String LISTAR = "SELECT * FROM administrador";
 	private static final String BUSCAR = "SELECT * FROM administrador WHERE id_adm=?";
 	private static final String ALT_FOTO = "UPDATE administrador SET foto_adm = ? WHERE id_adm = ?";
+	private static final String LOGIN = "SELECT * FROM administrador WHERE senha_adm = ? AND email_adm = ?";
 
 	@Autowired
 	public AdministradorDAO(DataSource dataSource) {
@@ -49,6 +50,40 @@ public class AdministradorDAO implements MetodosBasicos<Administrador> {
 			this.CONEXAO = dataSource.getConnection();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
+		}
+	}
+
+	// METODO DE LOGIN
+	public Administrador existeADM(Administrador adm) {
+		if (adm == null) {
+			throw new IllegalArgumentException(
+					"ADMINISTRADOR É NULO, NÃO É POSSIVEL LOGAR");
+		}
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(LOGIN);
+
+			stmt.setString(1, adm.getSenha());
+			stmt.setString(2, adm.getEmail());
+
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				adm.setIdAdm(rs.getInt("id_adm"));
+				adm.setNome(rs.getString("nome_adm"));
+				adm.setEmail(rs.getString("email_adm"));
+				adm.setCpf(rs.getString("cpf_adm"));
+				adm.setRg(rs.getString("rg_adm"));
+				adm.setNascimento(rs.getDate("nascimento_adm"));
+				adm.setSexo(rs.getString("sexo_adm"));
+				adm.setFoto(rs.getBytes("foto_adm"));
+			} else {
+				adm = null;
+			}
+			rs.close();
+			stmt.close();
+			return adm;
+		} catch (SQLException erro) {
+			throw new RuntimeException(erro);
 		}
 	}
 

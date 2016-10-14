@@ -34,6 +34,9 @@ public class AlunoDAO implements MetodosBasicos<Aluno> {
 	private final static String ALTERAR = "UPDATE aluno SET nome_aluno = ?, email_aluno = ?, senha_aluno = ?, rg_aluno = ?, "
 			+ "sexo_aluno = ?, nascimento_aluno = ?, id_turma = ? WHERE id_aluno = ?";
 	private final static String ALT_FOTO = "UPDATE aluno SET foto_aluno = ? WHERE id_aluno = ?";
+	private final static String LOGIN = "SELECT a.id_aluno, a.nome_aluno, a.email_aluno, a.senha_aluno, a.sexo_aluno, a.rg_aluno, "
+			+ "a.foto_aluno, a.nascimento_aluno, a.id_turma, t.nome_turma, t.id_turma, t.id_escola, e.nome_emp, "
+			+ "e.id_escola_cliente FROM aluno AS a, escola_cliente AS e, turma AS t WHERE a.senha_aluno = ? AND a.email_aluno = ?";
 
 	// CONEXAO
 	private final Connection CONEXAO;
@@ -47,6 +50,51 @@ public class AlunoDAO implements MetodosBasicos<Aluno> {
 		}
 	}
 
+	// METODO DE LOGIN
+	public Aluno existeAluno(Aluno aluno) {
+		if (aluno == null) {
+			throw new IllegalArgumentException(
+					"NÃO EXISTE ESSE ALUNO, NÃO FOI POSSIVEL FAZER LOGIN");
+		}
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(LOGIN);
+
+			stmt.setString(1, aluno.getSenha());
+			stmt.setString(2, aluno.getEmail());
+
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				EscolaCliente e = new EscolaCliente();
+				e.setNomeEmp(rs.getString("nome_emp"));
+				e.setIdEmp(rs.getInt("id_escola_cliente"));
+
+				Turma t = new Turma();
+				t.setNomeTurma(rs.getString("nome_turma"));
+				t.setIdTurma(rs.getInt("id_turma"));
+				t.setEscolaTurma(e);
+
+				aluno = new Aluno();
+				aluno.setIdAluno(rs.getInt("id_aluno"));
+				aluno.setNomeAluno(rs.getString("nome_aluno"));
+				aluno.setEmail(rs.getString("email_aluno"));
+				aluno.setSenha(rs.getString("senha_aluno"));
+				aluno.setSexoAluno(rs.getString("sexo_aluno"));
+				aluno.setRgAluno(rs.getString("rg_aluno"));
+				aluno.setNascAluno(rs.getDate("nascimento_aluno"));
+				aluno.setFotoAluno(rs.getBytes("foto_aluno"));
+				aluno.setTurmaAluno(t);
+			} else {
+				aluno = null;
+			}
+			rs.close();
+			stmt.close();
+			return aluno;
+		} catch (SQLException erro) {
+			throw new RuntimeException(erro);
+		}
+	}
+
 	// ADICIONAR
 	@Override
 	public void adicionar(Aluno aluno) {
@@ -54,7 +102,7 @@ public class AlunoDAO implements MetodosBasicos<Aluno> {
 			PreparedStatement stmt = CONEXAO.prepareStatement(ADD);
 
 			stmt.setString(1, aluno.getNomeAluno());
-			stmt.setString(2, aluno.getEmailAluno());
+			stmt.setString(2, aluno.getEmail());
 			stmt.setString(3, aluno.getRgAluno());
 			stmt.setString(4, aluno.getSexoAluno());
 			stmt.setDate(5, aluno.getNascAluno());
@@ -91,8 +139,8 @@ public class AlunoDAO implements MetodosBasicos<Aluno> {
 			PreparedStatement stmt = CONEXAO.prepareStatement(ALTERAR);
 
 			stmt.setString(1, aluno.getNomeAluno());
-			stmt.setString(2, aluno.getEmailAluno());
-			stmt.setString(3, aluno.getSenhaAluno());
+			stmt.setString(2, aluno.getEmail());
+			stmt.setString(3, aluno.getSenha());
 			stmt.setString(4, aluno.getRgAluno());
 			stmt.setString(5, aluno.getSexoAluno());
 			stmt.setDate(6, aluno.getNascAluno());
@@ -127,8 +175,8 @@ public class AlunoDAO implements MetodosBasicos<Aluno> {
 				Aluno a = new Aluno();
 				a.setIdAluno(rs.getInt("id_aluno"));
 				a.setNomeAluno(rs.getString("nome_aluno"));
-				a.setEmailAluno(rs.getString("email_aluno"));
-				a.setSenhaAluno(rs.getString("senha_aluno"));
+				a.setEmail(rs.getString("email_aluno"));
+				a.setSenha(rs.getString("senha_aluno"));
 				a.setSexoAluno(rs.getString("sexo_aluno"));
 				a.setRgAluno(rs.getString("rg_aluno"));
 				a.setNascAluno(rs.getDate("nascimento_aluno"));
@@ -167,8 +215,8 @@ public class AlunoDAO implements MetodosBasicos<Aluno> {
 				aluno = new Aluno();
 				aluno.setIdAluno(rs.getInt("id_aluno"));
 				aluno.setNomeAluno(rs.getString("nome_aluno"));
-				aluno.setEmailAluno(rs.getString("email_aluno"));
-				aluno.setSenhaAluno(rs.getString("senha_aluno"));
+				aluno.setEmail(rs.getString("email_aluno"));
+				aluno.setSenha(rs.getString("senha_aluno"));
 				aluno.setSexoAluno(rs.getString("sexo_aluno"));
 				aluno.setRgAluno(rs.getString("rg_aluno"));
 				aluno.setNascAluno(rs.getDate("nascimento_aluno"));

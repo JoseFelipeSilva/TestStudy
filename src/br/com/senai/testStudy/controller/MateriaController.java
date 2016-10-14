@@ -18,42 +18,46 @@ public class MateriaController {
 		this.dao = dao;
 
 	}
-	
-	
+
 	@RequestMapping("formMateria")
-	public String formAdd(Model model){
+	public String formAdd(Model model) {
 		model.addAttribute("disc", dao.listarDisc());
 		return "formCadMat";
 	}
-	
+
 	@RequestMapping("cadMateria")
-	public String cadMat(Materia m, Disciplina d){
+	public String cadMat(Materia m, Disciplina d) {
 		m.setDisciplina(d);
 		dao.adicionar(m);
 		return "sucesso";
 	}
+
 	@RequestMapping("listandoMat")
-	public String listandoMat(Model model){
+	public String listandoMat(Model model) {
 		model.addAttribute("infoMAT", dao.listar());
 		return "listaMAT";
 	}
+
 	@RequestMapping("alterandoMateria")
-	public String alterando(Model model, Materia m){
+	public String alterando(Model model, Materia m) {
 		model.addAttribute("buscaId", dao.buscarID(m.getIdMateria()));
 		model.addAttribute("lista", dao.listar());
 		return "formAlterMat";
 	}
+
 	@RequestMapping("alterarMat")
-	public String alterar(Materia m, Disciplina d){
+	public String alterar(Materia m, Disciplina d) {
 		m.setDisciplina(d);
 		dao.alterar(m);
 		return "sucesso";
 	}
+
 	@RequestMapping("consultarMateria")
-	public String consultar(Model modelo, Disciplina d){
+	public String consultar(Model modelo, Disciplina d) {
 		modelo.addAttribute("materia", dao.listarMateria(d));
 		modelo.addAttribute("disc", dao.listarDisc());
-		modelo.addAttribute("disciplinaSelecionada", dao.buscarID(d.getIdDisciplina()));
+		modelo.addAttribute("disciplinaSelecionada",
+				dao.buscarID(d.getIdDisciplina()));
 		return "formCadQP";
 	}
 }

@@ -31,7 +31,6 @@ public class MateriaDAO implements MetodosBasicos<Materia> {
 			+ " nome_materia = ? where id_materia = ?";
 	private static final String LISTAR_MATERIA = "SELECT materia.*, disciplina.*"
 			+ " FROM materia,disciplina WHERE materia.id_disciplina = disciplina.id_disciplina AND materia.id_disciplina = ?";
-	
 
 	@Autowired
 	public MateriaDAO(DataSource dataSource) {
@@ -41,9 +40,9 @@ public class MateriaDAO implements MetodosBasicos<Materia> {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	public List<Materia> listarMateria(Disciplina disc ){
-		List<Materia> materias	= new ArrayList<Materia>();
+
+	public List<Materia> listarMateria(Disciplina disc) {
+		List<Materia> materias = new ArrayList<Materia>();
 		try {
 			PreparedStatement stmt = CONEXAO.prepareStatement(LISTAR_MATERIA);
 			stmt.setInt(1, disc.getIdDisciplina());
@@ -52,7 +51,7 @@ public class MateriaDAO implements MetodosBasicos<Materia> {
 				Disciplina d = new Disciplina();
 				d.setIdDisciplina(rs.getInt("id_disciplina"));
 				d.setNomeDisciplina(rs.getString("nome_disciplina"));
-				
+
 				Materia m = new Materia();
 				m.setIdMateria(rs.getInt("id_materia"));
 				m.setNomeMateria(rs.getString("nome_materia"));
@@ -64,7 +63,7 @@ public class MateriaDAO implements MetodosBasicos<Materia> {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
-		
+
 		return materias;
 	}
 

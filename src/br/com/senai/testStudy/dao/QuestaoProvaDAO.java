@@ -20,11 +20,10 @@ import br.com.senai.testStudy.util.MetodosBasicos;
 @Repository
 public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 	Connection CONEXAO;
-	
+
 	private static final String ADICIONAR = "INSERT INTO questao_prova( visualizacao_questao,"
 			+ " corpo_questao, titulo_questao, tipo_questao, disciplina_questao, dificuldade, materia_questao, disponibilidade_questao, status_questao, examinador_responsavel_questao"
-			+ ", autor_questao)"
-			+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			+ ", autor_questao)" + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String LISTAR = "SELECT * FROM questao_prova";
 	private static final String BUSCAR = "SELECT * FROM questao_prova WHERE id_questao = ?";
 	private static final String ALTERAR = "UPDATE questao_prova SET corpo_questao=?, titulo_questao=?"
@@ -32,7 +31,7 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 	private static final String LISTAR_DISC = "SELECT * FROM disciplina";
 	private static final String LISTAR_MAT = "SELECT materia.*, disciplina.* FROM materia,"
 			+ " disciplina WHERE materia.id_materia = disciplina.id_disciplina AND materia.id_disciplina = ?";
-	
+
 	@Autowired
 	public QuestaoProvaDAO(DataSource dataSource) {
 		try {
@@ -41,9 +40,7 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	
-	
+
 	@Override
 	public void adicionar(QuestaoProva qp) {
 		try {
@@ -64,8 +61,9 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
-		
+
 	}
+
 	public List<Disciplina> listarDisc() {
 		List<Disciplina> disciplinas = new ArrayList<Disciplina>();
 		try {
@@ -75,7 +73,7 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 				Disciplina d = new Disciplina();
 				d.setIdDisciplina(rs.getInt("id_disciplina"));
 				d.setNomeDisciplina(rs.getString("nome_disciplina"));
-				
+
 				disciplinas.add(d);
 			}
 			stmt.close();
@@ -85,8 +83,8 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 		}
 		return disciplinas;
 	}
-	
-	public List<Materia> listarMat(Integer id){
+
+	public List<Materia> listarMat(Integer id) {
 		List<Materia> materias = new ArrayList<Materia>();
 		try {
 			PreparedStatement stmt = CONEXAO.prepareStatement(LISTAR_MAT);
@@ -96,13 +94,13 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 				Disciplina d = new Disciplina();
 				d.setIdDisciplina(rs.getInt("id_disciplina"));
 				d.setNomeDisciplina(rs.getString("nome_disciplina"));
-				
+
 				Materia m = new Materia();
 				m.setDisciplina(d);
 				m.setIdMateria(rs.getInt("id_materia"));
 				m.setNomeMateria(rs.getString("nome_materia"));
 				materias.add(m);
-				
+
 			}
 			stmt.close();
 			rs.close();
@@ -111,11 +109,13 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 		}
 		return materias;
 	}
+
 	@Override
 	public void remover(QuestaoProva object) {
 		// TODO Auto-generated method stub
-		
+
 	}
+
 	@Override
 	public void alterar(QuestaoProva qp) {
 		try {
@@ -129,8 +129,9 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
-		
+
 	}
+
 	@Override
 	public List<QuestaoProva> listar() {
 		List<QuestaoProva> questões = new ArrayList<QuestaoProva>();
@@ -154,6 +155,7 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 		}
 		return questões;
 	}
+
 	@Override
 	public QuestaoProva buscarID(Integer id) {
 		QuestaoProva qp = null;
@@ -161,14 +163,14 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 			PreparedStatement stmt = CONEXAO.prepareStatement(BUSCAR);
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
-			if(rs.next()){
+			if (rs.next()) {
 				qp = new QuestaoProva();
 				qp.setIdQuestaoProva(rs.getInt("id_questao"));
 				qp.setTituloQuestao(rs.getString("titulo_questao"));
 				qp.setCorpoQuestao(rs.getString("corpo_questao"));
 				qp.setTipoQuestao(rs.getString("tipo_questao"));
 				qp.setVisualizacaoQuestao(rs.getString("visualizacao_questao"));
-				qp.setUsoQuestao(rs.getInt("uso_questao"));				
+				qp.setUsoQuestao(rs.getInt("uso_questao"));
 			}
 			stmt.close();
 			rs.close();
@@ -177,6 +179,5 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 		}
 		return qp;
 	}
-	
-	
+
 }

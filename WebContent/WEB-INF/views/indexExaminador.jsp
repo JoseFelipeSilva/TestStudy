@@ -4,10 +4,18 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>questão</title>
+<title>Bem vindo examinador</title>
 </head>
 <body>
-	<a href="formQP">Adicionar questão</a>
-	<a href="listandoQP">Listar questões</a>
+	<br /><br />
+	<h1>PAGINA EXAMINADOR</h1>
+	<br /><br /><br />
+	
+	<a href="pendenciasExam">Visualizar pendências novas</a><br/>
+	<a href="pendenciasAntigasExam">Visualizar pendências antigas</a>
+	
+	
+	<br /><br /><br />
+	<a href="logoff">Sair</a>
 </body>
 </html>

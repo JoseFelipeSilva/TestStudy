@@ -44,6 +44,11 @@ public class CoordenadorController {
 		dao.adicionar(coord);
 		return "sucessoPage";
 	}
+	
+	@RequestMapping("backToIndexCoordenador")
+	public String backIndexAdm(){
+		return "indexCoordenador";
+	}
 
 	@RequestMapping("listagemCoordenador")
 	public String listaOfCoordenadores(Model model) {

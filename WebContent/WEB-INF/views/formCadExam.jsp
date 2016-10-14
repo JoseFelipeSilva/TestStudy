@@ -69,5 +69,9 @@ window.onload=function(){
 					</select>
 	<input type="submit" value="enviar">
 	</form>
+	
+	
+	<br /><br />
+	<a href="backToIndexAdm">Voltar</a>
 </body>
 </html>

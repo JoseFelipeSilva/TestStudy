@@ -10,16 +10,16 @@ import br.com.senai.testStudy.model.QuestaoProva;
 
 @Controller
 public class AlternativaController {
-	
+
 	AlternativaDAO DAO;
-	
+
 	@Autowired
 	public AlternativaController(AlternativaDAO DAO) {
 		this.DAO = DAO;
 	}
-	
+
 	@RequestMapping("cadastrarAlternativa")
-	public String cadastrarAlter( Alternativa a, QuestaoProva qp){
+	public String cadastrarAlter(Alternativa a, QuestaoProva qp) {
 		String[] lista;
 		lista = a.getCorpoAlternativa().split(",");
 		for (int i = 0; i < lista.length; i++) {
@@ -27,7 +27,8 @@ public class AlternativaController {
 				a.setCerta("C");
 				a.setCorpoAlternativa(lista[i]);
 				DAO.adicionar(a);
-			}if(i != 0){
+			}
+			if (i != 0) {
 				a.setCerta("E");
 				a.setCorpoAlternativa(lista[i]);
 				DAO.adicionar(a);

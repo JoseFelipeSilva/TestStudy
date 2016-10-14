@@ -92,7 +92,8 @@ public class ProfessorController {
 	}
 
 	@RequestMapping("alterandoProfessor")
-	public String alteraProfessor(Professor prof, EscolaCliente escola, Model model) {
+	public String alteraProfessor(Professor prof, EscolaCliente escola,
+			Model model) {
 		prof.setEscolaProfessor(escola);
 		dao.alterar(prof);
 		model.addAttribute("LProfs", dao.listar());
