@@ -26,5 +26,9 @@
 	<a href="formMateria">Adicionar matéria</a><br />
 	<a href="listandoMat">Listar matéria</a>
 	
+	
+	<br /><br /><br />
+	<a href="formQP">Adicionar questão</a>
+	<a href="listandoQP">Listar questões</a>
 </body>
 </html>

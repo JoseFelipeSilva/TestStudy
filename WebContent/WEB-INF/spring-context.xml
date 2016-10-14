@@ -18,9 +18,9 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 
-	<!--  <mvc:interceptors>
-		<bean class="br.com.senai.interception.AutorizaLogin" />
-	</mvc:interceptors>-->
+	<mvc:interceptors>
+		<bean class="br.com.senai.testStudy.interceptor.AutorizaLogin" />
+	</mvc:interceptors>
 
 	<bean id="mysqlDataSource" class="org.apache.commons.dbcp2.BasicDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
@@ -29,8 +29,9 @@
 		<property name="password" value="root"></property>
 		<property name="MaxTotal" value="30"></property>
 	</bean>
-	
-	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="maxUploadSize" value="1000000" />
 	</bean>
 </beans>

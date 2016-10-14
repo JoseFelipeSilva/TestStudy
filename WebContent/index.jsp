@@ -8,18 +8,19 @@
 </head>
 <body>
 	<br />
-	<h1>PAGE OF TESTES</h1>
+	<h1>LOGIN PAGE</h1>
 	<br /><br /><br />
 	
+	<form method="post" action="logar">
+		<strong>Email:</strong><br />
+		<input type="email" name="email" required/>
 	
-	
-	
-	
-	
-	
-	
-	
-	
+		<br /><br /><br />
+		<strong>Senha:</strong><br />
+		<input type="password" name="senha" required/>
+		<br /><br /><br /><br />
+		<input type="submit" value="Logar" />	
+	</form>	
 	
 </body>
 </html>

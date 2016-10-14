@@ -7,7 +7,10 @@
 <title>questão</title>
 </head>
 <body>
-	<a href="formQP">Adicionar questão</a>
-	<a href="listandoQP">Listar questões</a>
+	<br /><br />
+	<h1>PAGINA ALUNO</h1>
+	<br /><br /><br />
+	
+	
 </body>
 </html>
