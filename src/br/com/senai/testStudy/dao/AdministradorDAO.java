@@ -1,6 +1,13 @@
 package br.com.senai.testStudy.dao;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.awt.image.RenderedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,11 +15,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+import javax.imageio.stream.FileImageInputStream;
+import javax.imageio.stream.ImageInputStream;
 import javax.sql.DataSource;
 
+import org.apache.tomcat.jni.File;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import br.com.senai.testStudy.controller.LogController;
 import br.com.senai.testStudy.model.Administrador;
 import br.com.senai.testStudy.util.MetodosBasicos;
 
@@ -20,6 +32,7 @@ import br.com.senai.testStudy.util.MetodosBasicos;
 public class AdministradorDAO implements MetodosBasicos<Administrador> {
 	// conexão com o banco
 	private final Connection CONEXAO;
+	private LogController logController;
 	// Comandos do banco
 	private static final String ADD = "INSERT INTO administrador (sexo_adm, email_adm, foto_adm, nascimento_adm, "
 			+ "cpf_adm, rg_adm, nome_adm, senha_adm) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -42,12 +55,12 @@ public class AdministradorDAO implements MetodosBasicos<Administrador> {
 	// ADICIONAR
 	@Override
 	public void adicionar(Administrador adm) {
+
 		try {
 			PreparedStatement stmt = CONEXAO.prepareStatement(ADD);
 
 			stmt.setString(1, adm.getSexo());
 			stmt.setString(2, adm.getEmail());
-			// TODO ADICIONAR AQUI A FOTO PADRÃO
 			stmt.setBlob(3, (adm.getFoto() == null) ? null
 					: new ByteArrayInputStream(adm.getFoto()));
 			stmt.setDate(4, adm.getNascimento());
@@ -58,7 +71,8 @@ public class AdministradorDAO implements MetodosBasicos<Administrador> {
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e1) {
-			throw new RuntimeException();
+			throw new RuntimeException(e1.getMessage());
+
 		}
 
 	}

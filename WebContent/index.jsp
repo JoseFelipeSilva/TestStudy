@@ -14,7 +14,6 @@
 	<br /><br />
 	<a href="listagemEscolaCliente">Lista de escolas-cliente</a>
 	
-	
 	<br /><br /><br />
 	<a href="newCoordenador">Adicionar Coordenador</a>
 	<br /><br />
