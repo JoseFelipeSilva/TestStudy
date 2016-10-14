@@ -25,12 +25,15 @@ public class CoordenadorDAO implements MetodosBasicos<Coordenador> {
 			+ " cpf_coord = ?, nascimento_coord = ?, id_escola = ? WHERE id_coord = ?";
 	private final static String LISTAR = "SELECT c.id_coord, c.nome_coord, c.email_coord, c.senha_coord, c.foto_coord, c.sexo_coord, "
 			+ "c.nascimento_coord, c.cpf_coord, c.rg_coord, e.nome_emp, e.id_escola_cliente FROM coordenador AS c, escola_cliente AS e "
-			+ "WHERE id_escola_cliente = id_escola ORDER BY c.id_coord ASC";	
+			+ "WHERE id_escola_cliente = id_escola ORDER BY c.id_coord ASC";
 	private final static String BUSCAR = "SELECT c.id_coord, c.nome_coord, c.email_coord, c.senha_coord, c.foto_coord, c.sexo_coord, "
 			+ "c.nascimento_coord, c.cpf_coord, c.rg_coord, e.nome_emp, e.id_escola_cliente FROM coordenador AS c, escola_cliente AS e "
 			+ "WHERE id_escola_cliente = id_escola AND id_coord = ?";
 	private final static String EXCLUIR = "DELETE FROM coordenador WHERE id_coord =?";
 	private final static String ALT_FOTO = "UPDATE coordenador SET foto_coord =?  WHERE id_coord = ?";
+	private final static String LOGIN = "SELECT c.id_coord, c.nome_coord, c.email_coord, c.senha_coord, c.foto_coord, c.sexo_coord, "
+			+ "c.nascimento_coord, c.cpf_coord, c.rg_coord, e.nome_emp, e.id_escola_cliente FROM coordenador AS c, escola_cliente AS e "
+			+ "WHERE c.senha_coord = ? AND c.email_coord = ?";
 
 	// CONEXAO
 	private final Connection CONEXAO;
@@ -39,6 +42,47 @@ public class CoordenadorDAO implements MetodosBasicos<Coordenador> {
 	public CoordenadorDAO(DataSource dtSource) {
 		try {
 			this.CONEXAO = dtSource.getConnection();
+		} catch (SQLException erro) {
+			throw new RuntimeException(erro);
+		}
+	}
+
+	// METODO DE LOGIN
+	public Coordenador existeCOORD(Coordenador coord) {
+		if (coord == null) {
+			throw new IllegalArgumentException(
+					"NÃO EXISTE ESSE COORDENADOR, NÃO É POSSIVEL FAZER LOGIN");
+		}
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(LOGIN);
+
+			stmt.setString(1, coord.getSenha());
+			stmt.setString(2, coord.getEmail());
+
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				EscolaCliente escola = new EscolaCliente();
+				escola.setIdEmp(rs.getInt("id_escola_cliente"));
+				escola.setNomeEmp(rs.getString("nome_emp"));
+
+				coord = new Coordenador();
+				coord.setIdCoord(rs.getInt("id_coord"));
+				coord.setNome(rs.getString("nome_coord"));
+				coord.setEmail(rs.getString("email_coord"));
+				coord.setSenha(rs.getString("senha_coord"));
+				coord.setNascimento(rs.getDate("nascimento_coord"));
+				coord.setCpf(rs.getString("cpf_coord"));
+				coord.setRg(rs.getString("rg_coord"));
+				coord.setSexo(rs.getString("sexo_coord"));
+				coord.setFoto(rs.getBytes("foto_coord"));
+				coord.setEscola(escola);
+			} else {
+				coord = null;
+			}
+			rs.close();
+			stmt.close();
+			return coord;
 		} catch (SQLException erro) {
 			throw new RuntimeException(erro);
 		}
