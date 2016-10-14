@@ -39,7 +39,7 @@ window.onload=function(){
 		<br /><br />
 		
 		<strong>Email do aluno:</strong><br />
-		<input type="email" name="emailAluno" value="${al.emailAluno}" maxlength="255" required/>
+		<input type="email" name="email" value="${al.email}" maxlength="255" required/>
 		<br /><br />
 		
 		<strong>RG do aluno:</strong><br />
@@ -47,7 +47,7 @@ window.onload=function(){
 		<br /><br />
 		
 		<strong>Senha do aluno:</strong><br />
-		<input type="text" name="senhaAluno" value="${al.senhaAluno}" maxlength="50" required/>
+		<input type="text" name="senha" value="${al.senha}" maxlength="50" required/>
 		<br /><br />
 		
 		<strong>Sexo do aluno:</strong><br />

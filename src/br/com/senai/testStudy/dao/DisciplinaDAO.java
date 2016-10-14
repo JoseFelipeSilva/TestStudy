@@ -57,7 +57,7 @@ public class DisciplinaDAO implements MetodosBasicos<Disciplina> {
 				DisciplinaMateriaWS ws = new DisciplinaMateriaWS();
 				ws.setDisciplina(d);
 				ws.setMateria(m);
-				
+
 				disciplinas.add(ws);
 
 			}

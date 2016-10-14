@@ -40,13 +40,15 @@ public class QuestaoProvaController {
 	 */
 
 	@RequestMapping("adicionaQP")
-	public String adicionaQP(QuestaoProva qp, Materia m, Disciplina d, HttpSession sessao) {
-		// esta parte será substituida por um getSession do professor e ser adicionado a questão prova aqui
+	public String adicionaQP(QuestaoProva qp, Materia m, Disciplina d,
+			HttpSession sessao) {
+		// esta parte será substituida por um getSession do professor e ser
+		// adicionado a questão prova aqui
 		EscolaCliente e = new EscolaCliente();
 		e.setIdEmp(2);
 		e.setCnpjEmp("03.774.819/0001-02");
 		e.setEmailEmp("empresa2@emp");
-		
+
 		Professor p = new Professor();
 		p.setEscolaProfessor(e);
 		p.setCpf("465.846.636-9");
@@ -57,9 +59,9 @@ public class QuestaoProvaController {
 		m.setDisciplina(d);
 		qp.setMateria(m);
 		qp.setAutorQuestao(p);
-		if(qp.getDisponibilidadeQuestao().equals("disp")){
+		if (qp.getDisponibilidadeQuestao().equals("disp")) {
 			qp.setStatusQuestao("enviado");
-		} else if(qp.getDisponibilidadeQuestao().equals("priv")){
+		} else if (qp.getDisponibilidadeQuestao().equals("priv")) {
 			qp.setStatusQuestao("privada");
 		}
 		DAO.adicionar(qp);

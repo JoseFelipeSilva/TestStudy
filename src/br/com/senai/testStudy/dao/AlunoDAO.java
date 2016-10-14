@@ -59,8 +59,8 @@ public class AlunoDAO implements MetodosBasicos<Aluno> {
 		try {
 			PreparedStatement stmt = CONEXAO.prepareStatement(LOGIN);
 
-			stmt.setString(1, aluno.getSenhaAluno());
-			stmt.setString(2, aluno.getEmailAluno());
+			stmt.setString(1, aluno.getSenha());
+			stmt.setString(2, aluno.getEmail());
 
 			ResultSet rs = stmt.executeQuery();
 
@@ -77,8 +77,8 @@ public class AlunoDAO implements MetodosBasicos<Aluno> {
 				aluno = new Aluno();
 				aluno.setIdAluno(rs.getInt("id_aluno"));
 				aluno.setNomeAluno(rs.getString("nome_aluno"));
-				aluno.setEmailAluno(rs.getString("email_aluno"));
-				aluno.setSenhaAluno(rs.getString("senha_aluno"));
+				aluno.setEmail(rs.getString("email_aluno"));
+				aluno.setSenha(rs.getString("senha_aluno"));
 				aluno.setSexoAluno(rs.getString("sexo_aluno"));
 				aluno.setRgAluno(rs.getString("rg_aluno"));
 				aluno.setNascAluno(rs.getDate("nascimento_aluno"));
@@ -102,7 +102,7 @@ public class AlunoDAO implements MetodosBasicos<Aluno> {
 			PreparedStatement stmt = CONEXAO.prepareStatement(ADD);
 
 			stmt.setString(1, aluno.getNomeAluno());
-			stmt.setString(2, aluno.getEmailAluno());
+			stmt.setString(2, aluno.getEmail());
 			stmt.setString(3, aluno.getRgAluno());
 			stmt.setString(4, aluno.getSexoAluno());
 			stmt.setDate(5, aluno.getNascAluno());
@@ -139,8 +139,8 @@ public class AlunoDAO implements MetodosBasicos<Aluno> {
 			PreparedStatement stmt = CONEXAO.prepareStatement(ALTERAR);
 
 			stmt.setString(1, aluno.getNomeAluno());
-			stmt.setString(2, aluno.getEmailAluno());
-			stmt.setString(3, aluno.getSenhaAluno());
+			stmt.setString(2, aluno.getEmail());
+			stmt.setString(3, aluno.getSenha());
 			stmt.setString(4, aluno.getRgAluno());
 			stmt.setString(5, aluno.getSexoAluno());
 			stmt.setDate(6, aluno.getNascAluno());
@@ -175,8 +175,8 @@ public class AlunoDAO implements MetodosBasicos<Aluno> {
 				Aluno a = new Aluno();
 				a.setIdAluno(rs.getInt("id_aluno"));
 				a.setNomeAluno(rs.getString("nome_aluno"));
-				a.setEmailAluno(rs.getString("email_aluno"));
-				a.setSenhaAluno(rs.getString("senha_aluno"));
+				a.setEmail(rs.getString("email_aluno"));
+				a.setSenha(rs.getString("senha_aluno"));
 				a.setSexoAluno(rs.getString("sexo_aluno"));
 				a.setRgAluno(rs.getString("rg_aluno"));
 				a.setNascAluno(rs.getDate("nascimento_aluno"));
@@ -215,8 +215,8 @@ public class AlunoDAO implements MetodosBasicos<Aluno> {
 				aluno = new Aluno();
 				aluno.setIdAluno(rs.getInt("id_aluno"));
 				aluno.setNomeAluno(rs.getString("nome_aluno"));
-				aluno.setEmailAluno(rs.getString("email_aluno"));
-				aluno.setSenhaAluno(rs.getString("senha_aluno"));
+				aluno.setEmail(rs.getString("email_aluno"));
+				aluno.setSenha(rs.getString("senha_aluno"));
 				aluno.setSexoAluno(rs.getString("sexo_aluno"));
 				aluno.setRgAluno(rs.getString("rg_aluno"));
 				aluno.setNascAluno(rs.getDate("nascimento_aluno"));
