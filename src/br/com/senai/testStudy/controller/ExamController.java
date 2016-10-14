@@ -32,6 +32,12 @@ public class ExamController {
 		model.addAttribute("disciplina", dao.discPadrao());
 		return "formCadExam";
 	}
+	
+	@RequestMapping("backToListExamanidor")
+	public String backListaExaminador(Model model){
+		model.addAttribute("listaEXAM", dao.listar());
+		return "listaEXAM";
+	}
 
 	@RequestMapping("adicionaExam")
 	public String addExam(Examinador exam, MultipartFile arquivo, Disciplina d) {

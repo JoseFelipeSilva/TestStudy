@@ -81,6 +81,6 @@ window.onload=function(){
 	</form>
 	
 	<br /><br />
-	<a href="backToIndex">Voltar</a>
+	<a href="backToIndexAdm">Voltar</a>
 </body>
 </html>

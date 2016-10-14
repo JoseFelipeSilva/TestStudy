@@ -67,10 +67,16 @@ public class AdmController {
 		session.invalidate();
 		return "redirect:index.jsp";
 	}
-	
+
 	@RequestMapping("formADM")
 	public String formAddADm() {
 		return "formCadAdm";
+	}
+
+	@RequestMapping("backToListAdm")
+	public String backListaAdm(Model model) {
+		model.addAttribute("listaADM", ADMDAO.listar());
+		return "listaADM";
 	}
 
 	@RequestMapping("adicionaAdm")
@@ -84,6 +90,11 @@ public class AdmController {
 		}
 		ADMDAO.adicionar(adm);
 		return "sucesso";
+	}
+
+	@RequestMapping("backToIndexAdm")
+	public String backIndexAdm() {
+		return "indexAdm";
 	}
 
 	@RequestMapping("listandoADM")

@@ -15,12 +15,12 @@ public class AutorizaLogin extends HandlerInterceptorAdapter {
 		if (uri.endsWith("logar") || uri.contains("resources")) {
 			return true;
 		}
-
-		if (request.getSession().getAttribute("admLogon") != null
+		
+		if (request.getSession().getAttribute("alunoLogon") != null
 				|| request.getSession().getAttribute("examLogon") != null
 				|| request.getSession().getAttribute("coordLogon") != null
 				|| request.getSession().getAttribute("profLogon") != null
-				|| request.getSession().getAttribute("alunoLogon") != null) {
+				|| request.getSession().getAttribute("admLogon") != null) {
 			return true;
 		}
 

@@ -29,5 +29,9 @@
 			</c:forEach>
 		</tr>
 	</table>
+	
+	
+	<br /><br />
+	<a href="backToIndexAdm">Voltar</a>
 </body>
 </html>
