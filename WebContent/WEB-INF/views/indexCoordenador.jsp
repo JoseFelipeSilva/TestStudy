@@ -31,5 +31,9 @@
 	<a href="newAluno">Adicionar Aluno</a>
 	<br /><br />
 	<a href="ListagemAluno">Lista de alunos</a>
+	
+	
+	<br /><br /><br />
+	<a href="logoff">Sair</a>
 </body>
 </html>

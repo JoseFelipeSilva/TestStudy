@@ -62,6 +62,12 @@ public class AdmController {
 		}
 	}
 
+	@RequestMapping("logoff")
+	public String sair(HttpSession session) {
+		session.invalidate();
+		return "redirect:index.jsp";
+	}
+	
 	@RequestMapping("formADM")
 	public String formAddADm() {
 		return "formCadAdm";

@@ -33,5 +33,9 @@
 	<a href="newHistorico">Adicionar historico</a>
 	<br /><br />
 	<a href="ListagemHistorico">Lista de historico</a>
+	
+	
+	<br /><br /><br />
+	<a href="logoff">Sair</a>
 </body>
 </html>

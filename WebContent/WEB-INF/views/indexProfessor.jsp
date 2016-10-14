@@ -30,5 +30,9 @@
 	<br /><br /><br />
 	<a href="formQP">Adicionar questão</a>
 	<a href="listandoQP">Listar questões</a>
+
+	
+	<br /><br /><br />
+	<a href="logoff">Sair</a>
 </body>
 </html>

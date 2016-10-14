@@ -14,5 +14,8 @@
 	<a href="pendenciasExam">Visualizar pendências novas</a><br/>
 	<a href="pendenciasAntigasExam">Visualizar pendências antigas</a>
 	
+	
+	<br /><br /><br />
+	<a href="logoff">Sair</a>
 </body>
 </html>

@@ -12,5 +12,7 @@
 	<br /><br /><br />
 	
 	
+	<br /><br /><br />
+	<a href="logoff">Sair</a>
 </body>
 </html>
