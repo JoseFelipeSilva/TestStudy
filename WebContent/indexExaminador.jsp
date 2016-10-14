@@ -7,9 +7,12 @@
 <title>Bem vindo examinador</title>
 </head>
 <body>
-	<a href="formExam">Adicionar examinador</a> <br /><br />
-	<a href="listandoExam">Listar Examinadores</a><br/><br/>
-	<a href="pendenciasExam">Visualizar pendências novas</a><br/><br/>
+	<br /><br />
+	<h1>PAGINA EXAMINADOR</h1>
+	<br /><br /><br />
+	
+	<a href="pendenciasExam">Visualizar pendências novas</a><br/>
 	<a href="pendenciasAntigasExam">Visualizar pendências antigas</a>
+	
 </body>
 </html>
