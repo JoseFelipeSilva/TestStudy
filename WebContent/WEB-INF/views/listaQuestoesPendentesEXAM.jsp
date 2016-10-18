@@ -33,7 +33,13 @@
 			<td>${p.dificuldade}</td>
 			<td>${p.materia.disciplina.idDisciplina}</td>
 			<td>${p.materia.idMateria}</td>
+			<!-- SE O STATUS DA QUESTÃO É 'ENVIADO' SIGNIFICA QUE É UMA QUESTÃO SEM ALTERAÇÕES, E DEVE IR PARA NOVAS PENDENCIAS -->
+			<c:if test="${p.statusQuestao  == 'enviado'}">
 			<td><a href="alterandoStatus?idQuestaoProva=${p.idQuestaoProva}">Alterar status</a></td>
+			<!-- SE O STATUS DA QUESTÃO É 'EM ABERTO' SIGNIFICA QUE É UMA QUESTÃO QUE JÁ FOI SELECIONADA POR ALGUM EXAMINADOR -->
+			</c:if><c:if test="${p.statusQuestao  == 'Em aberto'}">
+			<td><a href="alterandoStatusAntigo?idQuestaoProva=${p.idQuestaoProva }">Alterar status</a></td>
+			</c:if>
 		</tr>
 		</c:forEach>
 	</table>

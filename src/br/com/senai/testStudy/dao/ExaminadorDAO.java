@@ -39,10 +39,18 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 			+ "FROM questao_prova, materia, disciplina, examinador WHERE status_questao = "
 			+ "'enviado' AND disciplina_questao = examinador.disciplina_examinador"
 			+ " AND examinador.disciplina_examinador = ? GROUP BY id_questao";
+	private static final String LISTAR_QUESTOES_PENDENTES_ANTIGAS = " SELECT DISTINCT questao_prova.*, disciplina.*, materia.*"
+			+ " FROM questao_prova, materia, disciplina, examinador WHERE status_questao = 'Em aberto' AND examinador_responsavel_questao"
+			+ " = ? GROUP BY id_questao";
 	// COMANDO RESPONSÁVEL POR BUSCAR UMA QUESTÃO PARA TER O STATUS ALTERADO
 	private static final String BUSCAR_QUESTAO_ID = "SELECT questao_prova.*, disciplina.*, materia.*"
 			+ " FROM questao_prova, materia, disciplina WHERE questao_prova.disponibilidade_questao"
 			+ " = 'disp' AND status_questao = 'enviado' AND questao_prova.disciplina_questao ="
+			+ " disciplina.id_disciplina AND questao_prova.materia_questao = materia.id_materia AND questao_prova.id_questao = ?";
+	// COMANDO RESPONSÁVEL POR BUSCAR UMA QUESTÃO ANTIGA PARA TER O STATUS ALTERADO
+	private static final String BUSCAR_QUESTAO_ANTIGA_ID = "SELECT questao_prova.*, disciplina.*, materia.*"
+			+ " FROM questao_prova, materia, disciplina WHERE questao_prova.disponibilidade_questao"
+			+ " = 'disp' AND status_questao = 'Em aberto' AND questao_prova.disciplina_questao ="
 			+ " disciplina.id_disciplina AND questao_prova.materia_questao = materia.id_materia AND questao_prova.id_questao = ?";
 	// COMANDO RESPONSÁVEL POR BUSCAR AS ALTERNATIVAS DA QUESTÃO PARA TER O
 	// STATUS ALTERADO
@@ -52,7 +60,8 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 			+ "disciplina.id_disciplina AND materia.id_materia = questao_prova.materia_questao";
 	private static final String LISTAR_DISC_PADRAO = "SELECT * FROM disciplina where padrao_disciplina = 'padrao'";
 	private static final String ALTERAR_STATUS = "UPDATE questao_prova SET status_questao = ?, examinador_responsavel_questao = ? WHERE id_questao = ?";
-	private static final String LOGIN = "SELECT * FROM examinador WHERE senha_examinador = ? AND email_examinador = ?";
+	private static final String LOGIN = "SELECT * FROM examinador, disciplina, escola_cliente WHERE senha_examinador = ? AND email_examinador = ? AND "
+			+ "examinador.disciplina_examinador = disciplina.id_disciplina AND disciplina.escola_disciplina = escola_cliente.id_escola_cliente";
 
 	@Autowired
 	public ExaminadorDAO(DataSource dataSource) {
@@ -77,6 +86,20 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
+				EscolaCliente escola = new EscolaCliente();
+				escola.setCnpjEmp(rs.getString("cnpj_emp"));
+				escola.setEmailEmp(rs.getString("email_emp"));
+				escola.setIdEmp(rs.getInt("id_escola_cliente"));
+				escola.setNomeEmp(rs.getString("nome_emp"));
+				escola.setNomeEmpresarialEmp(rs.getString("razao_social_emp"));
+				escola.setTelefoneEmp(rs.getString("telefone_emp"));
+				
+				Disciplina d = new Disciplina();
+				d.setEscola(escola);
+				d.setIdDisciplina(rs.getInt("id_disciplina"));
+				d.setNomeDisciplina(rs.getString("nome_disciplina"));
+				d.setPadraoDisciplina(rs.getString("padrao_disciplina"));
+				
 				exam = new Examinador();
 				exam.setIdExaminador(rs.getInt("id_examinador"));
 				exam.setSexo(rs.getString("sexo_examinador"));
@@ -87,7 +110,8 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 				exam.setNascimento(rs.getDate("nascimento_examinador"));
 				exam.setNome(rs.getString("nome_examinador"));
 				exam.setSenha(rs.getString("senha_examinador"));
-			} else {
+				exam.setDisciplinaExaminador(d);
+			} else{
 				exam = null;
 			}
 			rs.close();
@@ -97,6 +121,8 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 			throw new RuntimeException(erro);
 		}
 	}
+	
+	
 
 	public void alteraStatus(QuestaoProva qp, Integer id) {
 		try {
@@ -188,6 +214,46 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 		try {
 			PreparedStatement stmt = CONEXAO
 					.prepareStatement(BUSCAR_QUESTAO_ID);
+			stmt.setInt(1, id);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				Disciplina d = new Disciplina();
+				d.setIdDisciplina(rs.getInt("id_disciplina"));
+				d.setNomeDisciplina(rs.getString("nome_disciplina"));
+
+				Materia m = new Materia();
+				m.setIdMateria(rs.getInt("id_materia"));
+				m.setNomeMateria(rs.getString("nome_materia"));
+				m.setDisciplina(d);
+
+				qp = new QuestaoProva();
+				qp.setCorpoQuestao(rs.getString("corpo_questao"));
+				qp.setDificuldade(rs.getInt("dificuldade"));
+				qp.setDisponibilidadeQuestao(rs
+						.getString("disponibilidade_questao"));
+				qp.setIdQuestaoProva(rs.getInt("id_questao"));
+				qp.setMateria(m);
+				qp.setStatusQuestao(rs.getString("status_questao"));
+				qp.setTipoQuestao(rs.getString("tipo_questao"));
+				qp.setTituloQuestao(rs.getString("titulo_questao"));
+				qp.setUltimoUsoQuestao(rs.getDate("ultimo_uso_questao"));
+				qp.setUsoQuestao(rs.getInt("uso_questao"));
+				qp.setVisualizacaoQuestao(rs.getString("visualizacao_questao"));
+
+			}
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return qp;
+	}
+	
+	public QuestaoProva buscarQuestaoAntigaID(Integer id) {
+		QuestaoProva qp = null;
+		try {
+			PreparedStatement stmt = CONEXAO
+					.prepareStatement(BUSCAR_QUESTAO_ANTIGA_ID);
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
@@ -388,6 +454,45 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 			stmt.close();
 		} catch (SQLException erro) {
 			throw new RuntimeException(erro);
+		}
+	}
+
+	public List<QuestaoProva> listarPendenciasAntigas(Integer id) {
+		List<QuestaoProva> questoes = new ArrayList<QuestaoProva>();
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(LISTAR_QUESTOES_PENDENTES_ANTIGAS);
+			stmt.setInt(1, id);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				Disciplina d = new Disciplina();
+				d.setIdDisciplina(rs.getInt("id_disciplina"));
+				d.setNomeDisciplina(rs.getString("nome_disciplina"));
+
+				Materia m = new Materia();
+				m.setIdMateria(rs.getInt("id_materia"));
+				m.setNomeMateria(rs.getString("nome_materia"));
+				m.setDisciplina(d);
+
+				QuestaoProva q = new QuestaoProva();
+				q.setCorpoQuestao(rs.getString("corpo_questao"));
+				q.setDificuldade(rs.getInt("dificuldade"));
+				q.setDisponibilidadeQuestao(rs
+						.getString("disponibilidade_questao"));
+				q.setIdQuestaoProva(rs.getInt("id_questao"));
+				q.setMateria(m);
+				q.setStatusQuestao(rs.getString("status_questao"));
+				q.setTipoQuestao(rs.getString("tipo_questao"));
+				q.setTituloQuestao(rs.getString("titulo_questao"));
+				q.setUltimoUsoQuestao(rs.getDate("ultimo_uso_questao"));
+				q.setUsoQuestao(rs.getInt("uso_questao"));
+				q.setVisualizacaoQuestao(rs.getString("visualizacao_questao"));
+				questoes.add(q);
+			}
+			stmt.close();
+			rs.close();
+			return questoes;
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
 		}
 	}
 

@@ -103,16 +103,7 @@ public class ExamController {
 	@RequestMapping("pendenciasExam")
 	public String pendenciaExam(HttpSession sessao, Examinador exam,
 			Model modelo) {
-		Disciplina d = new Disciplina();
-		d.setIdDisciplina(1);
-		d.setNomeDisciplina("Matemática");
-
-		exam.setIdExaminador(2);
-		exam.setNome("Daniel");
-		exam.setCpf("45336757861");
-		exam.setEmail("daniel@daniel");
-		exam.setDisciplinaExaminador(d);
-		sessao.setAttribute("examLogado", exam);
+		exam = (Examinador) sessao.getAttribute("examLogon");
 		modelo.addAttribute("pendencias", dao.listarPendencias(exam
 				.getDisciplinaExaminador().getIdDisciplina()));
 		return "listaQuestoesPendentesEXAM";
@@ -121,19 +112,45 @@ public class ExamController {
 	// MÉTODO RESPONSÁVEL POR RETORNAR A PÁGINA DE ALTERAÇÃO DE STATUS DA
 	// QUESTÃO
 	@RequestMapping("alterandoStatus")
-	public String alteraStatus(QuestaoProva qp, Model modelo) {
-		modelo.addAttribute("infoQuestao",
-				dao.buscarQuestao(qp.getIdQuestaoProva()));
+	public String alteraStatus(QuestaoProva qp, Model modelo) {		
 		modelo.addAttribute("infoAlternativa",
 				dao.buscarAlter(qp.getIdQuestaoProva()));
+		modelo.addAttribute("infoQuestao",
+				dao.buscarQuestao(qp.getIdQuestaoProva()));
 		return "formAlterStatusQP";
 	}
 
 	// MÉTODO RESPONSÁVEL POR ALTERAR O STATUS DA QUESTÃO
 	@RequestMapping("alteraStatus")
 	public String alterStatus(QuestaoProva qp, HttpSession s, Examinador e) {
-		e = (Examinador) s.getAttribute("examLogado");
+		e = (Examinador) s.getAttribute("examLogon");
 		dao.alteraStatus(qp, e.getIdExaminador());
 		return "sucessoPage";
 	}
+	// MÉTODO RESPONSÁVEL POR LISTAR TODAS AS QUESTÕES ANTIGAS A SEREM ANALISADAS PELO
+	// EXAMINADOR
+	@RequestMapping("pendenciasAntigasExam")
+	public String pendenciasAntigasExam(Examinador exam, HttpSession sessao, Model modelo){
+		exam = (Examinador) sessao.getAttribute("examLogon");
+		modelo.addAttribute("pendencias", dao.listarPendenciasAntigas(exam.getIdExaminador()));		
+		return "listaQuestoesPendentesEXAM";
+	}
+	
+	@RequestMapping("alterandoStatusAntigo")
+	public String alterandoAntiga(QuestaoProva qp, Model modelo){
+		modelo.addAttribute("infoAlternativa", dao.buscarAlter(qp.getIdQuestaoProva()));
+		modelo.addAttribute("infoQuestao", dao.buscarQuestaoAntigaID(qp.getIdQuestaoProva()));
+		return "formAlterStatusQP";
+	}
 }
+
+
+
+
+
+
+
+
+
+
+

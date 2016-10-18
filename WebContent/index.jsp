@@ -5,13 +5,14 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>TESTES PAGE - TESTSTUDY</title>
+
 </head>
 <body>
 	<br />
 	<h1>LOGIN PAGE</h1>
 	<br /><br /><br />
 	
-<<<<<<< HEAD
+<!--  <<<<<<< HEAD
 	<br /><br /><br />
 	<a href="newCoordenador">Adicionar Coordenador</a>
 	<br /><br />
@@ -55,7 +56,7 @@
 	
 	
 	
-=======
+=======-->
 	<form method="post" action="logar">
 		<strong>Email:</strong><br />
 		<input type="email" name="email" required/>

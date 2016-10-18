@@ -43,21 +43,26 @@ public class AdmController {
 	public String logando(Examinador exam, Professor prof, Coordenador coord,
 			Aluno aluno, Administrador adm, HttpSession session) {
 		if (ADMDAO.existeADM(adm) != null) {
+			adm = ADMDAO.existeADM(adm);
 			session.setAttribute("admLogon", adm);
 			return "indexAdm";
 		} else if (adao.existeAluno(aluno) != null) {
+			aluno = adao.existeAluno(aluno);
 			session.setAttribute("alunoLogon", aluno);
 			return "indexAluno";
-		} else if (edao.existeExaminador(exam) != null) {
-			session.setAttribute("examLogon", exam);
-			return "indexExaminador";
 		} else if (cdao.existeCOORD(coord) != null) {
-			session.setAttribute("coordLogon", exam);
+			coord = cdao.existeCOORD(coord);
+			session.setAttribute("coordLogon", coord);
 			return "indexCoordenador";
 		} else if (pdao.existeProf(prof) != null) {
+			prof = pdao.existeProf(prof);
 			session.setAttribute("profLogon", prof);
 			return "indexProfessor";
-		} else {
+		} else if (edao.existeExaminador(exam) != null) {
+			exam = edao.existeExaminador(exam);
+			session.setAttribute("examLogon", exam);
+			return "indexExaminador";
+		}else {
 			return "redirect:index.jsp";
 		}
 	}
