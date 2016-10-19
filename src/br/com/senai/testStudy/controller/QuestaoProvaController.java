@@ -41,21 +41,9 @@ public class QuestaoProvaController {
 
 	@RequestMapping("adicionaQP")
 	public String adicionaQP(QuestaoProva qp, Materia m, Disciplina d,
-			HttpSession sessao) {
-		// esta parte será substituida por um getSession do professor e ser
-		// adicionado a questão prova aqui
-		EscolaCliente e = new EscolaCliente();
-		e.setIdEmp(2);
-		e.setCnpjEmp("03.774.819/0001-02");
-		e.setEmailEmp("empresa2@emp");
-
-		Professor p = new Professor();
-		p.setEscolaProfessor(e);
-		p.setCpf("465.846.636-9");
-		p.setEmail("prof1@prof");
-		p.setIdProfessor(1);
-		p.setNome("professor1");
-		sessao.setAttribute("professor", p);
+			HttpSession sessao, Professor p) {
+		p = (Professor) sessao.getAttribute("profLogon");
+		
 		m.setDisciplina(d);
 		qp.setMateria(m);
 		qp.setAutorQuestao(p);
@@ -73,8 +61,9 @@ public class QuestaoProvaController {
 	}
 
 	@RequestMapping("listandoQP")
-	public String listandoQP(Model modelo) {
-		modelo.addAttribute("qp", DAO.listar());
+	public String listandoQP(Model modelo, Professor p, HttpSession sessao) {
+		p = (Professor) sessao.getAttribute("profLogon");
+		modelo.addAttribute("qp", DAO.listarqp(p.getIdProfessor()));
 		return "listaQP";
 	}
 

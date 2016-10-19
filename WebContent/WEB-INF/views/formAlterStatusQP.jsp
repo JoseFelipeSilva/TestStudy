@@ -27,6 +27,9 @@
 		<option>Em aberto</option>
 	</select><br/><br/>
 	
+	<strong>Corpo da Mensagem</strong>
+	<textarea rows="50" cols="6"></textarea>
+	</br>
 	<input type="submit" value="enviar">
 	</form>
 </body>
