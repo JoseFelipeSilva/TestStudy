@@ -18,6 +18,7 @@ import br.com.senai.testStudy.model.Disciplina;
 import br.com.senai.testStudy.model.EscolaCliente;
 import br.com.senai.testStudy.model.Examinador;
 import br.com.senai.testStudy.model.Materia;
+import br.com.senai.testStudy.model.Professor;
 import br.com.senai.testStudy.model.QuestaoProva;
 import br.com.senai.testStudy.util.MetodosBasicos;
 
@@ -43,10 +44,11 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 			+ " FROM questao_prova, materia, disciplina, examinador WHERE status_questao = 'Em aberto' AND examinador_responsavel_questao"
 			+ " = ? GROUP BY id_questao";
 	// COMANDO RESPONSÁVEL POR BUSCAR UMA QUESTÃO PARA TER O STATUS ALTERADO
-	private static final String BUSCAR_QUESTAO_ID = "SELECT questao_prova.*, disciplina.*, materia.*"
-			+ " FROM questao_prova, materia, disciplina WHERE questao_prova.disponibilidade_questao"
+	private static final String BUSCAR_QUESTAO_ID = "SELECT questao_prova.*, disciplina.*, materia.*, professor.*, escola_cliente.*"
+			+ " FROM questao_prova, materia, professor, escola_cliente, disciplina WHERE questao_prova.disponibilidade_questao"
 			+ " = 'disp' AND status_questao = 'enviado' AND questao_prova.disciplina_questao ="
-			+ " disciplina.id_disciplina AND questao_prova.materia_questao = materia.id_materia AND questao_prova.id_questao = ?";
+			+ " disciplina.id_disciplina AND questao_prova.materia_questao = materia.id_materia AND questao_prova.id_questao = ? "
+			+ "AND professor.id_escola_cliente = escola_cliente.id_escola_cliente group by id_questao";
 	// COMANDO RESPONSÁVEL POR BUSCAR UMA QUESTÃO ANTIGA PARA TER O STATUS ALTERADO
 	private static final String BUSCAR_QUESTAO_ANTIGA_ID = "SELECT questao_prova.*, disciplina.*, materia.*"
 			+ " FROM questao_prova, materia, disciplina WHERE questao_prova.disponibilidade_questao"
@@ -217,6 +219,24 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
+				EscolaCliente ec = new EscolaCliente();
+				ec.setCnpjEmp(rs.getString("cnpj_emp"));
+				ec.setEmailEmp(rs.getString("email_emp"));
+				ec.setIdEmp(rs.getInt("id_escola_cliente"));
+				ec.setNomeEmp(rs.getString("nome_emp"));
+				ec.setNomeEmpresarialEmp(rs.getString("razao_social_emp"));
+				ec.setTelefoneEmp(rs.getString("telefone_emp"));
+				
+				Professor p = new Professor();
+				p.setCpf(rs.getString("cpf_professor"));
+				p.setEmail(rs.getString("email_professor"));
+				p.setEscolaProfessor(ec);
+				p.setIdProfessor(rs.getInt("id_professor"));
+				p.setNome(rs.getString("nome_professor"));
+				p.setRg(rs.getString("rg_professor"));
+				p.setSenha(rs.getString("senha_professor"));
+				p.setSexo(rs.getString("sexo_professor"));
+				
 				Disciplina d = new Disciplina();
 				d.setIdDisciplina(rs.getInt("id_disciplina"));
 				d.setNomeDisciplina(rs.getString("nome_disciplina"));
@@ -239,7 +259,7 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 				qp.setUltimoUsoQuestao(rs.getDate("ultimo_uso_questao"));
 				qp.setUsoQuestao(rs.getInt("uso_questao"));
 				qp.setVisualizacaoQuestao(rs.getString("visualizacao_questao"));
-
+				qp.setAutorQuestao(p);
 			}
 			stmt.close();
 			rs.close();

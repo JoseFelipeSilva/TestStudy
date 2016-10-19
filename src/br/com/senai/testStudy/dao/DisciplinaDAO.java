@@ -22,12 +22,13 @@ public class DisciplinaDAO implements MetodosBasicos<Disciplina> {
 	private final Connection CONEXAO;
 	private static final String ADICIONAR = "INSERT INTO disciplina(nome_disciplina, padrao_disciplina, escola_disciplina)VALUES(?,?,?)";
 	private static final String ALTERAR = "UPDATE disciplina SET nome_disciplina=? WHERE id_disciplina=?";
-	private static final String LISTAR = "SELECT * FROM disciplina";
+	private static final String LISTAR = "SELECT * FROM disciplina WHERE escola_disciplina = 1";
 	private static final String BUSCAR = "SELECT * FROM disciplina WHERE id_disciplina=?";
 	private static final String EXCLUIR = "DELETE FROM disciplina WHERE id_disciplina=?";
 	private static final String LISTAR_DISC_MAT_WS = "SELECT  materia.*, disciplina.*"
 			+ " FROM materia, disciplina WHERE materia.id_disciplina = "
 			+ "disciplina.id_disciplina AND materia.id_disciplina";
+	private static final String LISTAR_DISC_PRIVADA = "SELECT * FROM disciplina WHERE escola_disciplina = ?";
 
 	@Autowired
 	public DisciplinaDAO(DataSource dataSource) {
@@ -36,6 +37,26 @@ public class DisciplinaDAO implements MetodosBasicos<Disciplina> {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public List<Disciplina> listarDiscPrivada(Integer id){
+		List<Disciplina> disciplinas = new ArrayList<Disciplina>();
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(LISTAR_DISC_PRIVADA);
+			stmt.setInt(1, id);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				Disciplina disc = new Disciplina();
+				disc.setIdDisciplina(rs.getInt("id_disciplina"));
+				disc.setNomeDisciplina(rs.getString("nome_disciplina"));
+				disciplinas.add(disc);
+			}
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return disciplinas;
 	}
 
 	public List<DisciplinaMateriaWS> disciplinaMateria() {

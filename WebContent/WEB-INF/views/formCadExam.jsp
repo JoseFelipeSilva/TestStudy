@@ -1,10 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Cadastro de examinador</title>
 <script type="text/javascript">
 window.onload=function(){
@@ -38,16 +38,16 @@ window.onload=function(){
 	</p>
 	<p>
 		<strong>CPF: </strong> <input type="cpf" name="cpf"
-			placeholder="Sem pontuação" required /><br />
+			placeholder="Sem pontuaÃ§Ã£o" required /><br />
 	</p>
 	
 	<p>
 		<strong>RG: </strong> <input type="rg" name="rg"
-			placeholder="Sem pontuação" required /><br />
+			placeholder="Sem pontuaÃ§Ã£o" required /><br />
 	</p>
 	<p>
 		<strong>Data de nascimento: </strong> <input id="datefield" min="1930-01-01" type="date" name="nascimento"
-			placeholder="Sem pontuação" required /><br />
+			placeholder="Sem pontuaÃ§Ã£o" required /><br />
 	</p>
 	<p>
 		<strong>Senha: </strong> <input type="password" name="senha"

@@ -1,11 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Cadastrar questão</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Cadastrar questÃ£o</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://code.google.com/p/jquery-cascade"></script>
 
@@ -16,7 +16,7 @@
 				.getElementById("idDisciplina");
 		// Recupera o nome do valor selecionado na lista de Disciplina
 		var selectedValue = idDisciplina.options[idDisciplina.selectedIndex].value;
-		// Insere a disciplina selecionada em outro form para enviá-la e compará-la no banco de dados
+		// Insere a disciplina selecionada em outro form para enviÃ¡-la e comparÃ¡-la no banco de dados
 		var aux = document.getElementById("aux");
 		aux.value = selectedValue;
 		document.getElementById("botao").click();
@@ -34,14 +34,14 @@
 				.getElementById("idDisciplina");
 		// Recupera o nome do valor selecionado na lista de Disciplina
 		var valorSelecionadoDisciplina = idDisciplina.options[idDisciplina.selectedIndex].text;
-		// Compara e faz a validação se a Disciplina não foi selecionada
+		// Compara e faz a validaÃ§Ã£o se a Disciplina nÃ£o foi selecionada
 		if (valorSelecionadoDisciplina == "Selecione uma Disciplina") {
-			alert("Disciplina inválida");
+			alert("Disciplina invÃ¡lida");
 			return false;
 		}
-		// Compara e faz a validação se o Assunto não foi selecionado
+		// Compara e faz a validaÃ§Ã£o se o Assunto nÃ£o foi selecionado
 		if (valorSelecionadoAssunto == "Selecione um Assunto") {
-			alert("Assunto inválido");
+			alert("Assunto invÃ¡lido");
 			return false;
 		}
 		return false;
@@ -79,7 +79,7 @@
 	
 		
 					
-		<strong>Dificuldade da questão: </strong><br />
+		<strong>Dificuldade da questÃ£o: </strong><br />
 		 <input type="radio" name="dificuldade" value="1" required />1
 		 <input type="radio" name="dificuldade" value="2" required />2
 		 <input type="radio" name="dificuldade" value="3" required />3
@@ -91,11 +91,11 @@
 		 <input type="radio" name="dificuldade" value="9" required />9
 		 <input type="radio" name="dificuldade" value="10" required />10<br/>
 			
-			<strong>Deseja tornar esta questão pública?</br></strong>(a questão publica será enviada para um examinador)<br /> <input type="radio" name="disponibilidadeQuestao"
+			<strong>Deseja tornar esta questÃ£o pÃºblica?</br></strong>(a questÃ£o publica serÃ¡ enviada para um examinador)<br /> <input type="radio" name="disponibilidadeQuestao"
 			value="disp" required />Sim<br /> <input type="radio"
-			name="disponibilidadeQuestao" value="priv" required />Não<br />
+			name="disponibilidadeQuestao" value="priv" required />NÃ£o<br />
 		
-		<strong>Tipo da questão: </strong><br /> <input type="radio" name="tipoQuestao"
+		<strong>Tipo da questÃ£o: </strong><br /> <input type="radio" name="tipoQuestao"
 			value="obj" required />Objetiva<br /> <input type="radio"
 			name="tipoQuestao" value="diss" required />Dissertativa<br />
 			

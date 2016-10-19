@@ -30,7 +30,7 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 	private static final String BUSCAR = "SELECT * FROM questao_prova WHERE id_questao = ?";
 	private static final String ALTERAR = "UPDATE questao_prova SET corpo_questao=?, titulo_questao=?"
 			+ ", tipo_questao=? WHERE id_questao=?";
-	private static final String LISTAR_DISC = "SELECT * FROM disciplina";
+	private static final String LISTAR_DISC = "SELECT * FROM disciplina WHERE escola_disciplina = 1 OR escola_disciplina = ?";
 	private static final String LISTAR_MAT = "SELECT materia.*, disciplina.* FROM materia,"
 			+ " disciplina WHERE materia.id_materia = disciplina.id_disciplina AND materia.id_disciplina = ?";
 
@@ -66,10 +66,11 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 
 	}
 
-	public List<Disciplina> listarDisc() {
+	public List<Disciplina> listarDisc(Integer id) {
 		List<Disciplina> disciplinas = new ArrayList<Disciplina>();
 		try {
 			PreparedStatement stmt = CONEXAO.prepareStatement(LISTAR_DISC);
+			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				Disciplina d = new Disciplina();

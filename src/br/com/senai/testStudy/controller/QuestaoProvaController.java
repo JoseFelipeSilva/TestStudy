@@ -24,8 +24,9 @@ public class QuestaoProvaController {
 	}
 
 	@RequestMapping("formQP")
-	public String formQP(Model modelo) {
-		modelo.addAttribute("disc", DAO.listarDisc());
+	public String formQP(Model modelo, Professor p, HttpSession sessao) {
+		p = (Professor) sessao.getAttribute("profLogon");
+		modelo.addAttribute("disc", DAO.listarDisc(p.getEscolaProfessor().getIdEmp()));
 		return "formCadQP";
 	}
 

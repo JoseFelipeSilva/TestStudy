@@ -21,7 +21,7 @@ public class MateriaDAO implements MetodosBasicos<Materia> {
 	private final Connection CONEXAO;
 	private static final String ADICIONAR = "INSERT INTO materia (id_disciplina, nome_materia) VALUES"
 			+ "(?, ?) ";
-	private static final String LISTAR_DISC = "SELECT * FROM disciplina";
+	private static final String LISTAR_DISC = "SELECT * FROM disciplina WHERE escola_disciplina = 1 OR escola_disciplina = ?";
 	private static final String LISTAR = "SELECT materia.*, disciplina.* FROM materia,"
 			+ " disciplina WHERE materia.id_disciplina = disciplina.id_disciplina";
 	private static final String BUSCAR = "SELECT materia.*, disciplina.*"
@@ -67,10 +67,11 @@ public class MateriaDAO implements MetodosBasicos<Materia> {
 		return materias;
 	}
 
-	public List<Disciplina> listarDisc() {
+	public List<Disciplina> listarDisc(Integer id) {
 		List<Disciplina> disciplinas = new ArrayList<Disciplina>();
 		try {
 			PreparedStatement stmt = CONEXAO.prepareStatement(LISTAR_DISC);
+			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				Disciplina d = new Disciplina();
