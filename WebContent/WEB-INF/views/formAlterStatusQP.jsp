@@ -10,6 +10,8 @@
 <body>
 <form action="alteraStatus">
 	<input type="hidden" name="idQuestaoProva" value="${infoQuestao.idQuestaoProva }">
+	<input type="hidden" name="autorQuestao.email" value="${infoQuestao.autorQuestao.email }">
+	<input type="hidden" name="autorQuestao.nome" value="${infoQuestao.autorQuestao.nome }">
 	<strong>Título da questão</strong><br/>
 	<p>${infoQuestao.tituloQuestao }</p><br/> <br/>
 	<strong>Corpo da questão</strong>
@@ -28,13 +30,13 @@
 	</select><br/><br/>
 	
 	<strong>Seu e-mail</strong></br>
-	<input type="text" name="remetente" value="${infoExam.email }"></input><br/><br/>
+	<input type="text" value="${infoExam.email }" readonly></input><br/><br/>
 	<strong>e-mail do autor da questão</strong></br>
-	<input type="text" name="destinatario" value="${infoQuestao.autorQuestao.email}"></input><br/><br/>
+	<input type="text"  value="${infoQuestao.autorQuestao.email}" readonly></input><br/><br/>
 	<strong>Assunto da mensagem</strong></br>
 	<input type="text" name="tituloMensagem"></input><br/><br/>
 	<strong>Corpo da Mensagem</strong></br>
-	<textarea rows="7" cols="30"></textarea>
+	<textarea rows="7" cols="30" name="corpoMensagem"></textarea>
 	</br>
 	<input type="submit" value="enviar">
 	</form>

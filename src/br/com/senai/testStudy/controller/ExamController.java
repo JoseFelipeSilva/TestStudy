@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import br.com.senai.testStudy.dao.ExaminadorDAO;
 import br.com.senai.testStudy.model.Disciplina;
 import br.com.senai.testStudy.model.Examinador;
+import br.com.senai.testStudy.model.Mensagem;
 import br.com.senai.testStudy.model.QuestaoProva;
 import br.com.senai.testStudy.util.EnviarEmail;
 
@@ -114,10 +115,8 @@ public class ExamController {
 	// QUESTÃO
 	@RequestMapping("alterandoStatus")
 	public String alteraStatus(QuestaoProva qp, Model modelo, Examinador e, HttpSession sessao) {		
-		modelo.addAttribute("infoAlternativa",
-				dao.buscarAlter(qp.getIdQuestaoProva()));
-		modelo.addAttribute("infoQuestao",
-				dao.buscarQuestao(qp.getIdQuestaoProva()));
+		modelo.addAttribute("infoAlternativa",dao.buscarAlter(qp.getIdQuestaoProva()));
+		modelo.addAttribute("infoQuestao",dao.buscarQuestao(qp.getIdQuestaoProva()));
 		e = (Examinador) sessao.getAttribute("examLogon");
 		modelo.addAttribute("infoExam", e);
 		return "formAlterStatusQP";
@@ -125,9 +124,14 @@ public class ExamController {
 
 	// MÉTODO RESPONSÁVEL POR ALTERAR O STATUS DA QUESTÃO
 	@RequestMapping("alteraStatus")
-	public String alterStatus(QuestaoProva qp, HttpSession s, Examinador e, EnviarEmail send) {
+	public String alterStatus(QuestaoProva qp, HttpSession s, Examinador e, EnviarEmail send, Mensagem m) {
 		e = (Examinador) s.getAttribute("examLogon");
-		send.enviarEmail("testndo envio de mensagem");
+		m.setDestinatario(qp.getAutorQuestao());
+		m.setRemetente(e);
+		if(m.getCorpoMensagem()!=null){
+			send.enviarEmail(m);
+		}
+		
 		dao.alteraStatus(qp, e.getIdExaminador());
 		return "sucessoPage";
 	}

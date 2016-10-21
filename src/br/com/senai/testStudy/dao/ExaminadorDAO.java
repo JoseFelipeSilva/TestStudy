@@ -260,6 +260,7 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 				qp.setUsoQuestao(rs.getInt("uso_questao"));
 				qp.setVisualizacaoQuestao(rs.getString("visualizacao_questao"));
 				qp.setAutorQuestao(p);
+				System.out.println("Dentro do DAO " +qp.getAutorQuestao().getEmail());
 			}
 			stmt.close();
 			rs.close();

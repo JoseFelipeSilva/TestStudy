@@ -1,8 +1,11 @@
 package br.com.senai.testStudy.model;
 
+import com.sun.istack.internal.Nullable;
+
 public class Mensagem {
 	private String tituloMensagem;
 	private Examinador remetente;
+	@Nullable
 	private String corpoMensagem;
 	private Professor destinatario;
 	private QuestaoProva questaoMensagem;
