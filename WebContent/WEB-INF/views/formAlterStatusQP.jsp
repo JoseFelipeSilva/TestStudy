@@ -29,15 +29,6 @@
 		<option>Em aberto</option>
 	</select><br/><br/>
 	
-	<strong>Seu e-mail</strong></br>
-	<input type="text" value="${infoExam.email }" readonly></input><br/><br/>
-	<strong>e-mail do autor da questão</strong></br>
-	<input type="text"  value="${infoQuestao.autorQuestao.email}" readonly></input><br/><br/>
-	<strong>Assunto da mensagem</strong></br>
-	<input type="text" name="tituloMensagem"></input><br/><br/>
-	<strong>Corpo da Mensagem</strong></br>
-	<textarea rows="7" cols="30" name="corpoMensagem"></textarea>
-	</br>
 	<input type="submit" value="enviar">
 	</form>
 </body>

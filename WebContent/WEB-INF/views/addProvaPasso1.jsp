@@ -12,7 +12,7 @@
 	ADICIONAR PROVA
 	<br /><br /><br />
 	
-	<form method="post" action="adicionarProva">
+	<form method="post" action="provaPasso2">
 		<strong>Nome da prova:</strong><br />
 		<input type="text" name="nomeProva" maxlength="50" required/>
 		<br /><br />
@@ -21,24 +21,7 @@
 		<input type="number" min="10" max="99" name="nQuestoes" required />
 		<br /><br />
 		
-		<strong>Dificuldade da prova:</strong>
-		<select name="dificuldade">
-			<option value="facil">FACÍL</option>
-			<option value="intermediario">INTERMEDIARIO</option>
-			<option value="dificil">DIFÍCIL</option>
-		</select>
-		<br /><br />
-				
-		<strong>Professor responsável pela prova:</strong>
-		<select name="idProfessor">
-			<option value="0">--SELECIONE UM PROFESSOR--</option>
-		<c:forEach items="${LProfs}" var="p">
-			<option value="${p.idProfessor}">${p.nome}</option>
-		</c:forEach>
-		</select>
-		<br /><br />
-		
-		<input type="submit" value="Cadastrar" />
+		<input type="submit" value="próximo" />
 	</form>
 	
 	<br /><br />

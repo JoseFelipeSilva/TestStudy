@@ -13,9 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import br.com.senai.testStudy.dao.ExaminadorDAO;
 import br.com.senai.testStudy.model.Disciplina;
 import br.com.senai.testStudy.model.Examinador;
-import br.com.senai.testStudy.model.Mensagem;
 import br.com.senai.testStudy.model.QuestaoProva;
-import br.com.senai.testStudy.util.EnviarEmail;
 
 @Controller
 public class ExamController {
@@ -124,14 +122,8 @@ public class ExamController {
 
 	// MÉTODO RESPONSÁVEL POR ALTERAR O STATUS DA QUESTÃO
 	@RequestMapping("alteraStatus")
-	public String alterStatus(QuestaoProva qp, HttpSession s, Examinador e, EnviarEmail send, Mensagem m) {
-		e = (Examinador) s.getAttribute("examLogon");
-		m.setDestinatario(qp.getAutorQuestao());
-		m.setRemetente(e);
-		if(m.getCorpoMensagem()!=null){
-			send.enviarEmail(m);
-		}
-		
+	public String alterStatus(QuestaoProva qp, HttpSession s, Examinador e) {
+		e = (Examinador) s.getAttribute("examLogon");		
 		dao.alteraStatus(qp, e.getIdExaminador());
 		return "sucessoPage";
 	}
