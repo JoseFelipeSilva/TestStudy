@@ -10,32 +10,13 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://code.google.com/p/jquery-cascade"></script>
 
-<script>
-$(document).ready(function() {
-	  var max_fields = 6; //maximum input boxes allowed
-	  var wrapper = $(".input_fields_wrap"); //Fields wrapper
-	  var add_button = $(".add_field_button"); //Add button ID
-	  var enviar = $(".enviar");
-
-	  var x = 1; //initlal text box count
-	  $(add_button).click(function(e) { //on add input button click
-	    e.preventDefault();
-	    var length = wrapper.find("input:text").length;
-
-	    if (x < max_fields) { //max input box allowed
-	      x++; //text box increment
-	      $(wrapper).append('<div><input type="text" name="corpoAlternativa" />'); //add input box
-	      //document.getElementById('Texto1').value = $('#Texto1').val();
-	    }
-	    
-	  });
-</script>
-
 <script type="text/javascript">
 
 	  
 	function adicionarFiltro(){
-		
+		  var wrapper = $(".input_fields_wrap");
+		  $(wrapper).append('<div><input type="text" name="corpoAlternativa" />');
+		     
 	}
 	
 	
@@ -92,7 +73,10 @@ $(document).ready(function() {
 			</c:if>
 		</c:forEach>
 	</select>
-	</br>
+	<br>
+	<div class="input_fields_wrap">
+	
+	</div>
 
 	<strong>Materia</strong>
 	<select id="idMateria" name="idMateria">
@@ -118,7 +102,7 @@ $(document).ready(function() {
 		 <input type="radio" name="dificuldade" value="9" required />9
 		 <input type="radio" name="dificuldade" value="10" required />10<br/>
 		 
-		 <button class="add_field_button">Adicionar outros filtros</button>
+		 <button onClick="adicionarFiltro()" class="add_field_button">Adicionar outros filtros</button>
 		 
 	</form>
 	<form action="consultarMateriaAddProva">
