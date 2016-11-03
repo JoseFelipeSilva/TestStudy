@@ -10,6 +10,24 @@ public class Prova {
 	private Integer nQuestoes;
 	private String nomeProva;
 	private Date dataProva;
+	private Materia[] materias;
+	private Integer nDisciplinas;
+
+	public Integer getnDisciplinas() {
+		return nDisciplinas;
+	}
+
+	public void setnDisciplinas(Integer nDisciplinas) {
+		this.nDisciplinas = nDisciplinas;
+	}
+
+	public Materia[] getMaterias() {
+		return materias;
+	}
+
+	public void setMaterias(Materia[] materias) {
+		this.materias = materias;
+	}
 
 	public String getNomeProva() {
 		return nomeProva;

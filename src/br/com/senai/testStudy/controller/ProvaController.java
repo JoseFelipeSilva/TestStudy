@@ -32,6 +32,12 @@ public class ProvaController {
 		this.mdao = mdao;
 	}
 
+	@RequestMapping("teste")
+	public String teste(Prova p){
+		System.out.println(p.getNomeProva() + p.getnQuestoes());
+		return "sucesso";
+	}
+	
 	@RequestMapping("newProva")
 	public String addPageProva(Model model) {
 		// UTILIZAR ISTO AUTOMATICAMENTE... (O PROFESSOR SÓ PODERÁ CRIAR A PROVA PRA ELE, OBVIAMENTE KKKKK) model.addAttribute("LProfs", pdao.listar());
