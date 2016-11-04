@@ -33,32 +33,51 @@
 		<h1>Basic Demo</h1>
 
 		<script>
+			function consultaDisciplinas() {
+				// Recupera o id da lista de selects de Assunto
+				var idDisciplina = document.getElementById("idDisciplina");
+				// Recupera o nome do valor selecionado na lista de Disciplina
+				var selectedValue = idDisciplina.options[idDisciplina.selectedIndex].value;
+				// Insere a disciplina selecionada em outro form para enviá-la e compará-la no banco de dados
+				var aux = document.getElementById("aux");
+				aux.value = selectedValue;
+				document.getElementById("botao").click();
+
+			}
 			$(function() {
-				$("#wizard").steps({
-					headerTag : "h2",
-					bodyTag : "section",
-					transitionEffect : "slideLeft",
-					onFinished: function () {
-						$( "#salvaNaSessao" ).submit()
-					},
-					onStepChanged: function(){
-						// passa os valores de um section para o outro através de campos hidden
-						document.getElementById("nomeProva1").value = document.getElementById("nomeProva").value;
-						document.getElementById("nQuestoes1").value = document.getElementById("nQuestoes").value;
-						// neste ponto começa a lógica para aparecer os filtros de disciplinas da prova!!
-						// declaração da variável do numero de disciplinas da prova
-						var nDisciplina = document.getElementById("nDisciplinas").value;
-						// declaração da variável onde consta a div que deve ser preenchida com os campos de filtro!
-						var divFiltro = $(".input_filtro");
-						
-						if(nDisciplina > 0){
-							for (var i = 0; i < nDisciplina; i++) {
-								$(divFiltro).append('');
-								$(divFiltro).append('<strong>Dificuldade da questão: </strong><br /> <input type="radio" name="dificuldade" value="1" required />1<input type="radio" name="dificuldade" value="2" required />2<input type="radio" name="dificuldade" value="3" required />3<input type="radio" name="dificuldade" value="4" required />4<input type="radio" name="dificuldade" value="5" required />5<input type="radio" name="dificuldade" value="6" required />6<input type="radio" name="dificuldade" value="7" required />7<input type="radio" name="dificuldade" value="8" required />8<input type="radio" name="dificuldade" value="9" required />9<input type="radio" name="dificuldade" value="10" required />10<br/>');
-							}
-						}
-					}
-				});
+				$("#wizard")
+						.steps(
+								{
+									headerTag : "h2",
+									bodyTag : "section",
+									transitionEffect : "slideLeft",
+									// ao finalizar todas as steps dá um submit na form salvaNaSessao
+									onFinished : function() {
+										$("#salvaNaSessao").submit()
+									},
+									onStepChanged : function() {
+										// passa os valores de um section para o outro através de campos hidden
+										document.getElementById("nomeProva1").value = document
+												.getElementById("nomeProva").value;
+										document.getElementById("nQuestoes1").value = document
+												.getElementById("nQuestoes").value;
+										// neste ponto começa a lógica para aparecer os filtros de disciplinas da prova!!
+										// declaração da variável do numero de disciplinas da prova
+										var nDisciplina = document
+												.getElementById("nDisciplinas").value;
+										// declaração da variável onde consta a div que deve ser preenchida com os campos de filtro!
+										var divFiltro = $(".input_filtro");
+
+										if (nDisciplina > 0) {
+											for (var i = 0; i < nDisciplina; i++) {
+												$(divFiltro).append('');
+												$(divFiltro)
+														.append(
+																'<strong>Dificuldade da questão: </strong><br /> <input type="radio" name="dificuldade" value="1" required />1<input type="radio" name="dificuldade" value="2" required />2<input type="radio" name="dificuldade" value="3" required />3<input type="radio" name="dificuldade" value="4" required />4<input type="radio" name="dificuldade" value="5" required />5<input type="radio" name="dificuldade" value="6" required />6<input type="radio" name="dificuldade" value="7" required />7<input type="radio" name="dificuldade" value="8" required />8<input type="radio" name="dificuldade" value="9" required />9<input type="radio" name="dificuldade" value="10" required />10<br/>');
+											}
+										}
+									}
+								});
 			});
 		</script>
 
@@ -68,38 +87,54 @@
 				<div class="form-group">
 					<label class="col-xs-3 control-label">Numero de questões</label>
 					<div class="col-xs-5">
-						<input type="text" class="form-control" name="nQuestoes" id = "nQuestoes"/>
+						<input type="text" class="form-control" name="nQuestoes"
+							id="nQuestoes" />
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-xs-3 control-label">Nome da prova</label>
 					<div class="col-xs-5">
-						<input type="text" class="form-control" name="nomeProva" id = "nomeProva"/>
+						<input type="text" class="form-control" name="nomeProva"
+							id="nomeProva" />
 					</div>
 				</div>
-			
+				<strong>Disciplina</strong> <select name="idDisciplina"
+					id="idDisciplina" onchange="consultaDisciplinas();">
+					<option value="0">Selecione uma disciplina</option>
+					<c:forEach items="${disci}" var="disc">
+						<c:if
+							test="${disc.idDisciplina == disciplinaSelecionada.disciplina.idDisciplina}">
+							<option selected="selected" value="${disc.idDisciplina}">${disc.nomeDisciplina}</option>
+						</c:if>
+						<c:if
+							test="${disc.idDisciplina != disciplinaSelecionada.disciplina.idDisciplina}">
+							<option value="${disc.idDisciplina}">${disc.nomeDisciplina}</option>
+						</c:if>
+					</c:forEach>
+				</select>
+
 			</section>
 
 			<h2>Second Step</h2>
 			<section>
-			<form id="salvaNaSessao">
-				<div class="form-group">
-					<label class="col-xs-3 control-label">Numero de disciplinas da prova</label>
-					<div class="col-xs-5">
-						<input type="hidden" class="form-control" name="nQuestoes" id = "nQuestoes1"/>
-						<input type="hidden" class="form-control" name="nomeProva" id = "nomeProva1"/>
-						<input type="text" class="form-control" name="nDisciplinas" id= "nDisciplinas" />
+				<form id="salvaNaSessao">
+					<div class="form-group">
+						<label class="col-xs-3 control-label">Numero de
+							disciplinas da prova</label>
+						<div class="col-xs-5">
+							<input type="hidden" class="form-control" name="nQuestoes"
+								id="nQuestoes1" /> <input type="hidden" class="form-control"
+								name="nomeProva" id="nomeProva1" /> <input type="text"
+								class="form-control" name="nDisciplinas" id="nDisciplinas" />
+						</div>
 					</div>
-				</div>
 				</form>
 				<form action="teste"></form>
 			</section>
 
 			<h2>Third Step</h2>
 			<section>
-				<div class="input_filtro">
-				
-				</div>
+				<div class="input_filtro"></div>
 			</section>
 
 			<h2>Forth Step</h2>
