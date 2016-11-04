@@ -39,8 +39,11 @@ public class ProvaController {
 	}
 	
 	@RequestMapping("newProva")
-	public String addPageProva(Model model) {
+	public String addPageProva(Prova p,Professor professor, HttpSession sessao, Model modelo) {
 		// UTILIZAR ISTO AUTOMATICAMENTE... (O PROFESSOR SÓ PODERÁ CRIAR A PROVA PRA ELE, OBVIAMENTE KKKKK) model.addAttribute("LProfs", pdao.listar());
+		professor = (Professor) sessao.getAttribute("profLogon");
+		modelo.addAttribute("materia", mdao.listar());
+		modelo.addAttribute("disci", qdao.listarDisc(professor.getEscolaProfessor().getIdEmp()));
 		return "addProvaPasso1";
 	}
 	
@@ -58,7 +61,7 @@ public class ProvaController {
 		modelo.addAttribute("disci", mdao.listarDisc(p.getEscolaProfessor().getIdEmp()));
 		modelo.addAttribute("disciplinaSelecionada",
 				mdao.buscarID(d.getIdDisciplina()));
-		return "addProvaPasso2";
+		return "addProvaPasso1";
 	}
 
 	@RequestMapping("adicionarProva")

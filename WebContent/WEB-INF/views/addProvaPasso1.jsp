@@ -33,17 +33,51 @@
 		<h1>Basic Demo</h1>
 
 		<script>
-			function consultaDisciplinas() {
+		var aux;
+			function consultaMateria(materiaDisciplina, cbxSelecionado) {
 				// Recupera o id da lista de selects de Assunto
 				var idDisciplina = document.getElementById("idDisciplina");
-				// Recupera o nome do valor selecionado na lista de Disciplina
-				var selectedValue = idDisciplina.options[idDisciplina.selectedIndex].value;
 				// Insere a disciplina selecionada em outro form para enviá-la e compará-la no banco de dados
-				var aux = document.getElementById("aux");
-				aux.value = selectedValue;
-				document.getElementById("botao").click();
-
+				for (var i = 0; i < materiaDisciplina.length; i++) {
+					if (materiaDisciplina[i] == cbxSelecionado.value) {
+						i++;
+						if (cbxSelecionado.checked) {
+						document.getElementById("cbxMateria"+materiaDisciplina[i]).style = "display: list-item;";
+						} else {
+						document.getElementById("cbxMateria"+materiaDisciplina[i]).style = "display: none;";
+						}
+					}else{
+						i++;
+					}
+				}
 			}
+			
+			function materiasSelecionadas(att) {
+				if (att.checked) {
+					aux++;
+					var selecionadasAntigo = document.getElementById("hvMETAL").value;
+					if (selecionadasAntigo == undefined) {
+						selecionadasAntigo = ' ';
+					}
+					var selecionadasNovo = selecionadasAntigo + att.value + ", ";
+					document.getElementById("hvMETAL").value = selecionadasNovo;
+				} else {
+					aux--;
+					var	selecionadasAntigo = document.getElementById("hvMETAL").value.split(",");
+					var	selecionadasNovo = [0];
+					var aux2 = 0;
+					for (var selecionada = 0; selecionada <	selecionadasAntigo.length; selecionada++) {
+						if(selecionada != att.value) {
+							selecionadasNovo[aux2];
+							aux2++;
+						}
+					}
+					for (var i = aux2 - 1; i > 0; i--) {
+						document.getElementById("hvMETAL").value = selecionadasNovo[i] + ", ";
+					}
+				}
+			}
+			
 			$(function() {
 				$("#wizard")
 						.steps(
@@ -63,19 +97,8 @@
 												.getElementById("nQuestoes").value;
 										// neste ponto começa a lógica para aparecer os filtros de disciplinas da prova!!
 										// declaração da variável do numero de disciplinas da prova
-										var nDisciplina = document
-												.getElementById("nDisciplinas").value;
 										// declaração da variável onde consta a div que deve ser preenchida com os campos de filtro!
 										var divFiltro = $(".input_filtro");
-
-										if (nDisciplina > 0) {
-											for (var i = 0; i < nDisciplina; i++) {
-												$(divFiltro).append('');
-												$(divFiltro)
-														.append(
-																'<strong>Dificuldade da questão: </strong><br /> <input type="radio" name="dificuldade" value="1" required />1<input type="radio" name="dificuldade" value="2" required />2<input type="radio" name="dificuldade" value="3" required />3<input type="radio" name="dificuldade" value="4" required />4<input type="radio" name="dificuldade" value="5" required />5<input type="radio" name="dificuldade" value="6" required />6<input type="radio" name="dificuldade" value="7" required />7<input type="radio" name="dificuldade" value="8" required />8<input type="radio" name="dificuldade" value="9" required />9<input type="radio" name="dificuldade" value="10" required />10<br/>');
-											}
-										}
 									}
 								});
 			});
@@ -98,38 +121,38 @@
 							id="nomeProva" />
 					</div>
 				</div>
-				<strong>Disciplina</strong> <select name="idDisciplina"
-					id="idDisciplina" onchange="consultaDisciplinas();">
-					<option value="0">Selecione uma disciplina</option>
-					<c:forEach items="${disci}" var="disc">
-						<c:if
-							test="${disc.idDisciplina == disciplinaSelecionada.disciplina.idDisciplina}">
-							<option selected="selected" value="${disc.idDisciplina}">${disc.nomeDisciplina}</option>
-						</c:if>
-						<c:if
-							test="${disc.idDisciplina != disciplinaSelecionada.disciplina.idDisciplina}">
-							<option value="${disc.idDisciplina}">${disc.nomeDisciplina}</option>
-						</c:if>
-					</c:forEach>
-				</select>
 
 			</section>
 
 			<h2>Second Step</h2>
 			<section>
-				<form id="salvaNaSessao">
-					<div class="form-group">
-						<label class="col-xs-3 control-label">Numero de
-							disciplinas da prova</label>
-						<div class="col-xs-5">
-							<input type="hidden" class="form-control" name="nQuestoes"
-								id="nQuestoes1" /> <input type="hidden" class="form-control"
-								name="nomeProva" id="nomeProva1" /> <input type="text"
-								class="form-control" name="nDisciplinas" id="nDisciplinas" />
-						</div>
-					</div>
-				</form>
-				<form action="teste"></form>
+				<strong>Disciplina</strong>
+				<div name="idDisciplina" id="idDisciplina" style="overflow-y: scroll; height: 50px">
+					<c:forEach items="${disci}" var="disc">
+						<c:if
+							test="${disc.idDisciplina == disciplinaSelecionada.disciplina.idDisciplina}">
+							<input type="checkbox" checked="checked"
+								onchange="consultaMateria(${materia}, this);"
+								value="${disc.idDisciplina}">${disc.nomeDisciplina}
+						</c:if>
+						<c:if
+							test="${disc.idDisciplina != disciplinaSelecionada.disciplina.idDisciplina}">
+							<div>
+								<input type="checkbox"
+									onchange="consultaMateria(${materia}, this);"
+									value="${disc.idDisciplina}">${disc.nomeDisciplina}</div>
+						</c:if>
+					</c:forEach>
+				</div>
+				<strong>Materia</strong>
+				<div id="idMateria" name="idMateria" style="overflow-y: scroll; height: 50px">
+					<c:forEach items="${materia}" var="m">
+						<div style="display: none;" id="cbxMateria${m.idMateria}">
+							<input type="checkbox" onchange="materiasSelecionadas(this);"
+								value="${m.idMateria}">${m.nomeMateria}</div>
+					</c:forEach>
+				</div>
+				<br>
 			</section>
 
 			<h2>Third Step</h2>
@@ -145,8 +168,19 @@
 					Sed consequat vestibulum purus, imperdiet varius est pellentesque
 					vitae. Suspendisse consequat cursus eros, vitae tempus enim euismod
 					non. Nullam ut commodo tortor.</p>
+				<form id="salvaNaSessao">
+					<div class="form-group">
+						<div class="col-xs-5">
+							<input type="hidden" class="form-control" name="nQuestoes"
+								id="nQuestoes1" /> <input type="hidden" class="form-control"
+								name="nomeProva" id="nomeProva1" /> <input type="hidden"
+								class="form-control" name="hvMETAL" id="hvMETAL" />
+						</div>
+					</div>
+				</form>
 			</section>
 		</div>
 	</div>
+
 </body>
 </html>

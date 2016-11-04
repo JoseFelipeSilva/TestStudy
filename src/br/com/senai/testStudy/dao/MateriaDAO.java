@@ -23,7 +23,7 @@ public class MateriaDAO implements MetodosBasicos<Materia> {
 			+ "(?, ?) ";
 	private static final String LISTAR_DISC = "SELECT * FROM disciplina WHERE escola_disciplina = 1 OR escola_disciplina = ?";
 	private static final String LISTAR = "SELECT materia.*, disciplina.* FROM materia,"
-			+ " disciplina WHERE materia.id_disciplina = disciplina.id_disciplina";
+			+ " disciplina WHERE materia.id_disciplina = disciplina.id_disciplina order by materia.id_materia";
 	private static final String BUSCAR = "SELECT materia.*, disciplina.*"
 			+ " FROM materia, disciplina WHERE materia.id_disciplina ="
 			+ " disciplina.id_disciplina AND materia.id_materia = ?";

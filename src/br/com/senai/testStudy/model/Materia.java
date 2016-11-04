@@ -29,4 +29,9 @@ public class Materia {
 		this.nomeMateria = nomeMateria;
 	}
 
+	@Override
+	public String toString() {
+		return disciplina.getIdDisciplina().toString()+", "+idMateria;
+	}
+
 }
