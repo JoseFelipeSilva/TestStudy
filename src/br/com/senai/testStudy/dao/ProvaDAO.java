@@ -108,7 +108,7 @@ public class ProvaDAO implements MetodosBasicos<Prova> {
 				p.setNomeProva(rs.getString("nome_prova"));
 				p.setnQuestoes(rs.getInt("n_questoes"));
 				p.setIdProva(rs.getInt("id_prova"));
-				p.setDataProva(rs.getDate("data_prova"));
+				p.setCriacaoProva(rs.getDate("data_prova"));
 				p.setProfessor(prof);
 
 				provas.add(p);
@@ -140,7 +140,7 @@ public class ProvaDAO implements MetodosBasicos<Prova> {
 				p.setDificuldade(rs.getString("dificuldade"));
 				p.setNomeProva(rs.getString("nome_prova"));
 				p.setnQuestoes(rs.getInt("n_questoes"));
-				p.setDataProva(rs.getDate("data_prova"));
+				p.setCriacaoProva(rs.getDate("data_prova"));
 				p.setIdProva(rs.getInt("id_prova"));
 				p.setProfessor(prof);
 

@@ -9,17 +9,8 @@ public class Prova {
 	private String dificuldade;
 	private Integer nQuestoes;
 	private String nomeProva;
-	private Date dataProva;
+	private Date criacaoProva;
 	private Materia[] materias;
-	private Integer nDisciplinas;
-
-	public Integer getnDisciplinas() {
-		return nDisciplinas;
-	}
-
-	public void setnDisciplinas(Integer nDisciplinas) {
-		this.nDisciplinas = nDisciplinas;
-	}
 
 	public Materia[] getMaterias() {
 		return materias;
@@ -69,12 +60,12 @@ public class Prova {
 		this.nQuestoes = nQuestoes;
 	}
 
-	public Date getDataProva() {
-		return dataProva;
+	public Date getCriacaoProva() {
+		return criacaoProva;
 	}
 
-	public void setDataProva(Date dataProva) {
-		this.dataProva = dataProva;
+	public void setCriacaoProva(Date criacaoProva) {
+		this.criacaoProva = criacaoProva;
 	}
 
 }

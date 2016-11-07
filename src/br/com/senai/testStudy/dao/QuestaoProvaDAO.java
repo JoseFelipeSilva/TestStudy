@@ -26,7 +26,8 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 	private static final String ADICIONAR = "INSERT INTO questao_prova( visualizacao_questao,"
 			+ " corpo_questao, titulo_questao, tipo_questao, disciplina_questao, dificuldade, materia_questao, disponibilidade_questao, status_questao, examinador_responsavel_questao"
 			+ ", autor_questao)" + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	private static final String LISTAR = "SELECT * FROM questao_prova WHERE autor_questao = ?";
+	private static final String LISTAR = "SELECT * FROM materia,"
+			+ " disciplina, questao_prova WHERE materia.id_disciplina = disciplina.id_disciplina WHERE questao_prova.id_materia = materia.id_materia ";
 	private static final String BUSCAR = "SELECT * FROM questao_prova WHERE id_questao = ?";
 	private static final String ALTERAR = "UPDATE questao_prova SET corpo_questao=?, titulo_questao=?"
 			+ ", tipo_questao=? WHERE id_questao=?";
@@ -139,11 +140,7 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 	public List<QuestaoProva> listar() {
 		List<QuestaoProva> questões = new ArrayList<QuestaoProva>();
 		try {
-			PreparedStatement stmt = CONEXAO.prepareStatement(LISTAR);
-			Professor p = null;
-			HttpSession sessao = (HttpSession) p;
-			p = (Professor) sessao.getAttribute("profLogon");
-			stmt.setInt(1, p.getIdProfessor());
+			PreparedStatement stmt = CONEXAO.prepareStatement(LISTAR);//TODO SE DER ERRO FOI AQUI
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				QuestaoProva qp = new QuestaoProva();

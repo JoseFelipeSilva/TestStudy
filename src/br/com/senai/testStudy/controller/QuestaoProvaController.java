@@ -79,4 +79,10 @@ public class QuestaoProvaController {
 		DAO.alterar(qp);
 		return "sucesso";
 	}
+	
+	@RequestMapping("traserQuestoes")
+	private String aqui(Model modelo) {
+		modelo.addAttribute("questoes", DAO.listar());
+		return "TESTEtransa";
+	}
 }

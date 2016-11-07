@@ -8,7 +8,7 @@ public class QuestaoProva {
 	private Date ultimoUsoQuestao;
 	private String visualizacaoQuestao; // Mostra se a questão está disponível
 										// para ser
-	// usada novamente
+										// usada novamente
 	private String corpoQuestao;
 	private String tituloQuestao;
 	private String tipoQuestao; // Se a questão é de alternativa ou dissertativa

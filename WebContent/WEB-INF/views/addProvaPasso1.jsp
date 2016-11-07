@@ -29,15 +29,12 @@
         <![endif]-->
 
 
-	<div class="content">
+	<div class="content">	
 		<h1>Basic Demo</h1>
 
 		<script>
 		var aux;
 			function consultaMateria(materiaDisciplina, cbxSelecionado) {
-				// Recupera o id da lista de selects de Assunto
-				var idDisciplina = document.getElementById("idDisciplina");
-				// Insere a disciplina selecionada em outro form para enviá-la e compará-la no banco de dados
 				for (var i = 0; i < materiaDisciplina.length; i++) {
 					if (materiaDisciplina[i] == cbxSelecionado.value) {
 						i++;
@@ -55,15 +52,15 @@
 			function materiasSelecionadas(att) {
 				if (att.checked) {
 					aux++;
-					var selecionadasAntigo = document.getElementById("hvMETAL").value;
+					var selecionadasAntigo = document.getElementById("materiaSelecionada").value;
 					if (selecionadasAntigo == undefined) {
 						selecionadasAntigo = ' ';
 					}
-					var selecionadasNovo = selecionadasAntigo + att.value + ", ";
-					document.getElementById("hvMETAL").value = selecionadasNovo;
+					var selecionadasNovo = selecionadasAntigo + att.value + ",";
+					document.getElementById("materiaSelecionada").value = selecionadasNovo;
 				} else {
 					aux--;
-					var	selecionadasAntigo = document.getElementById("hvMETAL").value.split(",");
+					var	selecionadasAntigo = document.getElementById("materiaSelecionada").value.split(",");
 					var	selecionadasNovo = [0];
 					var aux2 = 0;
 					for (var selecionada = 0; selecionada <	selecionadasAntigo.length; selecionada++) {
@@ -73,7 +70,7 @@
 						}
 					}
 					for (var i = aux2 - 1; i > 0; i--) {
-						document.getElementById("hvMETAL").value = selecionadasNovo[i] + ", ";
+						document.getElementById("materiaSelecionada").value = selecionadasNovo[i] + ",";
 					}
 				}
 			}
@@ -89,15 +86,22 @@
 									onFinished : function() {
 										$("#salvaNaSessao").submit()
 									},
-									onStepChanged : function() {
+									onStepChanged : function(event, currentIndex) {
 										// passa os valores de um section para o outro através de campos hidden
 										document.getElementById("nomeProva1").value = document
 												.getElementById("nomeProva").value;
 										document.getElementById("nQuestoes1").value = document
 												.getElementById("nQuestoes").value;
-										// neste ponto começa a lógica para aparecer os filtros de disciplinas da prova!!
-										// declaração da variável do numero de disciplinas da prova
-										// declaração da variável onde consta a div que deve ser preenchida com os campos de filtro!
+										document.getElementById("diss1").value = document.getElementById("diss").value;
+										document.getElementById("alt1").value = document.getElementById("alt").value;
+										for (var d = 0; d < 10; d++) {
+											if (document.getElementById("d"+d).checked) {	
+											document.getElementById("dificuldadeDE").value = document.getElementById("d"+d).value;
+											}
+											if (document.getElementById("a"+d).checked) {												
+												document.getElementById("dificuldadeATE").value = document.getElementById("a"+d).value;
+												}
+										}
 										var divFiltro = $(".input_filtro");
 									}
 								});
@@ -122,12 +126,50 @@
 					</div>
 				</div>
 
+				<strong>Tipos de questões</strong>
+				<div id="tipoQuestoes" name="idTipoQuestoes">
+					<input type="checkbox" value="diss" id="diss">Dissertativa
+					<input type="checkbox" value="alt" id="alt">Alternativa
+				</div>
+
+
+				<div id="radios" style="float: left;">
+					<strong>Dificuldade da questão DE: </strong><br /> <input
+						type="radio" name="dificuldaded" id="d0" value="1"
+						checked="checked" />1 <input type="radio" name="dificuldaded"
+						id="d1" value="2" />2 <input type="radio" name="dificuldaded"
+						id="d2" value="3" />3 <input type="radio" name="dificuldaded"
+						id="d3" value="4" />4 <input type="radio" name="dificuldaded"
+						id="d4" value="5" />5 <input type="radio" name="dificuldaded"
+						id="d5" value="6" />6 <input type="radio" name="dificuldaded"
+						id="d6" value="7" />7 <input type="radio" name="dificuldaded"
+						id="d7" value="8" />8 <input type="radio" name="dificuldaded"
+						id="d8" value="9" />9 <input type="radio" name="dificuldaded"
+						id="d9" value="10" />10<br />
+				</div>
+
+
+
+				<div id="radios" style="float: left;">
+					<strong>Dificuldade da questão ATÉ: </strong><br /> <input
+						type="radio" name="dificuldadea" id="a0" value="1"
+						checked="checked" />1 <input type="radio" name="dificuldadea"
+						id="a1" value="2" />2 <input type="radio" name="dificuldadea"
+						id="a2" value="3" />3 <input type="radio" name="dificuldadea"
+						id="a3" value="4" />4 <input type="radio" name="dificuldadea"
+						id="a4" value="5" />5 <input type="radio" name="dificuldadea"
+						id="a5" value="6" />6 <input type="radio" name="dificuldadea"
+						id="a6" value="7" />7 <input type="radio" name="dificuldadea"
+						id="a7" value="8" />8 <input type="radio" name="dificuldadea"
+						id="a8" value="9" />9 <input type="radio" name="dificuldadea"
+						id="a9" value="10" />10<br />
+				</div>
 			</section>
 
 			<h2>Second Step</h2>
 			<section>
 				<strong>Disciplina</strong>
-				<div name="idDisciplina" id="idDisciplina" style="overflow-y: scroll; height: 50px">
+				<div id="idDisciplina" style="overflow-y: scroll; height: 80px">
 					<c:forEach items="${disci}" var="disc">
 						<c:if
 							test="${disc.idDisciplina == disciplinaSelecionada.disciplina.idDisciplina}">
@@ -145,7 +187,7 @@
 					</c:forEach>
 				</div>
 				<strong>Materia</strong>
-				<div id="idMateria" name="idMateria" style="overflow-y: scroll; height: 50px">
+				<div id="idMateria" style="overflow-y: scroll; height: 80px">
 					<c:forEach items="${materia}" var="m">
 						<div style="display: none;" id="cbxMateria${m.idMateria}">
 							<input type="checkbox" onchange="materiasSelecionadas(this);"
@@ -157,7 +199,9 @@
 
 			<h2>Third Step</h2>
 			<section>
-				<div class="input_filtro"></div>
+			<div id="ThirdStep">
+			<c:import url='TESTEtransa'></c:import>
+			</div>
 			</section>
 
 			<h2>Forth Step</h2>
@@ -174,7 +218,13 @@
 							<input type="hidden" class="form-control" name="nQuestoes"
 								id="nQuestoes1" /> <input type="hidden" class="form-control"
 								name="nomeProva" id="nomeProva1" /> <input type="hidden"
-								class="form-control" name="hvMETAL" id="hvMETAL" />
+								class="form-control" name="materiaSelecionada"
+								id="materiaSelecionada" value=", " /> <input type="hidden"
+								name="diss1" id="diss1"> <input type="hidden"
+								name="alt1" id="alt1"> <input type="hidden"
+								id="dificuldadeDE" name="dificuldadeDE" value="0"> <input
+								type="hidden" id="dificuldadeATE" name="dificuldadeATE"
+								value="0">
 						</div>
 					</div>
 				</form>
