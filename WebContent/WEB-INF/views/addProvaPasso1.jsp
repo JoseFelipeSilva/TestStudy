@@ -29,7 +29,7 @@
         <![endif]-->
 
 
-	<div class="content">	
+	<div class="content">
 		<h1>Basic Demo</h1>
 
 		<script>
@@ -82,11 +82,12 @@
 									headerTag : "h2",
 									bodyTag : "section",
 									transitionEffect : "slideLeft",
+									<c:if test="${continuando }">startIndex : "2",</c:if>
 									// ao finalizar todas as steps dá um submit na form salvaNaSessao
 									onFinished : function() {
 										$("#salvaNaSessao").submit()
 									},
-									onStepChanged : function(event, currentIndex) {
+									onStepChanged : function() {
 										// passa os valores de um section para o outro através de campos hidden
 										document.getElementById("nomeProva1").value = document
 												.getElementById("nomeProva").value;
@@ -103,6 +104,12 @@
 												}
 										}
 										var divFiltro = $(".input_filtro");
+									},
+									onStepChanging : function(event, currentIndex, newIndex) {
+										if (newIndex == 2) {
+											$("#salvaNaSessao").submit();
+										}
+										return true;
 									}
 								});
 			});
@@ -199,9 +206,25 @@
 
 			<h2>Third Step</h2>
 			<section>
-			<div id="ThirdStep">
-			<c:import url='TESTEtransa'></c:import>
-			</div>
+				<table>
+					<tr>
+						<th>ID</th>
+						<th>titulo</th>
+						<th>visualização</th>
+						<th>Uso da questão</th>
+						<th></th>
+						<c:forEach items="${questoes }" var="qp">
+							<tr>
+								<td>${qp.idQuestaoProva }</td>
+								<td>${qp.tituloQuestao }</td>
+								<td>${qp.visualizacaoQuestao }</td>
+								<td>${qp.usoQuestao }</td>
+								<td><a
+									href="alteraQuestao?idQuestaoProva=${qp.idQuestaoProva }">Alterar</a></td>
+							</tr>
+						</c:forEach>
+					</tr>
+				</table>
 			</section>
 
 			<h2>Forth Step</h2>
@@ -212,19 +235,18 @@
 					Sed consequat vestibulum purus, imperdiet varius est pellentesque
 					vitae. Suspendisse consequat cursus eros, vitae tempus enim euismod
 					non. Nullam ut commodo tortor.</p>
-				<form id="salvaNaSessao">
+				<form id="salvaNaSessao" action="pegandoQuestoes">
 					<div class="form-group">
 						<div class="col-xs-5">
 							<input type="hidden" class="form-control" name="nQuestoes"
 								id="nQuestoes1" /> <input type="hidden" class="form-control"
 								name="nomeProva" id="nomeProva1" /> <input type="hidden"
 								class="form-control" name="materiaSelecionada"
-								id="materiaSelecionada" value=", " /> <input type="hidden"
-								name="diss1" id="diss1"> <input type="hidden"
-								name="alt1" id="alt1"> <input type="hidden"
-								id="dificuldadeDE" name="dificuldadeDE" value="0"> <input
-								type="hidden" id="dificuldadeATE" name="dificuldadeATE"
-								value="0">
+								id="materiaSelecionada" /> <input type="hidden" name="diss1"
+								id="diss1"> <input type="hidden" name="alt1" id="alt1">
+							<input type="hidden" id="dificuldadeDE" name="dificuldadeDE"
+								value="0"> <input type="hidden" id="dificuldadeATE"
+								name="dificuldadeATE" value="0">
 						</div>
 					</div>
 				</form>

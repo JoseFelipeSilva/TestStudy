@@ -1,6 +1,7 @@
 package br.com.senai.testStudy.model;
 
 import java.sql.Date;
+import java.util.List;
 
 public class Prova {
 
@@ -11,6 +12,7 @@ public class Prova {
 	private String nomeProva;
 	private Date criacaoProva;
 	private Materia[] materias;
+	private List<QuestaoProva> questoes;
 
 	public Materia[] getMaterias() {
 		return materias;
@@ -66,6 +68,14 @@ public class Prova {
 
 	public void setCriacaoProva(Date criacaoProva) {
 		this.criacaoProva = criacaoProva;
+	}
+
+	public List<QuestaoProva> getQuestoes() {
+		return questoes;
+	}
+
+	public void setQuestoes(List<QuestaoProva> questoes) {
+		this.questoes = questoes;
 	}
 
 }

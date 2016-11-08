@@ -44,6 +44,7 @@ public class ProvaController {
 		professor = (Professor) sessao.getAttribute("profLogon");
 		modelo.addAttribute("materia", mdao.listar());
 		modelo.addAttribute("disci", qdao.listarDisc(professor.getEscolaProfessor().getIdEmp()));
+		modelo.addAttribute("continuando", false);
 		return "addProvaPasso1";
 	}
 	

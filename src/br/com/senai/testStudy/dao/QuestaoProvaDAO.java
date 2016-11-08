@@ -27,7 +27,7 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 			+ " corpo_questao, titulo_questao, tipo_questao, disciplina_questao, dificuldade, materia_questao, disponibilidade_questao, status_questao, examinador_responsavel_questao"
 			+ ", autor_questao)" + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String LISTAR = "SELECT * FROM materia,"
-			+ " disciplina, questao_prova WHERE materia.id_disciplina = disciplina.id_disciplina WHERE questao_prova.id_materia = materia.id_materia ";
+			+ " disciplina, questao_prova WHERE materia.id_disciplina = disciplina.id_disciplina AND questao_prova.materia_questao = materia.id_materia AND materia.id_materia=?";
 	private static final String BUSCAR = "SELECT * FROM questao_prova WHERE id_questao = ?";
 	private static final String ALTERAR = "UPDATE questao_prova SET corpo_questao=?, titulo_questao=?"
 			+ ", tipo_questao=? WHERE id_questao=?";
@@ -181,6 +181,7 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
+		java.util.Collections.shuffle(questões);
 		return questões;
 	}
 
