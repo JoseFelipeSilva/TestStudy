@@ -91,51 +91,16 @@ public class QuestaoProvaController {
 	private String aqui(Model modelo, Integer nQuestoes,
 			String materiaSelecionada, String diss1, String alt1,
 			Integer dificuldadeDE, Integer dificuldadeATE) {
-		List<QuestaoProva> questao = new ArrayList<QuestaoProva>();
+		// cria um vetor com as matérias que o cara quer criar a prova
 		String[] materias = materiaSelecionada.trim().split(",");
-		Integer i = 0;
-		Integer aux = nQuestoes;
-		while (i != nQuestoes && aux >= questao.size()) {
-			if (i == null || i == materias.length) {
-				i = 0;
-			}
-			for (; i < materias.length; i++) {
-				int j = 0;
-				List<QuestaoProva> aqui = DAO.listarqp(Integer
-						.valueOf(materias[i].trim()));
-				if (questao.size() == 0) {
-					questao.add(aqui.get(j));
-					nQuestoes--;
-				}
-				for (QuestaoProva q : questao) {
-					if (q != aqui.get(j)) {
-						questao.add(aqui.get(j));
-						nQuestoes--;
-						break;
-					} else {
-						j++;
-					}
-				}
-				if (aux - nQuestoes == aux) {
-					break;
-				}
-			}
-			List<QuestaoProva> list = new ArrayList<QuestaoProva>();
-			list.add(questao.get(0));
-			for (QuestaoProva questaoProva : questao) {
-				for (int j = 0; j < list.size(); j++) {
-					if (questaoProva.getIdQuestaoProva() == list.get(j).getIdQuestaoProva()) {
-						nQuestoes++;
-					} else {
-						System.out.println(questaoProva.getIdQuestaoProva() +"         "+ list.get(j).getIdQuestaoProva());
-						list.add(questaoProva);
-					}
-				}
-			}
-			questao.clear();
-			questao.addAll(list);
+		// cria uma lista com a lista das questões com as materias que o cara quer
+		List<List<QuestaoProva>> questoes = new ArrayList<List<QuestaoProva>>();
+		// laço para preencher com as questões das matérias que o cara quer e salvar no array de cima
+		// tá confuso? Rlx cuzao...
+		for (int i = 0; i < materias.length - 1; i++) {
+			questoes.add(DAO.listarqp(i + 1));			
 		}
-		modelo.addAttribute("questoes", questao);
+		modelo.addAttribute("questoes", questoes);
 		modelo.addAttribute("continuando", true);
 		return "addProvaPasso1";
 	}

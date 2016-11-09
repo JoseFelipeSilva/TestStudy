@@ -213,7 +213,8 @@
 						<th>visualização</th>
 						<th>Uso da questão</th>
 						<th></th>
-						<c:forEach items="${questoes }" var="qp">
+						<c:forEach items="${questoes.size }" var="i">
+						<c:forEach items="${questoes.get(i) }" var="qp">
 							<tr>
 								<td>${qp.idQuestaoProva }</td>
 								<td>${qp.tituloQuestao }</td>
@@ -222,6 +223,7 @@
 								<td><a
 									href="alteraQuestao?idQuestaoProva=${qp.idQuestaoProva }">Alterar</a></td>
 							</tr>
+							</c:forEach>
 						</c:forEach>
 					</tr>
 				</table>

@@ -181,7 +181,6 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
-		java.util.Collections.shuffle(questões);
 		return questões;
 	}
 
