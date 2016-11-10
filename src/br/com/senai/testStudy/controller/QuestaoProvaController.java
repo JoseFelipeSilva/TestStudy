@@ -1,9 +1,11 @@
 package br.com.senai.testStudy.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.http.HttpSession;
 
@@ -71,7 +73,7 @@ public class QuestaoProvaController {
 	@RequestMapping("listandoQP")
 	public String listandoQP(Model modelo, Professor p, HttpSession sessao) {
 		p = (Professor) sessao.getAttribute("profLogon");
-		modelo.addAttribute("qp", DAO.listarqp(p.getIdProfessor()));
+		modelo.addAttribute("qp", DAO.listarLocais(p.getIdProfessor()));
 		return "listaQP";
 	}
 
@@ -90,16 +92,50 @@ public class QuestaoProvaController {
 	@RequestMapping("pegandoQuestoes")
 	private String aqui(Model modelo, Integer nQuestoes,
 			String materiaSelecionada, String diss1, String alt1,
-			Integer dificuldadeDE, Integer dificuldadeATE) {
+			Integer dificuldadeDE, Integer dificuldadeATE, HttpSession session,
+			String disponibilidade1) {
 		// cria um vetor com as matérias que o cara quer criar a prova
 		String[] materias = materiaSelecionada.trim().split(",");
-		// cria uma lista com a lista das questões com as materias que o cara quer
+		// cria uma lista com a lista das questões com as materias que o cara
+		// quer
 		List<List<QuestaoProva>> questoes = new ArrayList<List<QuestaoProva>>();
-		// laço para preencher com as questões das matérias que o cara quer e salvar no array de cima
-		// tá confuso? Rlx cuzao...
-		for (int i = 0; i < materias.length - 1; i++) {
-			questoes.add(DAO.listarqp(i + 1));			
+		// laço para preencher com as questões das matérias que o cara quer e
+		// salvar no array de cima
+		for (int i = 0; i < materias.length; i++) {
+			questoes.add(DAO.listarqp(dificuldadeDE, dificuldadeATE,
+					disponibilidade1, ((Professor) session
+							.getAttribute("profLogon")).getIdProfessor(),
+					Integer.valueOf(materias[i])));
 		}
+		//
+
+		if (materias.length < 1) {
+			Integer aux = 0;
+			for (List<QuestaoProva> list : questoes) {
+				aux += list.size();
+			}
+			while (aux != nQuestoes) {
+				if (aux < nQuestoes) {
+					new RuntimeException("se fodeu" + this.toString());
+				}
+				List<Integer> integers = new ArrayList<Integer>();
+				for (List<QuestaoProva> list : questoes) {
+					integers.add(list.size());
+				}
+				Collections.sort(integers);
+				for (List<QuestaoProva> list : questoes) {
+					if (integers.get(integers.size() - 1) == list.size()) {
+						list.remove(list.size() - 1);
+						break;
+					}
+				}
+				aux--;
+			}
+		}/*
+		 * else { for (int i = questoes.get(0).size()-1; i > nQuestoes; i--) {
+		 * questoes.get(0).remove(i); } }
+		 */
+		Collections.shuffle(questoes);
 		modelo.addAttribute("questoes", questoes);
 		modelo.addAttribute("continuando", true);
 		return "addProvaPasso1";

@@ -26,8 +26,11 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 	private static final String ADICIONAR = "INSERT INTO questao_prova( visualizacao_questao,"
 			+ " corpo_questao, titulo_questao, tipo_questao, disciplina_questao, dificuldade, materia_questao, disponibilidade_questao, status_questao, examinador_responsavel_questao"
 			+ ", autor_questao)" + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	private static final String LISTAR = "SELECT * FROM materia,"
-			+ " disciplina, questao_prova WHERE materia.id_disciplina = disciplina.id_disciplina AND questao_prova.materia_questao = materia.id_materia AND materia.id_materia=?";
+	private static final String LISTAR = "SELECT * FROM materia, disciplina, questao_prova WHERE materia.id_disciplina = disciplina.id_disciplina "
+			+ "AND questao_prova.materia_questao = materia.id_materia AND questao_prova.dificuldade BETWEEN ? AND ? AND questao_prova.disponibilidade_questao = ? "
+			+ "AND materia.id_materia=? AND professor.id_professor=?";
+	private static final String LISTARLOCAIS = "SELECT * FROM materia, disciplina, questao_prova, professor WHERE materia.id_disciplina = disciplina.id_disciplina "
+			+ "AND questao_prova.materia_questao = materia.id_materia AND professor.id_professor=?";
 	private static final String BUSCAR = "SELECT * FROM questao_prova WHERE id_questao = ?";
 	private static final String ALTERAR = "UPDATE questao_prova SET corpo_questao=?, titulo_questao=?"
 			+ ", tipo_questao=? WHERE id_questao=?";
@@ -136,6 +139,7 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 
 	}
 
+	@Deprecated
 	@Override
 	public List<QuestaoProva> listar() {
 		List<QuestaoProva> questões = new ArrayList<QuestaoProva>();
@@ -160,10 +164,10 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 		return questões;
 	}
 	
-	public List<QuestaoProva> listarqp(Integer id) {
+	public List<QuestaoProva> listarLocais(Integer id) {
 		List<QuestaoProva> questões = new ArrayList<QuestaoProva>();
 		try {
-			PreparedStatement stmt = CONEXAO.prepareStatement(LISTAR);
+			PreparedStatement stmt = CONEXAO.prepareStatement(LISTARLOCAIS);
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -181,6 +185,35 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
+		return questões;
+	}
+	
+	public List<QuestaoProva> listarqp(Integer de, Integer ate, String disp, Integer idProfessor,Integer id) {
+		List<QuestaoProva> questões = new ArrayList<QuestaoProva>();
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(LISTAR);
+			stmt.setInt(1, de);
+			stmt.setInt(2, ate);
+			stmt.setString(3, disp);
+			stmt.setInt(4, idProfessor);
+			stmt.setInt(5, id);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				QuestaoProva qp = new QuestaoProva();
+				qp.setIdQuestaoProva(rs.getInt("id_questao"));
+				qp.setTituloQuestao(rs.getString("titulo_questao"));
+				qp.setCorpoQuestao(rs.getString("corpo_questao"));
+				qp.setTipoQuestao(rs.getString("tipo_questao"));
+				qp.setVisualizacaoQuestao(rs.getString("visualizacao_questao"));
+				qp.setUsoQuestao(rs.getInt("uso_questao"));
+				questões.add(qp);
+			}
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		java.util.Collections.shuffle(questões);
 		return questões;
 	}
 

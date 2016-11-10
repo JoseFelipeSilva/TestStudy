@@ -82,6 +82,7 @@
 									headerTag : "h2",
 									bodyTag : "section",
 									transitionEffect : "slideLeft",
+									// fica na posicao 3 qunado retorna do controller com as questoes
 									<c:if test="${continuando }">startIndex : "2",</c:if>
 									// ao finalizar todas as steps dá um submit na form salvaNaSessao
 									onFinished : function() {
@@ -95,6 +96,7 @@
 												.getElementById("nQuestoes").value;
 										document.getElementById("diss1").value = document.getElementById("diss").value;
 										document.getElementById("alt1").value = document.getElementById("alt").value;
+										document.getElementById("disponibilidade1").value = document.getElementById("disponibilidade").value;
 										for (var d = 0; d < 10; d++) {
 											if (document.getElementById("d"+d).checked) {	
 											document.getElementById("dificuldadeDE").value = document.getElementById("d"+d).value;
@@ -106,6 +108,7 @@
 										var divFiltro = $(".input_filtro");
 									},
 									onStepChanging : function(event, currentIndex, newIndex) {
+										// manda os filtros para recuperacao de questao
 										if (newIndex == 2) {
 											$("#salvaNaSessao").submit();
 										}
@@ -137,6 +140,12 @@
 				<div id="tipoQuestoes" name="idTipoQuestoes">
 					<input type="checkbox" value="diss" id="diss">Dissertativa
 					<input type="checkbox" value="alt" id="alt">Alternativa
+				</div>
+				
+				<strong>Privadas ou publicas</strong>
+				<div id="tipoQuestoes" name="disponibilidade">
+					<input type="checkbox" value="disp" id="diss">Publicas
+					<input type="checkbox" value="priv" id="alt">Privadas (se nao existirem questões suficientes serão adicionadas publicas)
 				</div>
 
 
@@ -213,8 +222,8 @@
 						<th>visualização</th>
 						<th>Uso da questão</th>
 						<th></th>
-						<c:forEach items="${questoes.size }" var="i">
-						<c:forEach items="${questoes.get(i) }" var="qp">
+						<c:forEach items="${questoes }" var="i">
+						<c:forEach items="${i }" var="qp">
 							<tr>
 								<td>${qp.idQuestaoProva }</td>
 								<td>${qp.tituloQuestao }</td>
@@ -248,7 +257,8 @@
 								id="diss1"> <input type="hidden" name="alt1" id="alt1">
 							<input type="hidden" id="dificuldadeDE" name="dificuldadeDE"
 								value="0"> <input type="hidden" id="dificuldadeATE"
-								name="dificuldadeATE" value="0">
+								name="dificuldadeATE" value="0"><input type="hidden" id="disponibilidade1"
+								name="disponibilidade1">
 						</div>
 					</div>
 				</form>
