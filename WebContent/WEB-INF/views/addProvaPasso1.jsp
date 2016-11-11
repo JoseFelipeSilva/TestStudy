@@ -64,12 +64,12 @@
 					var	selecionadasNovo = [0];
 					var aux2 = 0;
 					for (var selecionada = 0; selecionada <	selecionadasAntigo.length; selecionada++) {
-						if(selecionada != att.value) {
+						if(selecionadasAntigo[selecionada] != att.value) {
 							selecionadasNovo[aux2];
 							aux2++;
 						}
 					}
-					for (var i = aux2 - 1; i > 0; i--) {
+					for (var i = aux2 -1; i > 0; i--) {
 						document.getElementById("materiaSelecionada").value = selecionadasNovo[i] + ",";
 					}
 				}
@@ -94,9 +94,29 @@
 												.getElementById("nomeProva").value;
 										document.getElementById("nQuestoes1").value = document
 												.getElementById("nQuestoes").value;
-										document.getElementById("diss1").value = document.getElementById("diss").value;
-										document.getElementById("alt1").value = document.getElementById("alt").value;
-										document.getElementById("disponibilidade1").value = document.getElementById("disponibilidade").value;
+										if (document.getElementById("diss").checked) {
+										document.getElementById("diss1").value = document.getElementById("diss").value;											
+										}else {
+											document.getElementById("diss1").value = '';
+										}
+										if (document.getElementById("alt1").checked) {
+											document.getElementById("alt1").value = document.getElementById("alt").value;											
+											}else {
+												document.getElementById("alt1").value = '';
+											}
+										if (document.getElementById("disp1").checked) {
+											document.getElementById("disp1").value = document.getElementById("disp").value;							
+											}else {
+												document.getElementById("disp1").value = '';
+											}
+										if (document.getElementById("priv1").checked) {
+											document.getElementById("priv1").value = document.getElementById("priv").value;								
+											}else {
+												document.getElementById("priv1").value = '';
+											}
+										
+										
+									
 										for (var d = 0; d < 10; d++) {
 											if (document.getElementById("d"+d).checked) {	
 											document.getElementById("dificuldadeDE").value = document.getElementById("d"+d).value;
@@ -109,6 +129,9 @@
 									},
 									onStepChanging : function(event, currentIndex, newIndex) {
 										// manda os filtros para recuperacao de questao
+										<c:if test="${continuando }">
+										return true;
+										</c:if>
 										if (newIndex == 2) {
 											$("#salvaNaSessao").submit();
 										}
@@ -141,11 +164,13 @@
 					<input type="checkbox" value="diss" id="diss">Dissertativa
 					<input type="checkbox" value="alt" id="alt">Alternativa
 				</div>
-				
+
 				<strong>Privadas ou publicas</strong>
 				<div id="tipoQuestoes" name="disponibilidade">
-					<input type="checkbox" value="disp" id="diss">Publicas
-					<input type="checkbox" value="priv" id="alt">Privadas (se nao existirem questões suficientes serão adicionadas publicas)
+					<input type="checkbox" value="disp" id="disp"
+						name="disponibilidade">Publicas <input type="checkbox"
+						value="priv" id="priv" name="disponibilidade">Privadas (se
+					nao existirem questões suficientes serão adicionadas publicas)
 				</div>
 
 
@@ -223,15 +248,15 @@
 						<th>Uso da questão</th>
 						<th></th>
 						<c:forEach items="${questoes }" var="i">
-						<c:forEach items="${i }" var="qp">
-							<tr>
-								<td>${qp.idQuestaoProva }</td>
-								<td>${qp.tituloQuestao }</td>
-								<td>${qp.visualizacaoQuestao }</td>
-								<td>${qp.usoQuestao }</td>
-								<td><a
-									href="alteraQuestao?idQuestaoProva=${qp.idQuestaoProva }">Alterar</a></td>
-							</tr>
+							<c:forEach items="${i }" var="qp">
+								<tr>
+									<td>${qp.idQuestaoProva }</td>
+									<td>${qp.tituloQuestao }</td>
+									<td>${qp.visualizacaoQuestao }</td>
+									<td>${qp.usoQuestao }</td>
+									<td><a
+										href="alteraQuestao?idQuestaoProva=${qp.idQuestaoProva }">Alterar</a></td>
+								</tr>
 							</c:forEach>
 						</c:forEach>
 					</tr>
@@ -257,8 +282,9 @@
 								id="diss1"> <input type="hidden" name="alt1" id="alt1">
 							<input type="hidden" id="dificuldadeDE" name="dificuldadeDE"
 								value="0"> <input type="hidden" id="dificuldadeATE"
-								name="dificuldadeATE" value="0"><input type="hidden" id="disponibilidade1"
-								name="disponibilidade1">
+								name="dificuldadeATE" value="0"><input type="hidden"
+								name="disp1" id="disp1"> <input type="hidden"
+								name="priv1" id="priv1">
 						</div>
 					</div>
 				</form>

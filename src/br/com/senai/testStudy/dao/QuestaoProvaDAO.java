@@ -26,8 +26,8 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 	private static final String ADICIONAR = "INSERT INTO questao_prova( visualizacao_questao,"
 			+ " corpo_questao, titulo_questao, tipo_questao, disciplina_questao, dificuldade, materia_questao, disponibilidade_questao, status_questao, examinador_responsavel_questao"
 			+ ", autor_questao)" + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	private static final String LISTAR = "SELECT * FROM materia, disciplina, questao_prova WHERE materia.id_disciplina = disciplina.id_disciplina "
-			+ "AND questao_prova.materia_questao = materia.id_materia AND questao_prova.dificuldade BETWEEN ? AND ? AND questao_prova.disponibilidade_questao = ? "
+	private static final String LISTAR = "SELECT * FROM materia, disciplina, questao_prova, professor WHERE materia.id_disciplina = disciplina.id_disciplina "
+			+ "AND questao_prova.materia_questao = materia.id_materia AND questao_prova.dificuldade BETWEEN ? AND ? "
 			+ "AND materia.id_materia=? AND professor.id_professor=?";
 	private static final String LISTARLOCAIS = "SELECT * FROM materia, disciplina, questao_prova, professor WHERE materia.id_disciplina = disciplina.id_disciplina "
 			+ "AND questao_prova.materia_questao = materia.id_materia AND professor.id_professor=?";
@@ -189,14 +189,21 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 	}
 	
 	public List<QuestaoProva> listarqp(Integer de, Integer ate, String disp, Integer idProfessor,Integer id) {
+		String listar = LISTAR.toString();
+		Boolean teste = (!disp.equals("true"));
+		if (teste) {
+			listar += " AND questao_prova.disponibilidade_questao = ?";
+		}
 		List<QuestaoProva> questões = new ArrayList<QuestaoProva>();
 		try {
-			PreparedStatement stmt = CONEXAO.prepareStatement(LISTAR);
+			PreparedStatement stmt = CONEXAO.prepareStatement(listar);
 			stmt.setInt(1, de);
 			stmt.setInt(2, ate);
-			stmt.setString(3, disp);
+			stmt.setInt(3, id);
 			stmt.setInt(4, idProfessor);
-			stmt.setInt(5, id);
+			if (teste) {
+				stmt.setString(5, disp);
+			}
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				QuestaoProva qp = new QuestaoProva();
@@ -211,7 +218,7 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 			stmt.close();
 			rs.close();
 		} catch (SQLException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException(e.toString());
 		}
 		java.util.Collections.shuffle(questões);
 		return questões;

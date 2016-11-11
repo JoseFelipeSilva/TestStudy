@@ -93,7 +93,7 @@ public class QuestaoProvaController {
 	private String aqui(Model modelo, Integer nQuestoes,
 			String materiaSelecionada, String diss1, String alt1,
 			Integer dificuldadeDE, Integer dificuldadeATE, HttpSession session,
-			String disponibilidade1) {
+			String disp1, String priv1) {
 		// cria um vetor com as matérias que o cara quer criar a prova
 		String[] materias = materiaSelecionada.trim().split(",");
 		// cria uma lista com a lista das questões com as materias que o cara
@@ -102,21 +102,28 @@ public class QuestaoProvaController {
 		// laço para preencher com as questões das matérias que o cara quer e
 		// salvar no array de cima
 		for (int i = 0; i < materias.length; i++) {
+			// SE AS DUA ESTIVEREM SELECIONADAS OU VAZIAS ELE TRAS TRUE, SE
+			// APENAS UMA ESTIVER SELECIONADA
+			// ELE TRAZ O SEU RESPECTIVO VALOR
 			questoes.add(DAO.listarqp(dificuldadeDE, dificuldadeATE,
-					disponibilidade1, ((Professor) session
-							.getAttribute("profLogon")).getIdProfessor(),
-					Integer.valueOf(materias[i])));
+					(disp1 == null ? (priv1 == null ? "true" : priv1)
+							: ((priv1 == null ? disp1 : "true"))),
+					((Professor) session.getAttribute("profLogon"))
+							.getIdProfessor(), Integer.valueOf(materias[i])));
 		}
 		//
+		Integer aux = 0;
+		for (List<QuestaoProva> list : questoes) {
+			aux = (aux + list.size());
+		}
+		if (aux < nQuestoes) {
+			throw new RuntimeException("CADASTRE MAIS QUESTOES");
+		}
 
-		if (materias.length < 1) {
-			Integer aux = 0;
-			for (List<QuestaoProva> list : questoes) {
-				aux += list.size();
-			}
+		if (questoes.size() != 0) {
 			while (aux != nQuestoes) {
 				if (aux < nQuestoes) {
-					new RuntimeException("se fodeu" + this.toString());
+					throw new RuntimeException("se fodeu" + this.toString());
 				}
 				List<Integer> integers = new ArrayList<Integer>();
 				for (List<QuestaoProva> list : questoes) {
@@ -131,10 +138,14 @@ public class QuestaoProvaController {
 				}
 				aux--;
 			}
-		}/*
-		 * else { for (int i = questoes.get(0).size()-1; i > nQuestoes; i--) {
-		 * questoes.get(0).remove(i); } }
-		 */
+		} else {
+			while (aux != nQuestoes) {
+				Collections.shuffle(questoes.get(0));
+				questoes.get(0).remove(questoes.get(0).size() - 1);
+				aux--;
+			}
+		}
+
 		Collections.shuffle(questoes);
 		modelo.addAttribute("questoes", questoes);
 		modelo.addAttribute("continuando", true);
