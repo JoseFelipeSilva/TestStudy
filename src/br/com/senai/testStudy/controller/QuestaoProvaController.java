@@ -111,7 +111,14 @@ public class QuestaoProvaController {
 					((Professor) session.getAttribute("profLogon"))
 							.getIdProfessor(), Integer.valueOf(materias[i])));
 		}
-		//
+		Collections.shuffle(questoes);
+		List<QuestaoProva> teste = new ArrayList<QuestaoProva>();
+		for (List<QuestaoProva> list : questoes) {
+			for (QuestaoProva questaoProva : list) {
+				teste.add(questaoProva);
+			}
+		}
+		modelo.addAttribute("tetas", teste);
 		Integer aux = 0;
 		for (List<QuestaoProva> list : questoes) {
 			aux = (aux + list.size());
@@ -148,7 +155,6 @@ public class QuestaoProvaController {
 
 		Collections.shuffle(questoes);
 		modelo.addAttribute("questoes", questoes);
-		modelo.addAttribute("continuando", true);
-		return "addProvaPasso1";
+		return "addProvaPasso2";
 	}
 }

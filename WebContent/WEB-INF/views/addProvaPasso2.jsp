@@ -6,108 +6,117 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Adicionar Prova</title>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="https://code.google.com/p/jquery-cascade"></script>
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="resources/normalize.css">
+<link rel="stylesheet" href="resources/main.css">
+<link rel="stylesheet" href="resources/jquery.steps.css">
+<script src="resources/modernizr-2.6.2.min.js"></script>
+<script src="resources/jquery-1.9.1.min.js"></script>
+<script src="resources/jquery.cookie-1.3.1.js"></script>
+<script src="resources/jquery.steps.js"></script>
 
 <script type="text/javascript">
-
-	  
-	function adicionarFiltro(){
-		  var wrapper = $(".input_fields_wrap");
-		  $(wrapper).append('<div><input type="text" name="corpoAlternativa" />');
-		     
-	}
-	
-	
-	function consultaDisciplinas() {
-		// Recupera o id da lista de selects de Assunto
-		var idDisciplina = document.getElementById("idDisciplina");
-		// Recupera o nome do valor selecionado na lista de Disciplina
-		var selectedValue = idDisciplina.options[idDisciplina.selectedIndex].value;
-		// Insere a disciplina selecionada em outro form para enviá-la e compará-la no banco de dados
-		var aux = document.getElementById("aux");
-		aux.value = selectedValue;
-		document.getElementById("botao").click();
-
-	}
-
-	function verifica() {
-
-		// Recupera o id da lista de selects de Assunto
-		var idMateria = document.getElementById("idMateria");
-		// Recupera o nome do valor selecionado na lista de Assunto
-		var valorSelecionadoAssunto = idMateria.options[idMateria.selectedIndex].value;
-		// Recupera o id da lista de selects de Disciplina
-		var idDisciplina = document.getElementById("idDisciplina");
-		// Recupera o nome do valor selecionado na lista de Disciplina
-		var valorSelecionadoDisciplina = idDisciplina.options[idDisciplina.selectedIndex].text;
-		// Compara e faz a validação se a Disciplina não foi selecionada
-		if (valorSelecionadoDisciplina == "Selecione uma Disciplina") {
-			alert("Disciplina inválida");
-			return false;
+	function alterando(id,fazer,item) {
+		if (item.checked) {
+			if (fazer == "add") {
+				document.getElementById(fazer+id).style="border: green medium solid;";
+				var selecionadasAntigo = document.getElementById("questaoAdd").value;
+				if (selecionadasAntigo == undefined) {
+					selecionadasAntigo = ' ';
+				}
+				var selecionadasNovo = selecionadasAntigo + id + ",";
+				document.getElementById("questaoAdd").value = selecionadasNovo;
+			} else if(fazer == "rem"){
+				document.getElementById(fazer+id).style="border: red medium solid;";
+				var selecionadasAntigo = document.getElementById("questaoRem").value;
+				if (selecionadasAntigo == undefined) {
+					selecionadasAntigo = ' ';
+				}
+				var selecionadasNovo = selecionadasAntigo + id + ",";
+				document.getElementById("questaoRem").value = selecionadasNovo;
+			}else {
+				alert("error");
+			}
+		} else {
+			if (fazer == "add") {
+				document.getElementById(fazer+id).style="border: 1px aqua;";
+				var	selecionadasAntigo = document.getElementById("questaoAdd").value.split(",");
+				var	selecionadasNovo = [0];
+				var aux2 = 0;
+				for (var selecionada = 0; selecionada <	selecionadasAntigo.length; selecionada++) {
+					if(selecionadasAntigo[selecionada] != id) {
+						selecionadasNovo[aux2];
+						aux2++;
+					}
+				}
+				for (var i = aux2 -1; i > 0; i--) {
+					document.getElementById("questaoAdd").value = selecionadasNovo[i] + ",";
+				}
+			} else if(fazer == "rem"){
+				document.getElementById(fazer+id).style="border: 1px blue;";
+				aux--;
+				var	selecionadasAntigo = document.getElementById("questaoRem").value.split(",");
+				var	selecionadasNovo = [0];
+				var aux2 = 0;
+				for (var selecionada = 0; selecionada <	selecionadasAntigo.length; selecionada++) {
+					if(selecionadasAntigo[selecionada] != id) {
+						selecionadasNovo[aux2];
+						aux2++;
+					}
+				}
+				for (var i = aux2 -1; i > 0; i--) {
+					document.getElementById("questaoRem").value = selecionadasNovo[i] + ",";
+				}
+			}else {
+				alert("error");
+			}
 		}
-		// Compara e faz a validação se o Assunto não foi selecionado
-		if (valorSelecionadoAssunto == "Selecione um Assunto") {
-			alert("Assunto inválido");
-			return false;
-		}
-		return false;
 	}
 </script>
 </head>
 <body>
-<form action="">
-	<strong>Disciplina</strong>
-	<select name="idDisciplina" id="idDisciplina"
-		onchange="consultaDisciplinas();">
-		<option value="0">Selecione uma disciplina</option>
-		<c:forEach items="${disci}" var="disc">
-			<c:if
-				test="${disc.idDisciplina == disciplinaSelecionada.disciplina.idDisciplina}">
-				<option selected="selected" value="${disc.idDisciplina}">${disc.nomeDisciplina}</option>
-			</c:if>
-			<c:if
-				test="${disc.idDisciplina != disciplinaSelecionada.disciplina.idDisciplina}">
-				<option value="${disc.idDisciplina}">${disc.nomeDisciplina}</option>
-			</c:if>
-		</c:forEach>
-	</select>
-	<br>
-	<div class="input_fields_wrap">
-	
+	<div style="float: left;">
+		<table style="border: 1px blue;" border="1px">
+			<tr>
+				<th>ID</th>
+				<th>titulo</th>
+				<th></th>
+				<c:forEach items="${questoes }" var="i">
+					<c:forEach items="${i }" var="qp">
+						<tr id="rem${qp.idQuestaoProva }">
+							<td>${qp.idQuestaoProva }</td>
+							<td>${qp.tituloQuestao }</td>
+							<td>${qp.visualizacaoQuestao }</td>
+							<td>${qp.usoQuestao }</td>
+							<td><input type="checkbox" href="#"
+								onchange="alterando(${qp.idQuestaoProva },'rem',this)">Remover</td>
+						</tr>
+					</c:forEach>
+				</c:forEach>
+			</tr>
+		</table>
 	</div>
-
-	<strong>Materia</strong>
-	<select id="idMateria" name="idMateria">
-		<option value="0">Selecione um Assunto</option>
-		<c:forEach items="${materia}" var="m">
-			<option value="${m.idMateria}">${m.nomeMateria}</option>
-		</c:forEach>
-	</select>
-	<br>
-	
-	<strong>Quantidade de questões dessa seleção</strong><br>
-		 <input type="number"><br>
-	
-	<strong>Dificuldade da questão: </strong><br />
-		 <input type="radio" name="dificuldade" value="1" required />1
-		 <input type="radio" name="dificuldade" value="2" required />2
-		 <input type="radio" name="dificuldade" value="3" required />3
-		 <input type="radio" name="dificuldade" value="4" required />4
-		 <input type="radio" name="dificuldade" value="5" required />5
-		 <input type="radio" name="dificuldade" value="6" required />6
-		 <input type="radio" name="dificuldade" value="7" required />7
-		 <input type="radio" name="dificuldade" value="8" required />8
-		 <input type="radio" name="dificuldade" value="9" required />9
-		 <input type="radio" name="dificuldade" value="10" required />10<br/>
-		 
-		 <button onClick="adicionarFiltro()" class="add_field_button">Adicionar outros filtros</button>
-		 
-	</form>
-	<form action="consultarMateriaAddProva">
-		<input id="aux" type="text" name="idDisciplina" hidden="true">
-		<input id="botao" type="submit" hidden="true">
-	</form>
+	<div> 
+	</div>
+	<div style="float: left;">
+		<table style="border: 1px aqua;" border="1px">
+			<tr>
+				<th>ID</th>
+				<th>titulo</th>
+				<th></th>
+				<c:forEach items="${tetas }" var="qp2">
+						<tr id="add${qp2.idQuestaoProva }">
+							<td>${qp2.idQuestaoProva }</td>
+							<td>${qp2.tituloQuestao }</td>
+							<td>${qp2.visualizacaoQuestao }</td>
+							<td>${qp2.usoQuestao }</td>
+							<td><input type="checkbox" href="#"
+								onchange="alterando(${qp2.idQuestaoProva },'add',this)">Add</td>
+						</tr>
+				</c:forEach>
+			</tr>
+		</table>
+	</div>
+	<form action="pegandoQuestoes"></form>
 </body>
 </html>

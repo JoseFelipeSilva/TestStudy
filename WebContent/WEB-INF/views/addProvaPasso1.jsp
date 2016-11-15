@@ -83,7 +83,8 @@
 									bodyTag : "section",
 									transitionEffect : "slideLeft",
 									// fica na posicao 3 qunado retorna do controller com as questoes
-									<c:if test="${continuando }">startIndex : "2",</c:if>
+									 <c:if test="${continuando }">startIndex: "2",
+									 PreviousStep: true,</c:if>
 									// ao finalizar todas as steps dá um submit na form salvaNaSessao
 									onFinished : function() {
 										$("#salvaNaSessao").submit()
@@ -134,11 +135,15 @@
 										</c:if>
 										if (newIndex == 2) {
 											$("#salvaNaSessao").submit();
+											return true;																			
 										}
 										return true;
 									}
 								});
 			});
+			function func3step(){
+				location.reload();
+			}
 		</script>
 
 		<div id="wizard">
@@ -236,9 +241,26 @@
 					</c:forEach>
 				</div>
 				<br>
+				<form id="salvaNaSessao" action="pegandoQuestoes">
+					<div class="form-group">
+						<div class="col-xs-5">
+							<input type="hidden" class="form-control" name="nQuestoes"
+								id="nQuestoes1" /> <input type="hidden" class="form-control"
+								name="nomeProva" id="nomeProva1" /> <input type="hidden"
+								class="form-control" name="materiaSelecionada"
+								id="materiaSelecionada" /> <input type="hidden" name="diss1"
+								id="diss1"> <input type="hidden" name="alt1" id="alt1">
+							<input type="hidden" id="dificuldadeDE" name="dificuldadeDE"
+								value="0"> <input type="hidden" id="dificuldadeATE"
+								name="dificuldadeATE" value="0"><input type="hidden"
+								name="disp1" id="disp1"> <input type="hidden"
+								name="priv1" id="priv1">
+						</div>
+					</div>
+				</form>
 			</section>
 
-			<h2>Third Step</h2>
+			<!-- <h2>Third Step</h2>
 			<section>
 				<table>
 					<tr>
@@ -263,7 +285,7 @@
 				</table>
 			</section>
 
-			<h2>Forth Step</h2>
+			 <h2>Forth Step</h2>
 			<section>
 				<p>Quisque at sem turpis, id sagittis diam. Suspendisse
 					malesuada eros posuere mauris vehicula vulputate. Aliquam sed sem
@@ -288,7 +310,7 @@
 						</div>
 					</div>
 				</form>
-			</section>
+			</section>-->
 		</div>
 	</div>
 
