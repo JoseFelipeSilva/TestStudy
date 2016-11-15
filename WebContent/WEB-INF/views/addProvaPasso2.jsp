@@ -16,23 +16,27 @@
 <script src="resources/jquery.steps.js"></script>
 
 <script type="text/javascript">
-	function alterando(id,fazer,item) {
+	function alterando(fazer,item) {
 		if (item.checked) {
 			if (fazer == "add") {
+				alert(id)
 				document.getElementById(fazer+id).style="border: green medium solid;";
 				var selecionadasAntigo = document.getElementById("questaoAdd").value;
+				alert(selecionadasAntigo)
 				if (selecionadasAntigo == undefined) {
 					selecionadasAntigo = ' ';
 				}
-				var selecionadasNovo = selecionadasAntigo + id + ",";
+				var selecionadasNovo = selecionadasAntigo + item.value + ",";
 				document.getElementById("questaoAdd").value = selecionadasNovo;
 			} else if(fazer == "rem"){
+				alert(id)
 				document.getElementById(fazer+id).style="border: red medium solid;";
 				var selecionadasAntigo = document.getElementById("questaoRem").value;
 				if (selecionadasAntigo == undefined) {
 					selecionadasAntigo = ' ';
 				}
-				var selecionadasNovo = selecionadasAntigo + id + ",";
+				alert(selecionadasAntigo)
+				var selecionadasNovo = selecionadasAntigo + item.value + ",";
 				document.getElementById("questaoRem").value = selecionadasNovo;
 			}else {
 				alert("error");
@@ -44,7 +48,7 @@
 				var	selecionadasNovo = [0];
 				var aux2 = 0;
 				for (var selecionada = 0; selecionada <	selecionadasAntigo.length; selecionada++) {
-					if(selecionadasAntigo[selecionada] != id) {
+					if(selecionadasAntigo[selecionada] != item.value) {
 						selecionadasNovo[aux2];
 						aux2++;
 					}
@@ -59,7 +63,7 @@
 				var	selecionadasNovo = [0];
 				var aux2 = 0;
 				for (var selecionada = 0; selecionada <	selecionadasAntigo.length; selecionada++) {
-					if(selecionadasAntigo[selecionada] != id) {
+					if(selecionadasAntigo[selecionada] != item.value) {
 						selecionadasNovo[aux2];
 						aux2++;
 					}
@@ -88,7 +92,7 @@
 							<td>${qp.tituloQuestao }</td>
 							<td>${qp.visualizacaoQuestao }</td>
 							<td>${qp.usoQuestao }</td>
-							<td><input type="checkbox" href="#"
+							<td><input type="checkbox"
 								onchange="alterando(${qp.idQuestaoProva },'rem',this)">Remover</td>
 						</tr>
 					</c:forEach>
@@ -96,8 +100,7 @@
 			</tr>
 		</table>
 	</div>
-	<div> 
-	</div>
+	<div></div>
 	<div style="float: left;">
 		<table style="border: 1px aqua;" border="1px">
 			<tr>
@@ -105,18 +108,24 @@
 				<th>titulo</th>
 				<th></th>
 				<c:forEach items="${tetas }" var="qp2">
-						<tr id="add${qp2.idQuestaoProva }">
-							<td>${qp2.idQuestaoProva }</td>
-							<td>${qp2.tituloQuestao }</td>
-							<td>${qp2.visualizacaoQuestao }</td>
-							<td>${qp2.usoQuestao }</td>
-							<td><input type="checkbox" href="#"
-								onchange="alterando(${qp2.idQuestaoProva },'add',this)">Add</td>
-						</tr>
+					<tr id="add${qp2.idQuestaoProva }">
+						<td>${qp2.idQuestaoProva }</td>
+						<td>${qp2.tituloQuestao }</td>
+						<td>${qp2.visualizacaoQuestao }</td>
+						<td>${qp2.usoQuestao }</td>
+						<td><input type="checkbox"
+							onchange="alterando(${qp2.idQuestaoProva },'add',this)">Add</td>
+					</tr>
 				</c:forEach>
 			</tr>
 		</table>
 	</div>
-	<form action="pegandoQuestoes"></form>
+	<form action="attQuestoesProva">
+		<input type="hidden" id="questaoAdd" name="questaoAdd"> <input type="hidden"
+			name="questaoRem" id="questaoRem"> <input type="submit" value="att">
+	</form>
+	<form action="SalvandoProva">
+		<input type="submit" value="Salvar">
+	</form>
 </body>
 </html>

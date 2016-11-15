@@ -90,7 +90,7 @@ public class QuestaoProvaController {
 	}
 
 	@RequestMapping("pegandoQuestoes")
-	private String aqui(Model modelo, Integer nQuestoes,
+	private String aqui(HttpSession modelo, Integer nQuestoes,
 			String materiaSelecionada, String diss1, String alt1,
 			Integer dificuldadeDE, Integer dificuldadeATE, HttpSession session,
 			String disp1, String priv1) {
@@ -118,7 +118,7 @@ public class QuestaoProvaController {
 				teste.add(questaoProva);
 			}
 		}
-		modelo.addAttribute("tetas", teste);
+		modelo.setAttribute("tetas", teste);
 		Integer aux = 0;
 		for (List<QuestaoProva> list : questoes) {
 			aux = (aux + list.size());
@@ -154,7 +154,88 @@ public class QuestaoProvaController {
 		}
 
 		Collections.shuffle(questoes);
-		modelo.addAttribute("questoes", questoes);
+		modelo.setAttribute("questoes", questoes);
+		/*for (List<QuestaoProva> list : questoes) {
+			for (QuestaoProva questaoProva : list) {
+				if (teste.contains(questaoProva)) {
+					teste.remove(questaoProva);
+				}
+			}
+		}*/
 		return "addProvaPasso2";
 	}
+
+	@RequestMapping("attQuestoesProva")
+	private String attQuestoesProva(HttpSession session, String questaoAdd,
+			String questaoRem) {
+		String[] questoesAdd = questaoAdd.trim().split(",");
+		String[] questoesRem = questaoRem.trim().split(",");
+		List<List<QuestaoProva>> questoesProva = (List<List<QuestaoProva>>) session
+				.getAttribute("questoes");
+		List<QuestaoProva> questoes = (List<QuestaoProva>) session
+				.getAttribute("tetas");
+		for (int i = 0; i < questoesRem.length; i++) {
+			String string = questoesRem[i];
+			for (List<QuestaoProva> list : questoesProva) {
+				for (QuestaoProva questaoProva : list) {
+					System.out.println("sexooooooooooooo");
+					System.out.println(questaoProva.getIdQuestaoProva().toString());
+					
+					if (string == questaoProva.getIdQuestaoProva().toString()) {
+						questoes.add(questaoProva);
+						list.remove(questaoProva);
+						break;
+					}
+				}
+			}
+		}
+		for (int i = 0; i < questoesAdd.length; i++) {
+			String string = questoesAdd[i];
+				for (QuestaoProva questaoProva : questoes) {
+					System.out.println("analllllllllllllllllllllll");
+					System.out.println(questaoProva.getIdQuestaoProva().toString());
+					if (string.equals(questaoProva.getIdQuestaoProva().toString())) {
+						for (List<QuestaoProva> list : questoesProva) {
+							if (list.get(0).getMateria() == questaoProva.getMateria()) {
+								list.add(questaoProva);
+								break;
+							}
+						}
+						questoes.remove(questaoProva);
+						break;
+					}
+				break;
+			}
+		}
+		session.setAttribute("questoes", questoesProva);
+		session.setAttribute("tetas", questoes);
+		return "addProvaPasso2";
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
