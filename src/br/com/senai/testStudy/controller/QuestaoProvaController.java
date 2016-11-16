@@ -169,19 +169,25 @@ public class QuestaoProvaController {
 	private String attQuestoesProva(HttpSession session, String questaoAdd,
 			String questaoRem) {
 		String[] questoesAdd = questaoAdd.trim().split(",");
+		System.out.println("questoesAdd Sozinho:"+questoesAdd.toString());
 		String[] questoesRem = questaoRem.trim().split(",");
 		List<List<QuestaoProva>> questoesProva = (List<List<QuestaoProva>>) session
 				.getAttribute("questoes");
 		List<QuestaoProva> questoes = (List<QuestaoProva>) session
 				.getAttribute("tetas");
+		
+		// TODO é necessário mudar os laços for e tirar o teste if. Porque o for deve testar apenas quantas questões estão selecionadas
+		// ex: se tiver 3 questões selecionadas ele simplesmente vai adicionar em uma lista e remover na outra 3 vezes...
+		
+		for (int i = 0; i < questoesAdd.length; i++) {
+			
+		}
+		
 		for (int i = 0; i < questoesRem.length; i++) {
 			String string = questoesRem[i];
 			for (List<QuestaoProva> list : questoesProva) {
 				for (QuestaoProva questaoProva : list) {
-					System.out.println("sexooooooooooooo");
-					System.out.println(questaoProva.getIdQuestaoProva().toString());
-					
-					if (string == questaoProva.getIdQuestaoProva().toString()) {
+					if (string.equals(questaoProva.getIdQuestaoProva().toString())) {
 						questoes.add(questaoProva);
 						list.remove(questaoProva);
 						break;
@@ -189,24 +195,7 @@ public class QuestaoProvaController {
 				}
 			}
 		}
-		for (int i = 0; i < questoesAdd.length; i++) {
-			String string = questoesAdd[i];
-				for (QuestaoProva questaoProva : questoes) {
-					System.out.println("analllllllllllllllllllllll");
-					System.out.println(questaoProva.getIdQuestaoProva().toString());
-					if (string.equals(questaoProva.getIdQuestaoProva().toString())) {
-						for (List<QuestaoProva> list : questoesProva) {
-							if (list.get(0).getMateria() == questaoProva.getMateria()) {
-								list.add(questaoProva);
-								break;
-							}
-						}
-						questoes.remove(questaoProva);
-						break;
-					}
-				break;
-			}
-		}
+		
 		session.setAttribute("questoes", questoesProva);
 		session.setAttribute("tetas", questoes);
 		return "addProvaPasso2";

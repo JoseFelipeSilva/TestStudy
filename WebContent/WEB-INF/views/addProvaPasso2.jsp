@@ -16,27 +16,31 @@
 <script src="resources/jquery.steps.js"></script>
 
 <script type="text/javascript">
-	function alterando(fazer,item) {
+	function alterando(id,fazer,item) {
 		if (item.checked) {
 			if (fazer == "add") {
-				alert(id)
 				document.getElementById(fazer+id).style="border: green medium solid;";
 				var selecionadasAntigo = document.getElementById("questaoAdd").value;
-				alert(selecionadasAntigo)
-				if (selecionadasAntigo == undefined) {
+				if (selecionadasAntigo == '') {
 					selecionadasAntigo = ' ';
 				}
-				var selecionadasNovo = selecionadasAntigo + item.value + ",";
+				if (selecionadasAntigo == ' ') {
+					var selecionadasNovo = selecionadasAntigo + id;
+				} else {
+					var selecionadasNovo =  selecionadasAntigo+ "," + id;
+				}				
 				document.getElementById("questaoAdd").value = selecionadasNovo;
 			} else if(fazer == "rem"){
-				alert(id)
 				document.getElementById(fazer+id).style="border: red medium solid;";
 				var selecionadasAntigo = document.getElementById("questaoRem").value;
-				if (selecionadasAntigo == undefined) {
+				if (selecionadasAntigo == '') {
 					selecionadasAntigo = ' ';
 				}
-				alert(selecionadasAntigo)
-				var selecionadasNovo = selecionadasAntigo + item.value + ",";
+				if (selecionadasAntigo == ' ') {
+					var selecionadasNovo = selecionadasAntigo + id;
+				} else {
+					var selecionadasNovo =  selecionadasAntigo+ "," + id;
+				}
 				document.getElementById("questaoRem").value = selecionadasNovo;
 			}else {
 				alert("error");
@@ -54,7 +58,12 @@
 					}
 				}
 				for (var i = aux2 -1; i > 0; i--) {
-					document.getElementById("questaoAdd").value = selecionadasNovo[i] + ",";
+					if(i == 1){
+						document.getElementById("questaoAdd").value = selecionadasNovo[i];
+					}else{
+						document.getElementById("questaoAdd").value = selecionadasNovo[i] + ",";
+					}
+					
 				}
 			} else if(fazer == "rem"){
 				document.getElementById(fazer+id).style="border: 1px blue;";
@@ -69,7 +78,11 @@
 					}
 				}
 				for (var i = aux2 -1; i > 0; i--) {
-					document.getElementById("questaoRem").value = selecionadasNovo[i] + ",";
+					if(i == 1){
+						document.getElementById("questaoRem").value = selecionadasNovo[i];
+					}else{
+						document.getElementById("questaoRem").value = selecionadasNovo[i] + ",";
+					}
 				}
 			}else {
 				alert("error");
@@ -87,7 +100,7 @@
 				<th></th>
 				<c:forEach items="${questoes }" var="i">
 					<c:forEach items="${i }" var="qp">
-						<tr id="rem${qp.idQuestaoProva }">
+						<tr id="rem${qp.idQuestaoProva }" value="rem${qp.idQuestaoProva }">
 							<td>${qp.idQuestaoProva }</td>
 							<td>${qp.tituloQuestao }</td>
 							<td>${qp.visualizacaoQuestao }</td>
