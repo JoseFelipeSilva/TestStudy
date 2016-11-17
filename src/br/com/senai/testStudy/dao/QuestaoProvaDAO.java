@@ -190,7 +190,7 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 		return questões;
 	}
 	
-	public List<QuestaoProva> listarqp(Integer de, Integer ate, String disp, Integer idProfessor,Integer id, boolean pegaAlt) {
+	public List<QuestaoProva> listarqp(Integer de, Integer ate, String disp, Integer idProfessor,Integer id) {
 		// SE pegaAlt for true ele vai pro controller da alternativa para pegar as alternativas correspondentes a questão
 		String listar = LISTAR.toString();
 		Boolean teste = (!disp.equals("true"));
@@ -221,11 +221,12 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 			stmt.close();
 			rs.close();
 			// se pega alt for verdadeiro vai buscar as alternativas das questões
+			/*
 			if (pegaAlt) {
 				final AlternativaDAO dao = null;
 				AlternativaController alt = new AlternativaController(dao);
 				alt.mostraAlternativa(questoes);
-			}
+			}*/
 		} catch (SQLException e) {
 			throw new RuntimeException(e.toString());
 		}

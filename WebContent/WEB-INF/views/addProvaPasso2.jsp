@@ -134,6 +134,26 @@
 				</c:forEach>
 			</tr>
 		</table>
+
+
+		<table style="border: 1px aqua;" border="1px">
+			<tr>
+				<th>ID</th>
+				<th>titulo</th>
+				<th></th>
+				<c:forEach items="${alternativas }" var="alt">
+					<c:forEach items="${alt }" var="alt">
+						<tr id="add${alt.idAlternativa }">
+							<td>${alt.idAlternativa }</td>
+							<td>${alt.certa }</td>
+							<td>${alt.corpoAlternativa }</td>
+							<td><input type="checkbox"
+								onchange="alterando(${qp2.idQuestaoProva },'add',this)">Add</td>
+						</tr>
+					</c:forEach>
+				</c:forEach>
+			</tr>
+		</table>
 	</div>
 	<form action="attQuestoesProva">
 		<input type="hidden" id="questaoAdd" name="questaoAdd"> <input

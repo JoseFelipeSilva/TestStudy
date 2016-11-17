@@ -15,7 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import br.com.senai.testStudy.dao.AlternativaDAO;
 import br.com.senai.testStudy.dao.QuestaoProvaDAO;
+import br.com.senai.testStudy.model.Alternativa;
 import br.com.senai.testStudy.model.Disciplina;
 import br.com.senai.testStudy.model.Materia;
 import br.com.senai.testStudy.model.Professor;
@@ -25,11 +27,13 @@ import br.com.senai.testStudy.model.QuestaoProva;
 @Controller
 public class QuestaoProvaController {
 	private final QuestaoProvaDAO DAO;
+	private final AlternativaDAO ADAO;
 	
 
 	@Autowired
-	public QuestaoProvaController(QuestaoProvaDAO DAO) {
+	public QuestaoProvaController(QuestaoProvaDAO DAO, AlternativaDAO ADAO) {
 		this.DAO = DAO;
+		this.ADAO = ADAO;
 	}
 
 	@RequestMapping("formQP")
@@ -110,8 +114,18 @@ public class QuestaoProvaController {
 					(disp1 == null ? (priv1 == null ? "true" : priv1)
 							: ((priv1 == null ? disp1 : "true"))),
 					((Professor) session.getAttribute("profLogon"))
-							.getIdProfessor(), Integer.valueOf(materias[i]), true));
+							.getIdProfessor(), Integer.valueOf(materias[i])));
+			
 		}
+		List<List<Alternativa>> alternativas = new ArrayList<List<Alternativa>>();
+		for (int i = 0; i < questoes.size(); i++) {
+			for (int j = 0; j < questoes.get(i).size(); j++) {
+				System.out.println(questoes.get(i).get(j).getIdQuestaoProva());
+				alternativas.add(ADAO.listarPorQuestao(questoes.get(i).get(j).getIdQuestaoProva()));
+			}
+		}
+		modelo.setAttribute("alternativas", alternativas);
+		
 		Collections.shuffle(questoes);
 		List<QuestaoProva> teste = new ArrayList<QuestaoProva>();
 		for (List<QuestaoProva> list : questoes) {

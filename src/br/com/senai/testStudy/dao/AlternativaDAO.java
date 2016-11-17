@@ -83,7 +83,8 @@ public class AlternativaDAO implements MetodosBasicos<Alternativa> {
 				QuestaoProva qp = new QuestaoProva();
 				qp.setCorpoQuestao(rs.getString("corpo_questao"));
 				qp.setIdQuestaoProva(rs.getInt("id_questao"));
-				qp.setDificuldade(rs.getInt("dificuldade_questao"));
+				qp.setDificuldade(rs.getInt("dificuldade"));
+				
 				Alternativa a = new Alternativa();
 				a.setIdAlternativa(rs.getInt("id_alternativa"));
 				a.setCerta(rs.getString("certa_prova"));
