@@ -128,14 +128,17 @@
 						<td>${qp2.usoQuestao }</td>
 						<td><input type="checkbox"
 							onchange="alterando(${qp2.idQuestaoProva },'add',this)">Add</td>
+
 					</tr>
+
 				</c:forEach>
 			</tr>
 		</table>
 	</div>
 	<form action="attQuestoesProva">
-		<input type="hidden" id="questaoAdd" name="questaoAdd"> <input type="hidden"
-			name="questaoRem" id="questaoRem"> <input type="submit" value="att">
+		<input type="hidden" id="questaoAdd" name="questaoAdd"> <input
+			type="hidden" name="questaoRem" id="questaoRem"> <input
+			type="submit" value="att">
 	</form>
 	<form action="SalvandoProva">
 		<input type="submit" value="Salvar">

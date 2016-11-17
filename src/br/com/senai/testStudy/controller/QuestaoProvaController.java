@@ -25,6 +25,7 @@ import br.com.senai.testStudy.model.QuestaoProva;
 @Controller
 public class QuestaoProvaController {
 	private final QuestaoProvaDAO DAO;
+	
 
 	@Autowired
 	public QuestaoProvaController(QuestaoProvaDAO DAO) {
@@ -109,7 +110,7 @@ public class QuestaoProvaController {
 					(disp1 == null ? (priv1 == null ? "true" : priv1)
 							: ((priv1 == null ? disp1 : "true"))),
 					((Professor) session.getAttribute("profLogon"))
-							.getIdProfessor(), Integer.valueOf(materias[i])));
+							.getIdProfessor(), Integer.valueOf(materias[i]), true));
 		}
 		Collections.shuffle(questoes);
 		List<QuestaoProva> teste = new ArrayList<QuestaoProva>();
@@ -155,13 +156,15 @@ public class QuestaoProvaController {
 
 		Collections.shuffle(questoes);
 		modelo.setAttribute("questoes", questoes);
-		/*for (List<QuestaoProva> list : questoes) {
+
+		for (List<QuestaoProva> list : questoes) {
 			for (QuestaoProva questaoProva : list) {
 				if (teste.contains(questaoProva)) {
 					teste.remove(questaoProva);
 				}
 			}
-		}*/
+		}
+
 		return "addProvaPasso2";
 	}
 
@@ -169,25 +172,45 @@ public class QuestaoProvaController {
 	private String attQuestoesProva(HttpSession session, String questaoAdd,
 			String questaoRem) {
 		String[] questoesAdd = questaoAdd.trim().split(",");
-		System.out.println("questoesAdd Sozinho:"+questoesAdd.toString());
 		String[] questoesRem = questaoRem.trim().split(",");
 		List<List<QuestaoProva>> questoesProva = (List<List<QuestaoProva>>) session
 				.getAttribute("questoes");
 		List<QuestaoProva> questoes = (List<QuestaoProva>) session
 				.getAttribute("tetas");
-		
-		// TODO é necessário mudar os laços for e tirar o teste if. Porque o for deve testar apenas quantas questões estão selecionadas
-		// ex: se tiver 3 questões selecionadas ele simplesmente vai adicionar em uma lista e remover na outra 3 vezes...
-		
-		for (int i = 0; i < questoesAdd.length; i++) {
-			
+
+		// lista auxiliar onde todas as questões da prova se transformarão em
+		// apenas uma lista
+		List<QuestaoProva> aux = new ArrayList<QuestaoProva>();
+		for (int i = 0; i < questoesProva.size(); i++) {
+			for (int j = 0; j < questoesProva.get(i).size(); j++) {
+				aux.add(questoesProva.get(i).get(j));
+			}
 		}
-		
+
+		// parte do método que adiciona uma questão de fora na prova
+		for (int i = 0; i < questoesAdd.length; i++) {
+			// esta string corresponde a uma questão selecionada para adição...
+			String string = questoesAdd[i];
+			// percorre o numero de posições da lista das questões possíveis...
+			for (int j = 0; j < questoes.size(); j++) {
+				// caso a questão que ele achou na lista for igual a questão que
+				// está na string, adiciona em uma lista e remove na outra...
+				if (questoes.get(j).getIdQuestaoProva().toString()
+						.equals(string)) {
+					aux.add(questoes.get(j));
+					questoesProva.clear();
+					questoesProva.add(aux);
+					questoes.remove(questoes.get(j));
+				}
+			}
+		}
+		// parte do método que tira uma questão da prova
 		for (int i = 0; i < questoesRem.length; i++) {
 			String string = questoesRem[i];
 			for (List<QuestaoProva> list : questoesProva) {
 				for (QuestaoProva questaoProva : list) {
-					if (string.equals(questaoProva.getIdQuestaoProva().toString())) {
+					if (string.equals(questaoProva.getIdQuestaoProva()
+							.toString())) {
 						questoes.add(questaoProva);
 						list.remove(questaoProva);
 						break;
@@ -195,36 +218,10 @@ public class QuestaoProvaController {
 				}
 			}
 		}
-		
+
 		session.setAttribute("questoes", questoesProva);
 		session.setAttribute("tetas", questoes);
 		return "addProvaPasso2";
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

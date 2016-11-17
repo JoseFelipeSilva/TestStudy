@@ -12,7 +12,9 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.ui.Model;
 
+import br.com.senai.testStudy.controller.AlternativaController;
 import br.com.senai.testStudy.model.Disciplina;
 import br.com.senai.testStudy.model.Materia;
 import br.com.senai.testStudy.model.Professor;
@@ -188,13 +190,14 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 		return questões;
 	}
 	
-	public List<QuestaoProva> listarqp(Integer de, Integer ate, String disp, Integer idProfessor,Integer id) {
+	public List<QuestaoProva> listarqp(Integer de, Integer ate, String disp, Integer idProfessor,Integer id, boolean pegaAlt) {
+		// SE pegaAlt for true ele vai pro controller da alternativa para pegar as alternativas correspondentes a questão
 		String listar = LISTAR.toString();
 		Boolean teste = (!disp.equals("true"));
 		if (teste) {
 			listar += " AND questao_prova.disponibilidade_questao = ?";
 		}
-		List<QuestaoProva> questões = new ArrayList<QuestaoProva>();
+		List<QuestaoProva> questoes = new ArrayList<QuestaoProva>();
 		try {
 			PreparedStatement stmt = CONEXAO.prepareStatement(listar);
 			stmt.setInt(1, de);
@@ -213,15 +216,21 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 				qp.setTipoQuestao(rs.getString("tipo_questao"));
 				qp.setVisualizacaoQuestao(rs.getString("visualizacao_questao"));
 				qp.setUsoQuestao(rs.getInt("uso_questao"));
-				questões.add(qp);
+				questoes.add(qp);
 			}
 			stmt.close();
 			rs.close();
+			// se pega alt for verdadeiro vai buscar as alternativas das questões
+			if (pegaAlt) {
+				final AlternativaDAO dao = null;
+				AlternativaController alt = new AlternativaController(dao);
+				alt.mostraAlternativa(questoes);
+			}
 		} catch (SQLException e) {
 			throw new RuntimeException(e.toString());
 		}
-		java.util.Collections.shuffle(questões);
-		return questões;
+		java.util.Collections.shuffle(questoes);
+		return questoes;
 	}
 
 	@Override
