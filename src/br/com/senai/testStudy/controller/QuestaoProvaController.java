@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import br.com.senai.testStudy.dao.AlternativaDAO;
+import br.com.senai.testStudy.dao.ProvaDAO;
 import br.com.senai.testStudy.dao.QuestaoProvaDAO;
 import br.com.senai.testStudy.model.Alternativa;
 import br.com.senai.testStudy.model.Disciplina;
@@ -27,13 +28,13 @@ import br.com.senai.testStudy.model.QuestaoProva;
 @Controller
 public class QuestaoProvaController {
 	private final QuestaoProvaDAO DAO;
-	private final AlternativaDAO ADAO;
+	private final ProvaDAO PDAO;
 	
 
 	@Autowired
-	public QuestaoProvaController(QuestaoProvaDAO DAO, AlternativaDAO ADAO) {
+	public QuestaoProvaController(QuestaoProvaDAO DAO, ProvaDAO PDAO) {
 		this.DAO = DAO;
-		this.ADAO = ADAO;
+		this.PDAO = PDAO;
 	}
 
 	@RequestMapping("formQP")
@@ -98,12 +99,13 @@ public class QuestaoProvaController {
 	private String aqui(HttpSession modelo, Integer nQuestoes,
 			String materiaSelecionada, String diss1, String alt1,
 			Integer dificuldadeDE, Integer dificuldadeATE, HttpSession session,
-			String disp1, String priv1) {
+			String disp1, String priv1, String nomeProva, Prova prova) {		
 		// cria um vetor com as matérias que o cara quer criar a prova
 		String[] materias = materiaSelecionada.trim().split(",");
 		// cria uma lista com a lista das questões com as materias que o cara
 		// quer
 		List<List<QuestaoProva>> questoes = new ArrayList<List<QuestaoProva>>();
+		
 		// laço para preencher com as questões das matérias que o cara quer e
 		// salvar no array de cima
 		for (int i = 0; i < materias.length; i++) {
@@ -117,6 +119,8 @@ public class QuestaoProvaController {
 							.getIdProfessor(), Integer.valueOf(materias[i])));
 			
 		}
+		// TODO código para trazer a alternativa
+		/*
 		List<List<Alternativa>> alternativas = new ArrayList<List<Alternativa>>();
 		for (int i = 0; i < questoes.size(); i++) {
 			for (int j = 0; j < questoes.get(i).size(); j++) {
@@ -125,7 +129,7 @@ public class QuestaoProvaController {
 			}
 		}
 		modelo.setAttribute("alternativas", alternativas);
-		
+		*/
 		Collections.shuffle(questoes);
 		List<QuestaoProva> teste = new ArrayList<QuestaoProva>();
 		for (List<QuestaoProva> list : questoes) {
@@ -178,6 +182,14 @@ public class QuestaoProvaController {
 				}
 			}
 		}
+		prova.setProfessor((Professor) session.getAttribute("profLogon"));
+		
+		// AQUI ELE JÁ ESTÁ SALVANDO A PROVA... (SISTEMA APRESSADO)
+		prova.setDificuldadeDE(dificuldadeDE);
+		prova.setDificuldadeATE(dificuldadeATE);
+		prova.setNomeProva(nomeProva);
+		prova.setnQuestoes(nQuestoes);
+		PDAO.adicionar(prova);
 
 		return "addProvaPasso2";
 	}

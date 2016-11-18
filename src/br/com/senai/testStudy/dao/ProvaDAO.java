@@ -18,7 +18,7 @@ import br.com.senai.testStudy.util.MetodosBasicos;
 
 @Repository
 public class ProvaDAO implements MetodosBasicos<Prova> {
-	private final static String ADD = "INSERT INTO prova (nome_prova, dificuldade, n_questoes, id_professor, data_prova) VALUES (?, ?, ?, ?, "
+	private final static String ADD = "INSERT INTO prova (nome_prova, dificuldadeDE, dificuldadeATE, n_questoes, id_professor, data_prova) VALUES (?, ?, ?, ?, ?, "
 			+ "DATE(now()))";
 	private final static String EXCLUIR = "DELETE FROM prova WHERE id_prova = ?";
 	private final static String ALTERAR = "UPDATE prova SET nome_prova = ?, dificuldade = ?, n_questoes = ?, id_professor = ? "
@@ -46,10 +46,10 @@ public class ProvaDAO implements MetodosBasicos<Prova> {
 		try {
 			PreparedStatement stmt = CONEXAO.prepareStatement(ADD);
 			stmt.setString(1, prova.getNomeProva());
-			stmt.setString(2, prova.getDificuldade());
-			stmt.setInt(3, prova.getnQuestoes());
-			stmt.setInt(4, prova.getProfessor().getIdProfessor());
-
+			stmt.setInt(2, prova.getDificuldadeDE());
+			stmt.setInt(3, prova.getDificuldadeATE());
+			stmt.setInt(4, prova.getnQuestoes());
+			stmt.setInt(5, prova.getProfessor().getIdProfessor());
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException erro) {
@@ -78,7 +78,7 @@ public class ProvaDAO implements MetodosBasicos<Prova> {
 		try {
 			PreparedStatement stmt = CONEXAO.prepareStatement(ALTERAR);
 			stmt.setString(1, prova.getNomeProva());
-			stmt.setString(2, prova.getDificuldade());
+			stmt.setInt(2, prova.getDificuldadeDE());
 			stmt.setInt(3, prova.getnQuestoes());
 			stmt.setInt(4, prova.getProfessor().getIdProfessor());
 			stmt.setInt(5, prova.getIdProva());
@@ -104,7 +104,7 @@ public class ProvaDAO implements MetodosBasicos<Prova> {
 				prof.setNome(rs.getString("nome_professor"));
 
 				Prova p = new Prova();
-				p.setDificuldade(rs.getString("dificuldade"));
+				p.setDificuldadeDE(rs.getInt("dificuldade"));
 				p.setNomeProva(rs.getString("nome_prova"));
 				p.setnQuestoes(rs.getInt("n_questoes"));
 				p.setIdProva(rs.getInt("id_prova"));
@@ -137,7 +137,7 @@ public class ProvaDAO implements MetodosBasicos<Prova> {
 				prof.setNome(rs.getString("nome_professor"));
 
 				p = new Prova();
-				p.setDificuldade(rs.getString("dificuldade"));
+				p.setDificuldadeDE(rs.getInt("dificuldade"));
 				p.setNomeProva(rs.getString("nome_prova"));
 				p.setnQuestoes(rs.getInt("n_questoes"));
 				p.setCriacaoProva(rs.getDate("data_prova"));

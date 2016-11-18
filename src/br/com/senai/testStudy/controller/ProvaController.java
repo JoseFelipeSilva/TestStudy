@@ -1,5 +1,8 @@
 package br.com.senai.testStudy.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,4 +108,19 @@ public class ProvaController {
 		model.addAttribute("LProvas", dao.listar());
 		return "listaProva";
 	}
+	
+	@RequestMapping("salvarQuestoesNaProva")
+	public String salvarQuestoesNaProva(HttpSession session){
+		List<List<QuestaoProva>> questoesProva = (List<List<QuestaoProva>>) session
+				.getAttribute("questoes");
+		
+		// TODO eu parei aqui, salvando as questões na tabela associativa, tem que pensar em como dar um split aí...
+		for (int i = 0; i < questoesProva.size(); i++) {
+			for (int j = 0; j < questoesProva.get(i).size(); j++) {
+				
+			}
+		}
+		return "sucesso";
+	}
+	
 }

@@ -7,7 +7,8 @@ public class Prova {
 
 	private Integer idProva;
 	private Professor professor;
-	private String dificuldade;
+	private Integer dificuldadeDE;
+	private Integer dificuldadeATE;
 	private Integer nQuestoes;
 	private String nomeProva;
 	private Date criacaoProva;
@@ -42,16 +43,24 @@ public class Prova {
 		return professor;
 	}
 
+	public Integer getDificuldadeDE() {
+		return dificuldadeDE;
+	}
+
+	public void setDificuldadeDE(Integer dificuldadeDE) {
+		this.dificuldadeDE = dificuldadeDE;
+	}
+
+	public Integer getDificuldadeATE() {
+		return dificuldadeATE;
+	}
+
+	public void setDificuldadeATE(Integer dificuldadeATE) {
+		this.dificuldadeATE = dificuldadeATE;
+	}
+
 	public void setProfessor(Professor professor) {
 		this.professor = professor;
-	}
-
-	public String getDificuldade() {
-		return dificuldade;
-	}
-
-	public void setDificuldade(String dificuldade) {
-		this.dificuldade = dificuldade;
 	}
 
 	public Integer getnQuestoes() {
