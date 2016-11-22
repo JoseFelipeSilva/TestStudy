@@ -1,0 +1,7 @@
+- grafico para:	quantidade de acerto de questoes
+		notas
+
+metodo range() do mysql
+
+fullScreen() ---- 	http://pt.stackoverflow.com/questions/1855/existe-alguma-maneira-de-ativar-a-tela-cheia-do-navegador-com-javascript
+			http://loopinfinito.com.br/2012/11/27/veja-mais-com-a-fullscreen-api/

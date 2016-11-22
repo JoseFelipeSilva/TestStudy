@@ -23,9 +23,9 @@ public class ProvaDAO implements MetodosBasicos<Prova> {
 	private final static String EXCLUIR = "DELETE FROM prova WHERE id_prova = ?";
 	private final static String ALTERAR = "UPDATE prova SET nome_prova = ?, dificuldade = ?, n_questoes = ?, id_professor = ? "
 			+ "WHERE id_prova = ?";
-	private final static String LISTAR = "SELECT p.nome_prova, p.dificuldade, p.n_questoes, p.id_professor, pr.nome_professor, pr.id_professor, "
-			+ "p.id_prova, p.data_prova FROM prova AS p, professor AS pr WHERE p.id_professor = pr.id_professor";
-	private final static String BUSCAR = "SELECT p.nome_prova, p.dificuldade, p.n_questoes, p.id_professor, pr.nome_professor, pr.id_professor, "
+	private final static String LISTAR = "SELECT p.nome_prova, p.dificuldadeDE, p.dificuldadeATE, p.n_questoes, p.id_professor, pr.nome_professor, pr.id_professor, "
+			+ "p.id_prova, p.data_prova FROM prova AS p, professor AS pr WHERE p.id_professor = pr.id_professor AND pr.id_professor = ?";
+	private final static String BUSCAR = "SELECT p.nome_prova, p.dificuldadeDE, p.dificuldadeATE, p.n_questoes, p.id_professor, pr.nome_professor, pr.id_professor, "
 			+ "p.id_prova, p.data_prova FROM prova AS p, professor AS pr WHERE p.id_professor = pr.id_professor AND p.id_prova = ?";
 
 	// CONEXAO
@@ -44,13 +44,18 @@ public class ProvaDAO implements MetodosBasicos<Prova> {
 	@Override
 	public void adicionar(Prova prova) {
 		try {
-			PreparedStatement stmt = CONEXAO.prepareStatement(ADD);
+			PreparedStatement stmt = CONEXAO.prepareStatement(ADD, PreparedStatement.RETURN_GENERATED_KEYS);
 			stmt.setString(1, prova.getNomeProva());
 			stmt.setInt(2, prova.getDificuldadeDE());
 			stmt.setInt(3, prova.getDificuldadeATE());
 			stmt.setInt(4, prova.getnQuestoes());
 			stmt.setInt(5, prova.getProfessor().getIdProfessor());
 			stmt.execute();
+			ResultSet rs = stmt.getGeneratedKeys();
+			if (rs.next()) {
+				prova.setIdProva(rs.getInt(1));
+			}
+			rs.close();
 			stmt.close();
 		} catch (SQLException erro) {
 			throw new RuntimeException(erro);
@@ -91,6 +96,7 @@ public class ProvaDAO implements MetodosBasicos<Prova> {
 	}
 
 	// LISTAR TODOS
+	@Deprecated
 	@Override
 	public List<Prova> listar() {
 		List<Prova> provas = new ArrayList<>();
@@ -105,6 +111,37 @@ public class ProvaDAO implements MetodosBasicos<Prova> {
 
 				Prova p = new Prova();
 				p.setDificuldadeDE(rs.getInt("dificuldade"));
+				p.setNomeProva(rs.getString("nome_prova"));
+				p.setnQuestoes(rs.getInt("n_questoes"));
+				p.setIdProva(rs.getInt("id_prova"));
+				p.setCriacaoProva(rs.getDate("data_prova"));
+				p.setProfessor(prof);
+
+				provas.add(p);
+			}
+			rs.close();
+			stmt.close();
+			return provas;
+		} catch (SQLException erro) {
+			throw new RuntimeException(erro);
+		}
+	}
+	
+	public List<Prova> listar(Integer idProfessor) {
+		List<Prova> provas = new ArrayList<>();
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(LISTAR);
+			stmt.setInt(1, idProfessor);
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				Professor prof = new Professor();
+				prof.setIdProfessor(rs.getInt("id_professor"));
+				prof.setNome(rs.getString("nome_professor"));
+
+				Prova p = new Prova();
+				p.setDificuldadeDE(rs.getInt("dificuldadeDE"));
+				p.setDificuldadeATE(rs.getInt("dificuldadeATE"));
 				p.setNomeProva(rs.getString("nome_prova"));
 				p.setnQuestoes(rs.getInt("n_questoes"));
 				p.setIdProva(rs.getInt("id_prova"));

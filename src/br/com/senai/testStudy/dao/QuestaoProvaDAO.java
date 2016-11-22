@@ -39,6 +39,7 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 	private static final String LISTAR_DISC = "SELECT * FROM disciplina WHERE escola_disciplina = 1 OR escola_disciplina = ?";
 	private static final String LISTAR_MAT = "SELECT materia.*, disciplina.* FROM materia,"
 			+ " disciplina WHERE materia.id_materia = disciplina.id_disciplina AND materia.id_disciplina = ?";
+	private static final String ADICIONAR_NA_PROVA = "INSERT INTO prova_questao (id_questao, id_prova) VALUES (?, ?)";
 
 	@Autowired
 	public QuestaoProvaDAO(DataSource dataSource) {
@@ -70,6 +71,18 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 			throw new RuntimeException(e);
 		}
 
+	}
+	
+	public void adicionarQuestaoNaProva(Integer idProva, Integer idQuestao){
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(ADICIONAR_NA_PROVA);
+			stmt.setInt(1, idQuestao);
+			stmt.setInt(2, idProva);
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public List<Disciplina> listarDisc(Integer id) {

@@ -19,9 +19,8 @@ import br.com.senai.testStudy.util.MetodosBasicos;
 
 @Repository
 public class ProvaAgendadaDAO implements MetodosBasicos<ProvaAgendada> {
-	private final static String ADD = "INSERT INTO prova_agendada (id_prova, id_turma, data_termino, data_inicio, data_realizacao, hora_termino) "
-			+ "VALUES (?, ?, ?, ?, DATE(now()), TIME(now()))";
-	// TODO arrumar o erro 400 do horário, função TIME(now())
+	private final static String ADD = "INSERT INTO prova_agendada (id_prova, id_turma, data_termino, data_inicio, data_realizacao, hora_termino, horario_inicio) "
+			+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
 	private final static String EXCLUIR = "DELETE FROM prova_agendada WHERE id_prova_agendada = ?";
 	private final static String LISTAR = "SELECT pr.id_prova_agendada, pr.id_prova, pr.id_turma, pr.hora_termino, pr.horario_inicio, pr.data_realizacao, "
 			+ "pr.data_termino, pr.data_inicio, p.id_prova, p.nome_prova, t.id_turma, t.nome_turma FROM prova_agendada AS pr, prova AS p, turma AS t "
@@ -54,6 +53,9 @@ public class ProvaAgendadaDAO implements MetodosBasicos<ProvaAgendada> {
 			stmt.setInt(2, prova.getTurma().getIdTurma());
 			stmt.setDate(3, prova.getDataTermino());
 			stmt.setDate(4, prova.getDataInicio());
+			stmt.setDate(5, prova.getDataRealizacao());
+			stmt.setTime(6, prova.getHoraTermino());
+			stmt.setTime(7, prova.getHoraInicio());
 
 			stmt.execute();
 			stmt.close();

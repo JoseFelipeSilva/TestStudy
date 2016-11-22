@@ -110,13 +110,13 @@ public class ProvaController {
 	}
 	
 	@RequestMapping("salvarQuestoesNaProva")
-	public String salvarQuestoesNaProva(HttpSession session){
+	public String salvarQuestoesNaProva(HttpSession session, Prova p){
 		List<List<QuestaoProva>> questoesProva = (List<List<QuestaoProva>>) session
 				.getAttribute("questoes");
-		
-		// TODO eu parei aqui, salvando as questões na tabela associativa, tem que pensar em como dar um split aí...
+		p = (Prova) session.getAttribute("prova");
 		for (int i = 0; i < questoesProva.size(); i++) {
 			for (int j = 0; j < questoesProva.get(i).size(); j++) {
+				qdao.adicionarQuestaoNaProva(p.getIdProva(), questoesProva.get(i).get(j).getIdQuestaoProva());
 				
 			}
 		}

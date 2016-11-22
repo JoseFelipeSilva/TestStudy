@@ -190,7 +190,7 @@ public class QuestaoProvaController {
 		prova.setNomeProva(nomeProva);
 		prova.setnQuestoes(nQuestoes);
 		PDAO.adicionar(prova);
-
+		modelo.setAttribute("prova", prova);
 		return "addProvaPasso2";
 	}
 
