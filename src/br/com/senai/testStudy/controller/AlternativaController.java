@@ -43,7 +43,6 @@ public class AlternativaController {
 	public void mostraAlternativa(List<QuestaoProva> qp){
 		for (int i = 0; i < qp.size(); i++) {
 			System.out.println(qp.get(i).getIdQuestaoProva());
-			// TODO o problema do null pointer é por que ele não instancia a classe DAO, tem que ver com o sidney
 			// se tem como mandar do controller da questão prova direto pro dao da alternativa... 
 			//DAO.listarPorQuestao(qp.get(i).getIdQuestaoProva());
 		}

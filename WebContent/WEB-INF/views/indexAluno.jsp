@@ -10,7 +10,8 @@
 	<br /><br />
 	<h1>PAGINA ALUNO</h1>
 	<br /><br /><br />
-	
+	<a href="acessarNotificacoes">Painel de notificações</a>
+	<br /><br />
 	
 	<br /><br /><br />
 	<a href="logoff">Sair</a>
