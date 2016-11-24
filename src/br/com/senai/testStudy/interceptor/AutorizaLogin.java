@@ -5,6 +5,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import br.com.senai.testStudy.controller.AlunoController;
+
 public class AutorizaLogin extends HandlerInterceptorAdapter {
 
 	@Override
@@ -12,6 +14,11 @@ public class AutorizaLogin extends HandlerInterceptorAdapter {
 			HttpServletResponse response, Object controller) throws Exception {
 
 		String uri = request.getRequestURI();
+		
+		if (request.getSession().getAttribute("alunoLogon") != null) {
+			br.com.senai.testStudy.util.Util.acessandoNotificacoes(request.getSession());
+		}
+		
 		if (uri.endsWith("logar") || uri.contains("resources")) {
 			return true;
 		}

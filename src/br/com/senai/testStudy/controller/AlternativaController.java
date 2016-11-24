@@ -24,7 +24,7 @@ public class AlternativaController {
 	@RequestMapping("cadastrarAlternativa")
 	public String cadastrarAlter(Alternativa a, QuestaoProva qp) {
 		String[] lista;
-		lista = a.getCorpoAlternativa().split(",");
+		lista = a.getCorpoAlternativa().split("59604679#");
 		for (int i = 0; i < lista.length; i++) {
 			if (i == 0) {
 				a.setCerta("C");

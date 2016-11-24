@@ -49,6 +49,7 @@ public class AdmController {
 		} else if (adao.existeAluno(aluno) != null) {
 			aluno = adao.existeAluno(aluno);
 			session.setAttribute("alunoLogon", aluno);
+			br.com.senai.testStudy.util.Util.acessandoNotificacoes(session);
 			return "indexAluno";
 		} else if (cdao.existeCOORD(coord) != null) {
 			coord = cdao.existeCOORD(coord);

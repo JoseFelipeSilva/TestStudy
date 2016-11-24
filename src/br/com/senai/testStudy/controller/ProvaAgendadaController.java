@@ -1,7 +1,6 @@
 package br.com.senai.testStudy.controller;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -10,12 +9,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import br.com.senai.testStudy.dao.AlternativaDAO;
 import br.com.senai.testStudy.dao.ProvaAgendadaDAO;
 import br.com.senai.testStudy.dao.ProvaDAO;
+import br.com.senai.testStudy.dao.QuestaoProvaDAO;
 import br.com.senai.testStudy.dao.TurmaDAO;
 import br.com.senai.testStudy.model.Professor;
 import br.com.senai.testStudy.model.Prova;
 import br.com.senai.testStudy.model.ProvaAgendada;
+import br.com.senai.testStudy.model.QuestaoProva;
 import br.com.senai.testStudy.model.Turma;
 
 @Controller
@@ -23,13 +25,15 @@ public class ProvaAgendadaController {
 	private final ProvaAgendadaDAO dao;
 	private final ProvaDAO pdao;
 	private final TurmaDAO tdao;
+	private final AlternativaDAO adao;
 
 	@Autowired
-	public ProvaAgendadaController(TurmaDAO tdao, ProvaAgendadaDAO dao,
+	public ProvaAgendadaController(AlternativaDAO adao, TurmaDAO tdao, ProvaAgendadaDAO dao,
 			ProvaDAO pdao) {
 		this.dao = dao;
 		this.pdao = pdao;
 		this.tdao = tdao;
+		this.adao = adao;
 	}
 
 	@RequestMapping("newProvaAgendada")
@@ -39,32 +43,25 @@ public class ProvaAgendadaController {
 		model.addAttribute("LTurmas", tdao.listar());
 		return "addProvaAgendada";
 	}
+	
+	@RequestMapping("fazerProvaAgendada")
+	public String fazerProva(Model model, HttpSession session, Integer id) {
+		ProvaAgendada provaAgendada = new ProvaAgendada();
+		List<ProvaAgendada> notificacao = (List<ProvaAgendada>) session.getAttribute("notificacoes");
+		for (ProvaAgendada provaAgendada2 : notificacao) {
+			if (provaAgendada2.getIdProvaAgendada() == id) {
+				provaAgendada = provaAgendada2;
+			}
+		}
+		// TODO eu to mexendo aqui, fazendo o select
+		// select * from alternativa, questao_prova, disciplina, materia, professor, prova, prova_questao WHERE questao_prova.id_questao = alternativa.id_questao AND questao_prova.disciplina_questao = disciplina.id_disciplina AND materia.id_materia = questao_prova.materia_questao;
+
+
+		return "addProvaAgendada";
+	}
 
 	@RequestMapping("adicionarProvaAgendada")
-	public String adicionarProvaAgendada(String dataInicio, String dataTermino, 
-			String dataRealizacao,Turma t, Prova p, String horaInicioJSP, String horaTerminoJSP) {
-		ProvaAgendada pa = new ProvaAgendada();
-		if (!horaInicioJSP.isEmpty()&&!horaTerminoJSP.isEmpty()&&!dataRealizacao.isEmpty()) {		
-		String[] s = horaInicioJSP.split(":");
-		Time time = new Time(Integer.valueOf(s[0]),Integer.valueOf(s[1]),0);
-		String[] r = horaTerminoJSP.split(":");
-		Time time2 = new Time(Integer.valueOf(r[0]),Integer.valueOf(r[1]),0);
-		String[] i = dataRealizacao.split("-");
-		Date date = new Date(Integer.valueOf(i[0]),Integer.valueOf(i[1]),Integer.valueOf(i[2]));
-		pa.setDataRealizacao(date);
-		pa.setHoraTermino(time2);
-		pa.setHoraInicio(time);
-		}else if (!dataInicio.isEmpty()&&!dataTermino.isEmpty()) {
-			String[] n = dataInicio.split("-");
-			Date date2 = new Date(Integer.valueOf(n[0]),Integer.valueOf(n[1]),Integer.valueOf(n[2]));
-			String[] g = dataTermino.split("-");
-			Date date3 = new Date(Integer.valueOf(g[0]),Integer.valueOf(g[1]),Integer.valueOf(g[2]));
-			pa.setDataInicio(date2);
-			pa.setDataTermino(date3);
-		}else {
-			throw new RuntimeException("ADD PROVA AGEND  "+this);
-		}
-		
+	public String adicionarProvaAgendada(Turma t, Prova p, ProvaAgendada pa) {
 		pa.setProva(p);
 		pa.setTurma(t);
 		dao.adicionar(pa);

@@ -1,79 +1,59 @@
 package br.com.senai.testStudy.model;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDateTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 
 public class ProvaAgendada {
 	private Integer idProvaAgendada;
-	private Time horaInicio;
-	private Time horaTermino;
-	private Date dataInicio;
-	private Date dataTermino;
-	private Date dataRealizacao;
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	private LocalDateTime dataInicio;
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	private LocalDateTime dataTermino;
+	private Integer duracao;
 	private Turma turma;
 	private Prova prova;
-
 	public Integer getIdProvaAgendada() {
 		return idProvaAgendada;
 	}
-
 	public void setIdProvaAgendada(Integer idProvaAgendada) {
 		this.idProvaAgendada = idProvaAgendada;
 	}
-
-	public Prova getProva() {
-		return prova;
-	}
-
-	public void setProva(Prova prova) {
-		this.prova = prova;
-	}
-
-	public Time getHoraInicio() {
-		return horaInicio;
-	}
-
-	public void setHoraInicio(Time horaInicio) {
-		this.horaInicio = horaInicio;
-	}
-
-	public Time getHoraTermino() {
-		return horaTermino;
-	}
-
-	public void setHoraTermino(Time horaTermino) {
-		this.horaTermino = horaTermino;
-	}
-
-	public Date getDataInicio() {
+	public LocalDateTime getDataInicio() {
 		return dataInicio;
 	}
-
-	public void setDataInicio(Date dataInicio) {
+	public void setDataInicio(LocalDateTime dataInicio) {
 		this.dataInicio = dataInicio;
 	}
-
-	public Date getDataTermino() {
+	public LocalDateTime getDataTermino() {
 		return dataTermino;
 	}
-
-	public void setDataTermino(Date dataTermino) {
+	public void setDataTermino(LocalDateTime dataTermino) {
 		this.dataTermino = dataTermino;
 	}
-
-	public Date getDataRealizacao() {
-		return dataRealizacao;
-	}
-
-	public void setDataRealizacao(Date dataRealizacao) {
-		this.dataRealizacao = dataRealizacao;
-	}
-
 	public Turma getTurma() {
 		return turma;
 	}
-
 	public void setTurma(Turma turma) {
 		this.turma = turma;
+	}
+	public Prova getProva() {
+		return prova;
+	}
+	public void setProva(Prova prova) {
+		this.prova = prova;
+	}
+	@Override
+	public String toString() {
+		return "ProvaAgendada [idProvaAgendada=" + idProvaAgendada
+				+ ", dataInicio=" + dataInicio + ", dataTermino=" + dataTermino
+				+ ", turma=" + turma + ", prova=" + prova + "]";
+	}
+	public Integer getDuracao() {
+		return duracao;
+	}
+	public void setDuracao(Integer duracao) {
+		this.duracao = duracao;
 	}
 }

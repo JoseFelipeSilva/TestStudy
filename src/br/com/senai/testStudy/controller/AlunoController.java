@@ -23,13 +23,11 @@ import br.com.senai.testStudy.model.Turma;
 public class AlunoController {
 	private final AlunoDAO dao;
 	private final TurmaDAO tdao;
-	private final ProvaAgendadaDAO pdao;
 
 	@Autowired
-	public AlunoController(ProvaAgendadaDAO pdao, AlunoDAO dao, TurmaDAO tdao) {
+	public AlunoController(AlunoDAO dao, TurmaDAO tdao) {
 		this.dao = dao;
 		this.tdao = tdao;
-		this.pdao = pdao;
 	}
 
 	@RequestMapping("newAluno")
@@ -106,28 +104,6 @@ public class AlunoController {
 		model.addAttribute("LAlunos", dao.listar());
 		return "listaAluno";
 	}
-	
-	@RequestMapping("acessandoNotificacoes")
-	public String acessandoNotificacoes(HttpSession sessao, Model modelo){
-		// o objetivo aqui é criar duas listas, e comparar se tem prova marcada na turma do aluno que está logado,
-		// se sim exibe no painel de notificações...
-		List<ProvaAgendada> provasAgendadasNotificacao = new ArrayList<ProvaAgendada>();
-		
-		List<ProvaAgendada> provasAgendadas = new ArrayList<ProvaAgendada>();
-		provasAgendadas = pdao.listar();
-		
-		Aluno aluno = (Aluno) sessao.getAttribute("alunoLogon");
-		// TODO já que vc ta aí vai na pagina "paginaNotificacoes" e faz o foreach
-		// pra popular a tabela lá kkkkkkkk
-		for (int i = 0; i < provasAgendadas.size(); i++) {
-				if (aluno.getTurmaAluno().equals(provasAgendadas.get(i).getTurma())) {
-					provasAgendadasNotificacao.add(provasAgendadas.get(i));
-				}			
-		}
-		modelo.addAttribute("notificacoes", provasAgendadasNotificacao);
-		return "paginaNotificacoes";
-	}
-	
 }
 
 
