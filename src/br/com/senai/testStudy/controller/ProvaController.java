@@ -76,15 +76,18 @@ public class ProvaController {
 	}
 
 	@RequestMapping("ListagemProva")
-	public String listaDeProvas(Model model) {
-		model.addAttribute("LProvas", dao.listar());
+	public String listaDeProvas(Model model, HttpSession sessao) {
+		Professor p = (Professor) sessao.getAttribute("profLogon");
+		model.addAttribute("LProvas", dao.listar(p.getIdProfessor()));
 		return "listaProva";
 	}
 
 	@RequestMapping("removerProva")
-	public String removerProva(Prova prova, Model model) {
+	public String removerProva(Prova prova, Model model, HttpSession sessao) {
 		dao.remover(prova);
-		model.addAttribute("LProvas", dao.listar());
+		Professor p = (Professor) sessao.getAttribute("profLogon");
+		model.addAttribute("LProvas", dao.listar(p.getIdProfessor()));
+		model.addAttribute("LProvas", dao.listar(p.getIdProfessor()));
 		return "listaProva";
 	}
 
@@ -96,8 +99,9 @@ public class ProvaController {
 	}
 
 	@RequestMapping("backToListOfProvas")
-	public String backToListOfProvas(Model model) {
-		model.addAttribute("LProvas", dao.listar());
+	public String backToListOfProvas(Model model, HttpSession sessao) {
+		Professor p = (Professor) sessao.getAttribute("profLogon");
+		model.addAttribute("LProvas", dao.listar(p.getIdProfessor()));
 		return "listaProva";
 	}
 
@@ -105,7 +109,7 @@ public class ProvaController {
 	public String alterandoProva(Model model, Prova prova, Professor prof) {
 		prova.setProfessor(prof);
 		dao.alterar(prova);
-		model.addAttribute("LProvas", dao.listar());
+		model.addAttribute("LProvas", dao.listar(prof.getIdProfessor()));
 		return "listaProva";
 	}
 	

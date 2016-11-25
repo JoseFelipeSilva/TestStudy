@@ -50,13 +50,12 @@ public class ProvaAgendadaController {
 		List<ProvaAgendada> notificacao = (List<ProvaAgendada>) session.getAttribute("notificacoes");
 		for (ProvaAgendada provaAgendada2 : notificacao) {
 			if (provaAgendada2.getIdProvaAgendada() == id) {
-				provaAgendada = provaAgendada2;
+				provaAgendada = dao.buscarID(provaAgendada.getIdProvaAgendada());
+				System.out.println(provaAgendada.getProva().getProfessor().getIdProfessor());
+				
 			}
 		}
-		// TODO eu to mexendo aqui, fazendo o select
-		// select * from alternativa, questao_prova, disciplina, materia, professor, prova, prova_questao WHERE questao_prova.id_questao = alternativa.id_questao AND questao_prova.disciplina_questao = disciplina.id_disciplina AND materia.id_materia = questao_prova.materia_questao;
-
-
+	
 		return "addProvaAgendada";
 	}
 

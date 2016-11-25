@@ -155,10 +155,14 @@ public class ProvaAgendadaDAO implements MetodosBasicos<ProvaAgendada> {
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
 
+			// TODO as ideias estão bem estruturadas já, é só arrumar esse select pra trazer o resto das coisas que estão
+			// faltando, inclusive o professor, e esses dados vao aparecer no resumo da prova, e qdo o cara clicar pra fazer
+			// pega as questões e as alternativas...
 			if (rs.next()) {
 				Prova p = new Prova();
 				p.setNomeProva(rs.getString("nome_prova"));
 				p.setIdProva(rs.getInt("id_prova"));
+				
 
 				Turma t = new Turma();
 				t.setNomeTurma(rs.getString("nome_turma"));

@@ -27,7 +27,6 @@
 			<td>${p.idProva}</td>
 			<td>${p.nomeProva}</td>
 			<td>${p.professor.nome}</td>
-			<td>${p.dataProva}</td>
 			<td><a href="alterarProva?idProva=${p.idProva}">Modificar</a></td>
 			<td><a href="removerProva?idProva=${p.idProva}">Remover</a></td>
 		</tr>
