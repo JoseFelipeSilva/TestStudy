@@ -29,6 +29,8 @@ public class DisciplinaDAO implements MetodosBasicos<Disciplina> {
 			+ " FROM materia, disciplina WHERE materia.id_disciplina = "
 			+ "disciplina.id_disciplina AND materia.id_disciplina";
 	private static final String LISTAR_DISC_PRIVADA = "SELECT * FROM disciplina WHERE escola_disciplina = ?";
+	private static final String BUSCAR_POR_MATERIA = "SELECT * FROM materia,"
+			+ " disciplina WHERE materia.id_disciplina = disciplina.id_disciplina AND materia.id_materia = ?";
 
 	@Autowired
 	public DisciplinaDAO(DataSource dataSource) {
@@ -171,6 +173,26 @@ public class DisciplinaDAO implements MetodosBasicos<Disciplina> {
 			throw new RuntimeException(e);
 		}
 		return disciplina;
+	}
+	
+	public Disciplina buscaPorMateria(Integer idMateria){
+		Disciplina disciplina = null;
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(BUSCAR_POR_MATERIA);
+			stmt.setInt(1, idMateria);
+			ResultSet rs = stmt.executeQuery();
+			if(rs.next()){
+				disciplina = new Disciplina();
+				disciplina.setNomeDisciplina(rs.getString("nome_disciplina"));
+				disciplina.setIdDisciplina(rs.getInt("id_disciplina"));
+				disciplina.setPadraoDisciplina(rs.getString("padrao_disciplina"));
+			}
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return disciplina;	
 	}
 
 }

@@ -1,24 +1,22 @@
 package br.com.senai.testStudy.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.naming.java.javaURLContextFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import br.com.senai.testStudy.dao.AlternativaDAO;
+import br.com.senai.testStudy.dao.DisciplinaDAO;
 import br.com.senai.testStudy.dao.ProvaDAO;
 import br.com.senai.testStudy.dao.QuestaoProvaDAO;
-import br.com.senai.testStudy.model.Alternativa;
 import br.com.senai.testStudy.model.Disciplina;
 import br.com.senai.testStudy.model.Materia;
 import br.com.senai.testStudy.model.Professor;
@@ -29,12 +27,14 @@ import br.com.senai.testStudy.model.QuestaoProva;
 public class QuestaoProvaController {
 	private final QuestaoProvaDAO DAO;
 	private final ProvaDAO PDAO;
+	private final DisciplinaDAO DDAO;
 	
 
 	@Autowired
-	public QuestaoProvaController(QuestaoProvaDAO DAO, ProvaDAO PDAO) {
+	public QuestaoProvaController(DisciplinaDAO DDAO, QuestaoProvaDAO DAO, ProvaDAO PDAO) {
 		this.DAO = DAO;
 		this.PDAO = PDAO;
+		this.DDAO = DDAO;
 	}
 
 	@RequestMapping("formQP")
@@ -182,14 +182,17 @@ public class QuestaoProvaController {
 				}
 			}
 		}
-		prova.setProfessor((Professor) session.getAttribute("profLogon"));
+		// TODO eu preciso pegar a prova, questão a matéria e aí sim só a disciplina
+		
+		
+		
 		
 		// AQUI ELE JÁ ESTÁ SALVANDO A PROVA... (SISTEMA APRESSADO)
 		prova.setDificuldadeDE(dificuldadeDE);
 		prova.setDificuldadeATE(dificuldadeATE);
 		prova.setNomeProva(nomeProva);
 		prova.setnQuestoes(nQuestoes);
-		PDAO.adicionar(prova);
+		// PDAO.adicionar(prova);
 		modelo.setAttribute("prova", prova);
 		return "addProvaPasso2";
 	}

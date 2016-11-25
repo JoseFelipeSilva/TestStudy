@@ -121,9 +121,11 @@ public class ProvaController {
 		for (int i = 0; i < questoesProva.size(); i++) {
 			for (int j = 0; j < questoesProva.get(i).size(); j++) {
 				qdao.adicionarQuestaoNaProva(p.getIdProva(), questoesProva.get(i).get(j).getIdQuestaoProva());
-				
 			}
 		}
+	/*	for (int i = 0; i < p.getMaterias().length; i++) {
+			dao.adicionaProvaDisciplina(p.getIdProva(), p.getMaterias()[i].getDisciplina().getIdDisciplina());
+		}*/
 		return "sucesso";
 	}
 	
