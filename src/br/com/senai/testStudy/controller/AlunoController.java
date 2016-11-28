@@ -58,6 +58,7 @@ public class AlunoController {
 
 	@RequestMapping("removerAluno")
 	public String removerAluno(Aluno aluno, Model model) {
+		dao.adicionaMorto(aluno.getIdAluno());
 		dao.remover(aluno);
 		model.addAttribute("LAlunos", dao.listar());
 		return "listaAluno";

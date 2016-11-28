@@ -14,6 +14,7 @@
 			<th>FOTO</th>
 			<th>Nome</th>
 			<th>E-mail</th>
+			<th>Sexo</th>
 			<th></th>
 			<th></th>
 			
@@ -23,6 +24,7 @@
 					<td><a href="alteraPhotoADM?idAdm=${adm.idAdm}"><img src="data:image/jpeg;base64, ${adm.foto64}" id="fotoPerfil" height="100px" width="140px"></a></td>
 					<td>${adm.nome }</td>
 					<td>${adm.email }</td>
+					<td>${adm.sexo }</td>
 					<td><a href="removeadm?idAdm=${adm.idAdm }">Remover</a></td>
 					<td><a href="alterandoadm?id=${adm.idAdm }">alterarAdm</a></td>
 				</tr>			

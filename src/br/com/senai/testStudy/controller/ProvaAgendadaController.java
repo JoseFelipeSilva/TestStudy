@@ -50,10 +50,16 @@ public class ProvaAgendadaController {
 	public String fazerProva(Model model, HttpSession session, ProvaAgendada provaAgendada) {
 		List<ProvaAgendada> notificacao = (List<ProvaAgendada>) session.getAttribute("notificacoes");
 		for (ProvaAgendada provaAgendada2 : notificacao) {
+<<<<<<< HEAD
 			if (provaAgendada2.getIdProvaAgendada() == provaAgendada.getIdProvaAgendada()) {
 				provaAgendada = dao.buscarID(provaAgendada.getIdProvaAgendada());
 				session.setAttribute("provaParaFazer", provaAgendada);
 				model.addAttribute("QuestoesDaProvaParaFazer", qpdao.listarQuestoesDaProva(provaAgendada.getProva().getIdProva()));
+=======
+			if (provaAgendada2.getIdProvaAgendada() == id) {
+				
+				
+>>>>>>> branch 'master' of https://github.com/JoseFelipeSilva/TestStudy
 			}
 		}
 		

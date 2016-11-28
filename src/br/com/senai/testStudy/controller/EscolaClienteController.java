@@ -41,6 +41,7 @@ public class EscolaClienteController {
 
 	@RequestMapping("removerEscola")
 	public String removerEscola(Model model, EscolaCliente escola) {
+		dao.adicionaMorto(escola.getIdEmp());
 		dao.remover(escola);
 		model.addAttribute("listaSchools", dao.listar());
 		return "listaEscolaCliente";

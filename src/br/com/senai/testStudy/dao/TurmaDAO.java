@@ -26,6 +26,8 @@ public class TurmaDAO implements MetodosBasicos<Turma> {
 	private final static String BUSCAR = "SELECT t.id_turma, t.id_escola, t.nome_turma, e.id_escola_cliente, "
 			+ "e.nome_emp FROM turma AS t, escola_cliente AS e WHERE t.id_escola = e.id_escola_cliente AND "
 			+ "t.id_turma = ?";
+	private final static String ADD_MORTO = "INSERT INTO turma_morto (id_turma_antigo, id_escola_morto, nome_turma_morto)"
+			+ " SELECT id_turma, id_escola, nome_turma FROM turma WHERE id_turma = ?";
 
 	// CONEXAO
 	private final Connection CONEXAO;
@@ -52,6 +54,17 @@ public class TurmaDAO implements MetodosBasicos<Turma> {
 			stmt.close();
 		} catch (SQLException erro) {
 			throw new RuntimeException(erro);
+		}
+	}
+	
+	public void adicionarMorto(Integer idTurma){
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(ADD_MORTO);
+			stmt.setInt(1, idTurma);
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
 		}
 	}
 

@@ -58,6 +58,7 @@ public class CoordenadorController {
 
 	@RequestMapping("removerCoordenador")
 	public String removerCoordenador(Model model, Coordenador coord) {
+		dao.adicionaMorto(coord.getIdCoord());
 		dao.remover(coord);
 		model.addAttribute("LCoord", dao.listar());
 		return "listaCoordenador";

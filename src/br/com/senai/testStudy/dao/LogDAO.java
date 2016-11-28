@@ -9,7 +9,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import br.com.senai.testStudy.controller.LogController;
+import br.com.senai.testStudy.model.Log;
 
 @Repository
 public class LogDAO {
@@ -27,7 +27,7 @@ public class LogDAO {
 		
 	}
 	
-	public void adicionareAcao(LogController log){
+	public void adicionareAcao(Log log){
 		try {
 			PreparedStatement stmt = CONEXAO.prepareStatement(ADICIONAR);
 		} catch (Exception e) {

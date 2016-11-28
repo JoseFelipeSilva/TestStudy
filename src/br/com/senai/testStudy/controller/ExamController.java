@@ -73,6 +73,7 @@ public class ExamController {
 
 	@RequestMapping("removeexam")
 	public String remover(Examinador exam) {
+		dao.adicionarMorto(exam.getIdExaminador());
 		dao.remover(exam);
 		return "sucesso";
 	}

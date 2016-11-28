@@ -64,6 +64,11 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 	private static final String ALTERAR_STATUS = "UPDATE questao_prova SET status_questao = ?, examinador_responsavel_questao = ? WHERE id_questao = ?";
 	private static final String LOGIN = "SELECT * FROM examinador, disciplina, escola_cliente WHERE senha_examinador = ? AND email_examinador = ? AND "
 			+ "examinador.disciplina_examinador = disciplina.id_disciplina AND disciplina.escola_disciplina = escola_cliente.id_escola_cliente";
+	private static final String ADD_MORTO = "INSERT INTO examinador_morto (email_exam_morto, nascimento_exam_morto,"
+			+ " id_exam_antigo, sexo_exam_morto, rg_exam_morto, foto_exam_morto, cpf_exam_morto, nome_exam_morto,"
+			+ " senha_exam_morto) SELECT email_examinador, nascimento_examinador, id_examinador, sexo_examinador,"
+			+ " rg_examinador, foto_examinador, cpf_examinador, nome_examinador, senha_examinador FROM examinador"
+			+ " WHERE id_examinador = ?";
 
 	@Autowired
 	public ExaminadorDAO(DataSource dataSource) {
@@ -124,7 +129,16 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 		}
 	}
 	
-	
+	public void adicionarMorto(Integer idExam){
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(ADD_MORTO);
+			stmt.setInt(1, idExam);
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	public void alteraStatus(QuestaoProva qp, Integer id) {
 		try {

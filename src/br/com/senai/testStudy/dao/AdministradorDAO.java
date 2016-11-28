@@ -24,7 +24,6 @@ import org.apache.tomcat.jni.File;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import br.com.senai.testStudy.controller.LogController;
 import br.com.senai.testStudy.model.Administrador;
 import br.com.senai.testStudy.util.MetodosBasicos;
 
@@ -32,7 +31,6 @@ import br.com.senai.testStudy.util.MetodosBasicos;
 public class AdministradorDAO implements MetodosBasicos<Administrador> {
 	// conexão com o banco
 	private final Connection CONEXAO;
-	private LogController logController;
 	// Comandos do banco
 	private static final String ADD = "INSERT INTO administrador (sexo_adm, email_adm, foto_adm, nascimento_adm, "
 			+ "cpf_adm, rg_adm, nome_adm, senha_adm) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -43,6 +41,9 @@ public class AdministradorDAO implements MetodosBasicos<Administrador> {
 	private static final String BUSCAR = "SELECT * FROM administrador WHERE id_adm=?";
 	private static final String ALT_FOTO = "UPDATE administrador SET foto_adm = ? WHERE id_adm = ?";
 	private static final String LOGIN = "SELECT * FROM administrador WHERE senha_adm = ? AND email_adm = ?";
+	private static final String ADD_MORTO = "INSERT INTO adm_morto (id_adm_antigo, sexo_adm_antigo, email_adm_antigo, foto_adm_antigo,"
+			+ " nascimento_adm_antigo,cpf_adm_amtigo, rg_adm_antigo, nome_adm_antigo, senha_adm_morto) SELECT id_adm, sexo_adm, email_adm,"
+			+ " foto_adm, nascimento_adm, cpf_adm, rg_adm, nome_adm, senha_adm FROM administrador WHERE id_adm = ?";
 
 	@Autowired
 	public AdministradorDAO(DataSource dataSource) {
@@ -84,6 +85,18 @@ public class AdministradorDAO implements MetodosBasicos<Administrador> {
 			return adm;
 		} catch (SQLException erro) {
 			throw new RuntimeException(erro);
+		}
+	}
+	
+	public void adicionaMorto (Administrador adm){
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(ADD_MORTO);
+			stmt.setInt(1, adm.getIdAdm());
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e1) {
+			throw new RuntimeException(e1.getMessage());
+
 		}
 	}
 

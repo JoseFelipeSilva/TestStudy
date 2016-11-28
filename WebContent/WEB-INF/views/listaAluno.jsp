@@ -29,7 +29,7 @@
 			<td>${a.idAluno}</td>
 			<td><a href="alteraPhotoAluno?idAluno=${a.idAluno}"><img src="data:image/jpeg;base64, ${a.foto64}" id="fotoPerfil" height="100px" width="140px"></a></td>
 			<td>${a.nomeAluno}</td>
-			<td>${a.emailAluno}</td>
+			<td>${a.email}</td>
 			<td>${a.turmaAluno.nomeTurma}</td>
 			<td>${a.turmaAluno.escolaTurma.nomeEmp}</td>
 			<td><a href="alterarAluno?idAluno=${a.idAluno}">Modificar</a></td>

@@ -14,12 +14,14 @@ import br.com.senai.testStudy.dao.AdministradorDAO;
 import br.com.senai.testStudy.dao.AlunoDAO;
 import br.com.senai.testStudy.dao.CoordenadorDAO;
 import br.com.senai.testStudy.dao.ExaminadorDAO;
+import br.com.senai.testStudy.dao.LogDAO;
 import br.com.senai.testStudy.dao.ProfessorDAO;
 import br.com.senai.testStudy.model.Administrador;
 import br.com.senai.testStudy.model.Aluno;
 import br.com.senai.testStudy.model.Coordenador;
 import br.com.senai.testStudy.model.Examinador;
 import br.com.senai.testStudy.model.Professor;
+import br.com.senai.testStudy.util.Util;
 
 @Controller
 public class AdmController {
@@ -28,15 +30,17 @@ public class AdmController {
 	private final AlunoDAO adao;
 	private final CoordenadorDAO cdao;
 	private final ExaminadorDAO edao;
+	private final LogDAO ldao;
 
 	@Autowired
 	public AdmController(ProfessorDAO pdao, CoordenadorDAO cdao, AlunoDAO adao,
-			ExaminadorDAO edao, AdministradorDAO ADMDAO) {
+			ExaminadorDAO edao, AdministradorDAO ADMDAO, LogDAO ldao) {
 		this.ADMDAO = ADMDAO;
 		this.adao = adao;
 		this.edao = edao;
 		this.cdao = cdao;
 		this.pdao = pdao;
+		this.ldao = ldao;
 	}
 
 	@RequestMapping("logar")
@@ -45,23 +49,28 @@ public class AdmController {
 		if (ADMDAO.existeADM(adm) != null) {
 			adm = ADMDAO.existeADM(adm);
 			session.setAttribute("admLogon", adm);
+			Util.addLog(session, ldao, this);
 			return "indexAdm";
 		} else if (adao.existeAluno(aluno) != null) {
 			aluno = adao.existeAluno(aluno);
 			session.setAttribute("alunoLogon", aluno);
-			br.com.senai.testStudy.util.Util.acessandoNotificacoes(session);
+			Util.acessandoNotificacoes(session);
+			Util.addLog(session, ldao, this);
 			return "indexAluno";
 		} else if (cdao.existeCOORD(coord) != null) {
 			coord = cdao.existeCOORD(coord);
 			session.setAttribute("coordLogon", coord);
+			Util.addLog(session, ldao, this);
 			return "indexCoordenador";
 		} else if (pdao.existeProf(prof) != null) {
 			prof = pdao.existeProf(prof);
 			session.setAttribute("profLogon", prof);
+			Util.addLog(session, ldao, this);
 			return "indexProfessor";
 		} else if (edao.existeExaminador(exam) != null) {
 			exam = edao.existeExaminador(exam);
 			session.setAttribute("examLogon", exam);
+			Util.addLog(session, ldao, this);
 			return "indexExaminador";
 		}else {
 			return "redirect:index.jsp";
@@ -70,6 +79,7 @@ public class AdmController {
 
 	@RequestMapping("logoff")
 	public String sair(HttpSession session) {
+		Util.addLog(session, ldao, this);
 		session.invalidate();
 		return "redirect:index.jsp";
 	}
@@ -86,7 +96,7 @@ public class AdmController {
 	}
 
 	@RequestMapping("adicionaAdm")
-	public String addADM(Administrador adm, MultipartFile arquivo) {
+	public String addADM(Administrador adm, MultipartFile arquivo, HttpSession session) {
 		if (!arquivo.isEmpty()) {
 			try {
 				adm.setFoto(arquivo.getBytes());
@@ -94,6 +104,7 @@ public class AdmController {
 				throw new RuntimeException(e);
 			}
 		}
+		Util.addLog(session, ldao, this);
 		ADMDAO.adicionar(adm);
 		return "sucesso";
 	}
@@ -104,8 +115,9 @@ public class AdmController {
 	}
 
 	@RequestMapping("listandoADM")
-	public String lista(Model model) {
+	public String lista(Model model, HttpSession session) {
 		model.addAttribute("listaADM", ADMDAO.listar());
+		Util.addLog(session, ldao, this);
 		return "listaADM";
 	}
 
@@ -116,14 +128,17 @@ public class AdmController {
 	}
 
 	@RequestMapping("alteraADM")
-	public String alterar(Administrador adm) {
+	public String alterar(Administrador adm, HttpSession session) {
 		ADMDAO.alterar(adm);
+		Util.addLog(session, ldao, this);
 		return "sucesso";
 	}
 
 	@RequestMapping("removeadm")
-	public String remover(Administrador adm) {
+	public String remover(Administrador adm, HttpSession session) {
+		ADMDAO.adicionaMorto(adm);
 		ADMDAO.remover(adm);
+		Util.addLog(session, ldao, this);
 		return "sucesso";
 	}
 
@@ -135,7 +150,7 @@ public class AdmController {
 
 	@RequestMapping("alterandoFotoDeAdm")
 	public String alterarFotoAdm(Model model, MultipartFile arquivo,
-			Administrador adm) {
+			Administrador adm, HttpSession session) {
 		if (!arquivo.isEmpty()) {
 			try {
 				adm.setFoto(arquivo.getBytes());
@@ -144,6 +159,7 @@ public class AdmController {
 			}
 		}
 		ADMDAO.alterarFoto(adm);
+		Util.addLog(session, ldao, this);
 		model.addAttribute("listaADM", ADMDAO.listar());
 		return "listaADM";
 	}

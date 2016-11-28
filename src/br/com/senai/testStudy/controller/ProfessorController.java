@@ -59,6 +59,7 @@ public class ProfessorController {
 
 	@RequestMapping("removerProfessor")
 	public String removerProfessor(Professor prof) {
+		dao.adicionarMorto(prof.getIdProfessor());
 		dao.remover(prof);
 		return "sucessoPage";
 	}

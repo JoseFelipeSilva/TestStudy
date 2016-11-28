@@ -37,6 +37,10 @@ public class AlunoDAO implements MetodosBasicos<Aluno> {
 	private final static String LOGIN = "SELECT a.id_aluno, a.nome_aluno, a.email_aluno, a.senha_aluno, a.sexo_aluno, a.rg_aluno, "
 			+ "a.foto_aluno, a.nascimento_aluno, a.id_turma, t.nome_turma, t.id_turma, t.id_escola, e.nome_emp, "
 			+ "e.id_escola_cliente FROM aluno AS a, escola_cliente AS e, turma AS t WHERE a.senha_aluno = ? AND a.email_aluno = ?";
+	private final static String ADICIONA_MORTO = "INSERT INTO aluno_morto (email_aluno_morto, id_aluno_antigo, sexo_aluno_morto,"
+			+ " id_turma_morto, foto_aluno_morto, nome_aluno_morto, rg_aluno_morto, nascimento_aluno_morto, senha_aluno_morto) "
+			+ "SELECT email_aluno, id_aluno, sexo_aluno, id_turma, foto_aluno, nome_aluno, rg_aluno, nascimento_aluno, senha_aluno FROM aluno"
+			+ " WHERE id_aluno = ?";
 
 	// CONEXAO
 	private final Connection CONEXAO;
@@ -244,5 +248,17 @@ public class AlunoDAO implements MetodosBasicos<Aluno> {
 		} catch (SQLException erro) {
 			throw new RuntimeException(erro);
 		}
+	}
+
+	public void adicionaMorto(Integer idAluno) {
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(ADICIONA_MORTO);
+			stmt.setInt(1, idAluno);
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
 	}
 }
