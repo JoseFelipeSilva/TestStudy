@@ -43,8 +43,9 @@ public class AdministradorDAO implements MetodosBasicos<Administrador> {
 	private static final String BUSCAR = "SELECT * FROM administrador WHERE id_adm=?";
 	private static final String ALT_FOTO = "UPDATE administrador SET foto_adm = ? WHERE id_adm = ?";
 	private static final String LOGIN = "SELECT * FROM administrador WHERE senha_adm = ? AND email_adm = ?";
-	private static final String ADD_MORTO = "INSERT INTO adm_morto (id_adm_antigo, sexo_adm, email_adm, foto_adm, nascimento_adm, "
-			+ "cpf_adm, rg_adm, nome_adm, senha_adm) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	private static final String ADD_MORTO = "INSERT INTO adm_morto (id_adm_antigo, sexo_adm_antigo, email_adm_antigo, foto_adm_antigo,"
+			+ " nascimento_adm_antigo,cpf_adm_amtigo, rg_adm_antigo, nome_adm_antigo, senha_adm_morto) SELECT id_adm, sexo_adm, email_adm,"
+			+ " foto_adm, nascimento_adm, cpf_adm, rg_adm, nome_adm, senha_adm FROM administrador WHERE id_adm = ?";
 
 	@Autowired
 	public AdministradorDAO(DataSource dataSource) {
@@ -91,17 +92,8 @@ public class AdministradorDAO implements MetodosBasicos<Administrador> {
 	
 	public void adicionaMorto (Administrador adm){
 		try {
-			PreparedStatement stmt = CONEXAO.prepareStatement(ADD);
+			PreparedStatement stmt = CONEXAO.prepareStatement(ADD_MORTO);
 			stmt.setInt(1, adm.getIdAdm());
-			stmt.setString(1, adm.getSexo());
-			stmt.setString(2, adm.getEmail());
-			stmt.setBlob(3, (adm.getFoto() == null) ? null
-					: new ByteArrayInputStream(adm.getFoto()));
-			stmt.setDate(4, adm.getNascimento());
-			stmt.setString(5, adm.getCpf());
-			stmt.setString(6, adm.getRg());
-			stmt.setString(7, adm.getNome());
-			stmt.setString(8, adm.getSenha());
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e1) {

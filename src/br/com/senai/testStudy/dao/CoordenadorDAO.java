@@ -34,6 +34,7 @@ public class CoordenadorDAO implements MetodosBasicos<Coordenador> {
 	private final static String LOGIN = "SELECT c.id_coord, c.nome_coord, c.email_coord, c.senha_coord, c.foto_coord, c.sexo_coord, "
 			+ "c.nascimento_coord, c.cpf_coord, c.rg_coord, e.nome_emp, e.id_escola_cliente FROM coordenador AS c, escola_cliente AS e "
 			+ "WHERE c.senha_coord = ? AND c.email_coord = ? AND e.id_escola_cliente = c.id_escola";
+	private final static String ADD_MORTO = "";
 
 	// CONEXAO
 	private final Connection CONEXAO;
@@ -86,6 +87,10 @@ public class CoordenadorDAO implements MetodosBasicos<Coordenador> {
 		} catch (SQLException erro) {
 			throw new RuntimeException(erro);
 		}
+	}
+	
+	public void adicionaMorto(Integer idCoord){
+		
 	}
 
 	// ADICIONAR

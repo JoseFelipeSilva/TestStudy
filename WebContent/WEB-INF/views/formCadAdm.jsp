@@ -57,8 +57,8 @@ window.onload=function(){
 	</p>
 	<p>
 		<strong>Sexo: </strong><br /> <input type="radio" name="sexo"
-			value="Masc" required />Masculino<br /> <input type="radio"
-			name="sexo" value="Fem" required />Feminino<br />
+			value="masc" required />Masculino<br /> <input type="radio"
+			name="sexo" value="fem" required />Feminino<br />
 	</p>
 	<input type="submit" value="enviar">
 	</form>
