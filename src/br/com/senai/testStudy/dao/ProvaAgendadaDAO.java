@@ -20,6 +20,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.datetime.joda.LocalDateTimeParser;
 import org.springframework.stereotype.Repository;
 
+import br.com.senai.testStudy.model.Professor;
 import br.com.senai.testStudy.model.Prova;
 import br.com.senai.testStudy.model.ProvaAgendada;
 import br.com.senai.testStudy.model.Turma;
@@ -33,9 +34,8 @@ public class ProvaAgendadaDAO implements MetodosBasicos<ProvaAgendada> {
 	private final static String LISTAR = "SELECT pr.id_prova_agendada, pr.id_prova, pr.id_turma, pr.duracao_prova,"
 			+ "pr.data_termino, pr.data_inicio, p.id_prova, p.nome_prova, t.id_turma, t.nome_turma FROM prova_agendada AS pr, prova AS p, turma AS t "
 			+ "WHERE pr.id_prova = p.id_prova AND pr.id_turma = t.id_turma";
-	private final static String BUSCAR = "SELECT pr.id_prova_agendada, pr.id_prova, pr.id_turma, pr.duracao_prova,"
-			+ "pr.data_termino, pr.data_inicio, p.id_prova, p.nome_prova, t.id_turma, t.nome_turma FROM prova_agendada AS pr, prova AS p, turma AS t "
-			+ "WHERE pr.id_prova = p.id_prova AND pr.id_turma = t.id_turma AND pr.id_prova_agendada = ?";
+	private final static String BUSCAR = "SELECT * FROM prova_agendada AS pr, prova AS p, turma AS t, professor AS prof "
+			+ "WHERE pr.id_prova = p.id_prova AND pr.id_turma = t.id_turma AND pr.id_prova_agendada = ? GROUP BY p.id_professor";
 	private final static String ALTERAR = "UPDATE prova_agendada SET id_prova = ?, id_turma = ?, duracao_prova = ?, data_termino = ?, data_inicio = ? WHERE id_prova_agendada = ?";
 	private final static String LISTARPORTURMA = "SELECT pr.id_prova_agendada, pr.id_prova, pr.id_turma, "
 			+ "pr.data_termino, pr.data_inicio, p.id_prova, p.nome_prova, t.id_turma, t.nome_turma FROM prova_agendada AS pr, prova AS p, turma AS t "
@@ -159,9 +159,19 @@ public class ProvaAgendadaDAO implements MetodosBasicos<ProvaAgendada> {
 			// faltando, inclusive o professor, e esses dados vao aparecer no resumo da prova, e qdo o cara clicar pra fazer
 			// pega as questões e as alternativas...
 			if (rs.next()) {
+				Professor prof = new Professor();
+				prof.setNome(rs.getString("nome_professor"));
+				prof.setEmail(rs.getString("email_professor"));
+				prof.setIdProfessor(rs.getInt("id_professor"));
+				prof.setSexo(rs.getString("sexo_professor"));
+				
+				
 				Prova p = new Prova();
 				p.setNomeProva(rs.getString("nome_prova"));
 				p.setIdProva(rs.getInt("id_prova"));
+				p.setDificuldadeATE(rs.getInt("dificuldadeATE"));
+				p.setDificuldadeDE(rs.getInt("dificuldadeDE"));
+				p.setProfessor(prof);				
 				
 
 				Turma t = new Turma();
