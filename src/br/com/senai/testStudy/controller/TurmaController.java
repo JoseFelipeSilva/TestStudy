@@ -42,6 +42,7 @@ public class TurmaController {
 
 	@RequestMapping("removerTurma")
 	public String removerTurma(Turma turma, Model model) {
+		dao.adicionarMorto(turma.getIdTurma());
 		dao.remover(turma);
 		model.addAttribute("LTurmas", dao.listar());
 		return "listaTurma";

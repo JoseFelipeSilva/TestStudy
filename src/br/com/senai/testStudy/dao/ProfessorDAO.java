@@ -92,6 +92,17 @@ public class ProfessorDAO implements MetodosBasicos<Professor> {
 			throw new RuntimeException(erro);
 		}
 	}
+	
+	public void adicionarMorto(Integer idProf){
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(ADD_MORTO);
+			stmt.setInt(1, idProf);
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	// ADICIONAR
 	@Override

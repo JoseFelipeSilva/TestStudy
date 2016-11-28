@@ -1,15 +1,14 @@
 package br.com.senai.testStudy.model;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDateTime;
 
 public class Log {
 	private Integer idLog;
 	private String nomeUsuario;
 	private String tipoUsuario;
+	private String emailUsuario;
 	private String acaoUsuario;
-	private Date dataAcao;
-	private Time horarioAcao;
+	private LocalDateTime dataAcao;
 
 	public Integer getIdLog() {
 		return idLog;
@@ -43,20 +42,19 @@ public class Log {
 		this.acaoUsuario = acaoUsuario;
 	}
 
-	public Date getDataAcao() {
+	public LocalDateTime getDataAcao() {
 		return dataAcao;
 	}
 
-	public void setDataAcao(Date dataAcao) {
+	public void setDataAcao(LocalDateTime dataAcao) {
 		this.dataAcao = dataAcao;
 	}
 
-	public Time getHorarioAcao() {
-		return horarioAcao;
+	public String getEmailUsuario() {
+		return emailUsuario;
 	}
 
-	public void setHorarioAcao(Time horarioAcao) {
-		this.horarioAcao = horarioAcao;
+	public void setEmailUsuario(String emailUsuario) {
+		this.emailUsuario = emailUsuario;
 	}
-
 }

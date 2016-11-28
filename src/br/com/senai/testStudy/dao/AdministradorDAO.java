@@ -24,7 +24,6 @@ import org.apache.tomcat.jni.File;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import br.com.senai.testStudy.controller.LogController;
 import br.com.senai.testStudy.model.Administrador;
 import br.com.senai.testStudy.util.MetodosBasicos;
 
@@ -32,7 +31,6 @@ import br.com.senai.testStudy.util.MetodosBasicos;
 public class AdministradorDAO implements MetodosBasicos<Administrador> {
 	// conexão com o banco
 	private final Connection CONEXAO;
-	private LogController logController;
 	// Comandos do banco
 	private static final String ADD = "INSERT INTO administrador (sexo_adm, email_adm, foto_adm, nascimento_adm, "
 			+ "cpf_adm, rg_adm, nome_adm, senha_adm) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";

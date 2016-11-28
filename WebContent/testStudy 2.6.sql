@@ -1,6 +1,6 @@
 -- Gerado em 06/09/2016
 -- projeto test study
--- VERSÃO 18/10/2016
+-- VERSÃO 28/11/2016
 DROP SCHEMA IF EXISTS testStudy;
 CREATE SCHEMA IF NOT EXISTS testStudy;
 USE testStudy;
@@ -115,7 +115,8 @@ FOREIGN KEY(id_escola_cliente) REFERENCES escola_cliente (id_escola_cliente)
 CREATE TABLE IF NOT EXISTS prova (
 id_prova INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
 id_professor INTEGER NOT NULL,
-dificuldade VARCHAR(15) NOT NULL,
+dificuldadeDE VARCHAR(2) NOT NULL,
+dificuldadeATE VARCHAR(2) NOT NULL,
 n_questoes INTEGER NOT NULL,
 nome_prova VARCHAR(50) NOT NULL,
 data_prova DATE NOT NULL,
@@ -126,11 +127,8 @@ CREATE TABLE IF NOT EXISTS prova_agendada(
 id_prova_agendada INTEGER AUTO_INCREMENT NOT NULL PRIMARY KEY,
 id_prova INTEGER NOT NULL,
 id_turma INTEGER NOT NULL,
-hora_termino TIME,
-horario_inicio TIME,
-data_realizacao DATE NOT NULL,
-data_termino DATE NOT NULL,
-data_inicio DATE NOT NULL,
+data_termino DATETIME,
+data_inicio DATETIME,
 FOREIGN KEY (id_prova) REFERENCES prova (id_prova),
 FOREIGN KEY (id_turma) REFERENCES turma (id_turma)
 );
@@ -182,6 +180,8 @@ padrao_disciplina VARCHAR(7) NOT NULL,
 escola_disciplina INTEGER,
 FOREIGN KEY(escola_disciplina) REFERENCES escola_cliente (id_escola_cliente)
 );
+
+SELECT * FROM disciplina;
 
 CREATE TABLE IF NOT EXISTS examinador (
 id_examinador INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -364,8 +364,31 @@ FOREIGN KEY(questao_mensagem) REFERENCES questao_prova(id_questao)
 );
 
 
+
 ALTER TABLE prova ADD FOREIGN KEY(id_professor) REFERENCES professor (id_professor);
 ALTER TABLE materia ADD FOREIGN KEY(id_disciplina) REFERENCES disciplina (id_disciplina);
+ALTER TABLE `teststudy`.`prova_agendada` CHANGE COLUMN `data_termino` `data_termino` DATETIME NOT NULL ,
+CHANGE COLUMN `data_inicio` `data_inicio` DATETIME NOT NULL ,
+ADD COLUMN `duracao_prova` INT(3) NOT NULL AFTER `data_inicio`;
+
+ALTER TABLE `teststudy`.`log` 
+DROP COLUMN `horario_acao`,
+CHANGE COLUMN `data_acao` `data_acao` DATETIME NOT NULL ;
+
+ALTER TABLE `teststudy`.`aluno_morto` 
+DROP COLUMN `cpf_aluno_morto`,
+CHANGE COLUMN `id_escola_morto` `id_turma_morto` VARCHAR(10) NOT NULL ;
+
+ALTER TABLE `teststudy`.`aluno_morto` 
+CHANGE COLUMN `nascimento_aluno_morto` `nascimento_aluno_morto` DATE NOT NULL ;
+
+ALTER TABLE `teststudy`.`turma_morto` 
+DROP COLUMN `id_aluno_antigo`;
+
+ALTER TABLE `teststudy`.`turma_morto` 
+ADD COLUMN `nome_turma_morto` VARCHAR(50) NOT NULL AFTER `id_escola_morto`;
+
+
 
 INSERT INTO administrador(sexo_adm,
  email_adm,
