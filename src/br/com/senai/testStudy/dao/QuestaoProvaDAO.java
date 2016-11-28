@@ -40,7 +40,11 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 	private static final String LISTAR_MAT = "SELECT materia.*, disciplina.* FROM materia,"
 			+ " disciplina WHERE materia.id_materia = disciplina.id_disciplina AND materia.id_disciplina = ?";
 	private static final String ADICIONAR_NA_PROVA = "INSERT INTO prova_questao (id_questao, id_prova) VALUES (?, ?)";
-
+	private static final String LISTAR_QUESTOES_DA_PROVA = "select * from prova_questao,"
+			+ " questao_prova, professor, materia, disciplina where questao_prova.id_questao"
+			+ " = prova_questao.id_questao AND materia.id_disciplina = disciplina.id_disciplina"
+			+ " AND questao_prova.materia_questao = materia.id_materia AND questao_prova.autor_questao"
+			+ " = professor.id_professor AND prova_questao.id_prova = ?";
 	@Autowired
 	public QuestaoProvaDAO(DataSource dataSource) {
 		try {
@@ -71,6 +75,51 @@ public class QuestaoProvaDAO implements MetodosBasicos<QuestaoProva> {
 			throw new RuntimeException(e);
 		}
 
+	}
+	
+	public List<QuestaoProva> listarQuestoesDaProva(Integer id){
+		List<QuestaoProva>questoesDaProva = new ArrayList<QuestaoProva>();
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(LISTAR_QUESTOES_DA_PROVA);
+			stmt.setInt(1, id);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()){
+				Disciplina d = new Disciplina();
+				d.setIdDisciplina(rs.getInt("id_disciplina"));
+				d.setNomeDisciplina(rs.getString("nome_disciplina"));
+				d.setPadraoDisciplina(rs.getString("padrao_disciplina"));
+				
+				Materia m = new Materia();
+				m.setDisciplina(d);
+				m.setIdMateria(rs.getInt("id_materia"));
+				m.setNomeMateria(rs.getString("nome_materia"));
+				
+				Professor p = new Professor();
+				p.setIdProfessor(rs.getInt("id_professor"));
+				p.setNome(rs.getString("nome_professor"));
+				p.setSexo(rs.getString("sexo_professor"));
+				p.setSenha(rs.getString("sexo_professor"));
+				p.setCpf(rs.getString("cpf_professor"));
+				p.setEmail(rs.getString("email_professor"));
+				p.setNascimento(rs.getDate("nascimento_professor"));
+				
+				
+				QuestaoProva qp = new QuestaoProva();
+				qp.setIdQuestaoProva(rs.getInt("id_questao"));
+				qp.setTituloQuestao(rs.getString("titulo_questao"));
+				qp.setCorpoQuestao(rs.getString("corpo_questao"));
+				qp.setTipoQuestao(rs.getString("tipo_questao"));
+				qp.setVisualizacaoQuestao(rs.getString("visualizacao_questao"));
+				qp.setUsoQuestao(rs.getInt("uso_questao"));
+				qp.setAutorQuestao(p);
+				qp.setMateria(m);
+				questoesDaProva.add(qp);
+				
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return questoesDaProva;
 	}
 	
 	public void adicionarQuestaoNaProva(Integer idProva, Integer idQuestao){

@@ -26,14 +26,16 @@ public class ProvaAgendadaController {
 	private final ProvaDAO pdao;
 	private final TurmaDAO tdao;
 	private final AlternativaDAO adao;
+	private final QuestaoProvaDAO qpdao;
 
 	@Autowired
-	public ProvaAgendadaController(AlternativaDAO adao, TurmaDAO tdao, ProvaAgendadaDAO dao,
+	public ProvaAgendadaController(QuestaoProvaDAO qpdao, AlternativaDAO adao, TurmaDAO tdao, ProvaAgendadaDAO dao,
 			ProvaDAO pdao) {
 		this.dao = dao;
 		this.pdao = pdao;
 		this.tdao = tdao;
 		this.adao = adao;
+		this.qpdao = qpdao;
 	}
 
 	@RequestMapping("newProvaAgendada")
@@ -45,18 +47,18 @@ public class ProvaAgendadaController {
 	}
 	
 	@RequestMapping("fazerProvaAgendada")
-	public String fazerProva(Model model, HttpSession session, Integer id) {
-		ProvaAgendada provaAgendada = new ProvaAgendada();
+	public String fazerProva(Model model, HttpSession session, ProvaAgendada provaAgendada) {
 		List<ProvaAgendada> notificacao = (List<ProvaAgendada>) session.getAttribute("notificacoes");
 		for (ProvaAgendada provaAgendada2 : notificacao) {
-			if (provaAgendada2.getIdProvaAgendada() == id) {
+			if (provaAgendada2.getIdProvaAgendada() == provaAgendada.getIdProvaAgendada()) {
 				provaAgendada = dao.buscarID(provaAgendada.getIdProvaAgendada());
-				System.out.println(provaAgendada.getProva().getProfessor().getIdProfessor());
-				
+				session.setAttribute("provaParaFazer", provaAgendada);
+				model.addAttribute("QuestoesDaProvaParaFazer", qpdao.listarQuestoesDaProva(provaAgendada.getProva().getIdProva()));
 			}
 		}
+		
 	
-		return "addProvaAgendada";
+		return "resumoDaProva";
 	}
 
 	@RequestMapping("adicionarProvaAgendada")

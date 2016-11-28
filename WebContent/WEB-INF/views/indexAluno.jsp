@@ -21,7 +21,7 @@ function aparecerProvas() {
 	<div id="notify" style="display: none;">
 		<c:forEach items="${notificacoes}" var="i">
 		<div>
-		<a href="fazerProvaAgendada?id=${i.idProvaAgendada}">${i.prova.nomeProva }</a>
+		<a href="fazerProvaAgendada?idProvaAgendada=${i.idProvaAgendada}">${i.prova.nomeProva }</a>
 		</div>
 		</c:forEach>
 	</div>

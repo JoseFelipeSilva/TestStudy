@@ -155,9 +155,7 @@ public class ProvaAgendadaDAO implements MetodosBasicos<ProvaAgendada> {
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
 
-			// TODO as ideias estão bem estruturadas já, é só arrumar esse select pra trazer o resto das coisas que estão
-			// faltando, inclusive o professor, e esses dados vao aparecer no resumo da prova, e qdo o cara clicar pra fazer
-			// pega as questões e as alternativas...
+			
 			if (rs.next()) {
 				Professor prof = new Professor();
 				prof.setNome(rs.getString("nome_professor"));
@@ -171,6 +169,7 @@ public class ProvaAgendadaDAO implements MetodosBasicos<ProvaAgendada> {
 				p.setIdProva(rs.getInt("id_prova"));
 				p.setDificuldadeATE(rs.getInt("dificuldadeATE"));
 				p.setDificuldadeDE(rs.getInt("dificuldadeDE"));
+				p.setnQuestoes(rs.getInt("n_questoes"));
 				p.setProfessor(prof);				
 				
 
@@ -182,6 +181,7 @@ public class ProvaAgendadaDAO implements MetodosBasicos<ProvaAgendada> {
 				pa.setIdProvaAgendada(rs.getInt("id_prova_agendada"));
 				pa.setDataInicio(rs.getTimestamp("data_inicio").toLocalDateTime());
 				pa.setDataTermino(rs.getTimestamp("data_termino").toLocalDateTime());
+				pa.setDuracao(rs.getInt("duracao_prova"));
 				pa.setTurma(t);
 				pa.setProva(p);
 			}else {
