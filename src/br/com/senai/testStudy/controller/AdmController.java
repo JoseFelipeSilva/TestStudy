@@ -123,6 +123,7 @@ public class AdmController {
 
 	@RequestMapping("removeadm")
 	public String remover(Administrador adm) {
+		ADMDAO.adicionaMorto(adm);
 		ADMDAO.remover(adm);
 		return "sucesso";
 	}

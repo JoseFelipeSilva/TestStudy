@@ -50,13 +50,12 @@ public class ProvaAgendadaController {
 		List<ProvaAgendada> notificacao = (List<ProvaAgendada>) session.getAttribute("notificacoes");
 		for (ProvaAgendada provaAgendada2 : notificacao) {
 			if (provaAgendada2.getIdProvaAgendada() == id) {
-				provaAgendada = dao.buscarID(provaAgendada.getIdProvaAgendada());
-				System.out.println(provaAgendada.getProva().getProfessor().getIdProfessor());
+				
 				
 			}
 		}
 	
-		return "addProvaAgendada";
+		return "resumoDaProva";
 	}
 
 	@RequestMapping("adicionarProvaAgendada")
