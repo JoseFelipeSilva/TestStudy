@@ -24,6 +24,9 @@ public class EscolaClienteDAO implements MetodosBasicos<EscolaCliente> {
 	private final static String BUSCAR = "SELECT * FROM escola_cliente WHERE id_escola_cliente = ?";
 	private final static String ALTERAR = " UPDATE escola_cliente SET nome_emp = ?, email_emp = ?, telefone_emp = ?, cnpj_emp = ?, razao_social_emp = ?"
 			+ "WHERE id_escola_cliente = ?";
+	private final static String ADD_MORTO = "INSERT INTO escola_cliente_morto (cnpj_emp_morto, id_escola_antigo, razao_social_morto,"
+			+ " telefone_emp_morto, email_emp_morto, nome_emp_morto) SELECT cnpj_emp, id_escola_cliente, razao_social_emp, telefone_emp,"
+			+ " email_emp, nome_emp FROM escola_cliente WHERE id_escola_cliente = ?";
 
 	// CONEXAO
 	private final Connection CONEXAO;
@@ -34,6 +37,17 @@ public class EscolaClienteDAO implements MetodosBasicos<EscolaCliente> {
 			this.CONEXAO = dtSource.getConnection();
 		} catch (SQLException erro) {
 			throw new RuntimeException(erro);
+		}
+	}
+	
+	public void adicionaMorto(Integer idEscola){
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(ADD_MORTO);
+			stmt.setInt(1, idEscola);
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
 		}
 	}
 

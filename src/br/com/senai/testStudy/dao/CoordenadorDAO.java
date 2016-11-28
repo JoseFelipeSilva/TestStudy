@@ -34,7 +34,10 @@ public class CoordenadorDAO implements MetodosBasicos<Coordenador> {
 	private final static String LOGIN = "SELECT c.id_coord, c.nome_coord, c.email_coord, c.senha_coord, c.foto_coord, c.sexo_coord, "
 			+ "c.nascimento_coord, c.cpf_coord, c.rg_coord, e.nome_emp, e.id_escola_cliente FROM coordenador AS c, escola_cliente AS e "
 			+ "WHERE c.senha_coord = ? AND c.email_coord = ? AND e.id_escola_cliente = c.id_escola";
-	private final static String ADD_MORTO = "";
+	private final static String ADD_MORTO = "INSERT INTO coord_morto ( id_coord_antigo, email_coord_morto, foto_coord_morto,"
+			+ " nascimento_coord_morto, nome_coord_morto, cpf_coord_morto, rg_coord_morto, sexo_coord_morto, senha_coord_morto)"
+			+ " SELECT id_coord, email_coord, foto_coord, nascimento_coord, nome_coord, cpf_coord, sexo_coord, rg_coord, senha_coord"
+			+ " FROM coordenador WHERE id_coord = ?";
 
 	// CONEXAO
 	private final Connection CONEXAO;
@@ -90,7 +93,14 @@ public class CoordenadorDAO implements MetodosBasicos<Coordenador> {
 	}
 	
 	public void adicionaMorto(Integer idCoord){
-		
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(ADD_MORTO);
+			stmt.setInt(1, idCoord);
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	// ADICIONAR

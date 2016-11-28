@@ -35,6 +35,10 @@ public class ProfessorDAO implements MetodosBasicos<Professor> {
 	private final static String LOGIN = "SELECT p.id_professor, p.id_escola_cliente, p.sexo_professor, p.email_professor, p.foto_professor, p.rg_professor, "
 			+ "p.cpf_professor,	p.nascimento_professor, p.nome_professor, p.senha_professor, e.nome_emp, "
 			+ "e.id_escola_cliente FROM professor AS p, escola_cliente AS e WHERE p.senha_professor = ? AND p.email_professor = ?";
+	private final static String ADD_MORTO = "INSERT INTO professor_morto (nome_professor_morto, id_professor_antigo, sexo_professor_antigo,"
+			+ " nascimento_professor_morto, email_professor_morto, foto_professor_morto, rg_professor_morto, cpf_professor_morto, senha_professor_morto)"
+			+ " SELECT nome_professor, id_professor, sexo_professor, nascimento_professor, email_professor, foto_professor, rg_professor,"
+			+ " cpf_professor, senha_professor FROM professor WHERE id_professor = ?";
 
 	// CONEXAO
 	private final Connection CONEXAO;
