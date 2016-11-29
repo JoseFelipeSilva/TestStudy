@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import br.com.senai.testStudy.dao.AlternativaDAO;
 import br.com.senai.testStudy.dao.LogDAO;
 import br.com.senai.testStudy.dao.ProvaAgendadaDAO;
 import br.com.senai.testStudy.dao.ProvaDAO;
@@ -27,15 +28,18 @@ public class ProvaAgendadaController {
 	private final TurmaDAO tdao;
 	private final QuestaoProvaDAO qpdao;
 	private final LogDAO ldao;
+	private final AlternativaDAO idao;
 
 	@Autowired
-	public ProvaAgendadaController(QuestaoProvaDAO qpdao,
-			TurmaDAO tdao, ProvaAgendadaDAO dao, ProvaDAO pdao, LogDAO ldao) {
+	public ProvaAgendadaController(QuestaoProvaDAO qpdao, TurmaDAO tdao,
+			ProvaAgendadaDAO dao, ProvaDAO pdao, LogDAO ldao,
+			AlternativaDAO idao) {
 		this.dao = dao;
 		this.pdao = pdao;
 		this.tdao = tdao;
 		this.qpdao = qpdao;
 		this.ldao = ldao;
+		this.idao = idao;
 	}
 
 	@RequestMapping("newProvaAgendada")
@@ -50,13 +54,14 @@ public class ProvaAgendadaController {
 	@RequestMapping("fazerProvaAgendada")
 	public String fazerProva(Model model, HttpSession session,
 			ProvaAgendada provaAgendada) {
-		List<ProvaAgendada> notificacao = (List<ProvaAgendada>) session.getAttribute("notificacoes");
+		List<ProvaAgendada> notificacao = (List<ProvaAgendada>) session
+				.getAttribute("notificacoes");
 		for (ProvaAgendada provaAgendada2 : notificacao) {
-			if (provaAgendada2.getIdProvaAgendada() == provaAgendada.getIdProvaAgendada()) {
-				provaAgendada = dao.buscarID(provaAgendada.getIdProvaAgendada());
+			if (provaAgendada2.getIdProvaAgendada() == provaAgendada
+					.getIdProvaAgendada()) {
+				provaAgendada = idao
+						.buscarProva(provaAgendada.getIdProvaAgendada());
 				session.setAttribute("provaParaFazer", provaAgendada);
-				model.addAttribute("QuestoesDaProvaParaFazer", qpdao.listarQuestoesDaProva(provaAgendada.getProva().getIdProva()));
-				
 			}
 
 		}
@@ -64,7 +69,8 @@ public class ProvaAgendadaController {
 	}
 
 	@RequestMapping("adicionarProvaAgendada")
-	public String adicionarProvaAgendada(Turma t, Prova p, ProvaAgendada pa, HttpSession session) {
+	public String adicionarProvaAgendada(Turma t, Prova p, ProvaAgendada pa,
+			HttpSession session) {
 		pa.setProva(p);
 		pa.setTurma(t);
 		dao.adicionar(pa);

@@ -13,6 +13,7 @@
 			<th>Nome da prova</th>
 			<th>Numero de questoes</th>
 			<th>Duração</th>
+			<th>questoes</th>
 			<c:forEach items="${QuestoesDaProvaParaFazer }" var="qp">
 			<th>Materias</th>
 			</c:forEach>
@@ -21,6 +22,9 @@
 				<td>${provaParaFazer.prova.nomeProva }</td>
 				<td>${provaParaFazer.prova.nQuestoes }</td>
 				<td>${provaParaFazer.duracao }</td>
+				<c:forEach items="${QuestoesDaProvaParaFazer }" var="qp">
+					<th>${qp.materia.nomeMateria}</th>
+				</c:forEach>
 				<c:forEach items="${QuestoesDaProvaParaFazer }" var="qp">
 					<th>${qp.materia.nomeMateria}</th>
 				</c:forEach>
