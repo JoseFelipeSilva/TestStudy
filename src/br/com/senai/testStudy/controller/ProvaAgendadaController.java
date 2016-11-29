@@ -59,8 +59,8 @@ public class ProvaAgendadaController {
 		for (ProvaAgendada provaAgendada2 : notificacao) {
 			if (provaAgendada2.getIdProvaAgendada() == provaAgendada
 					.getIdProvaAgendada()) {
-				provaAgendada = idao
-						.buscarProva(provaAgendada.getIdProvaAgendada());
+				provaAgendada = idao.buscarProva(provaAgendada.getIdProvaAgendada());
+				System.out.println(provaAgendada);
 				session.setAttribute("provaParaFazer", provaAgendada);
 			}
 

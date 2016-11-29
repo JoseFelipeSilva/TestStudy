@@ -212,8 +212,9 @@ public class ExaminadorDAO implements MetodosBasicos<Examinador> {
 				a.setCerta(rs.getString("certa_prova"));
 				a.setCorpoAlternativa(rs.getString("corpo_alternativa"));
 				a.setIdAlternativa(rs.getInt("id_alternativa"));
-				a.setQuestaoAlternativa(qp);
-
+				//a.setQuestaoAlternativa(qp);
+				
+				// TODO ARRUMAR AQUI, PQ AGR A MODEL MUDOU, PRECISO DE UMA LISTA DE QUESTÕES QUE TEM ALTERNATIVAS, E NÃO O CONTRÁRIO
 				alternativas.add(a);
 			}
 

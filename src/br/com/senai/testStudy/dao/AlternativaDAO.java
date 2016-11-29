@@ -13,8 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import br.com.senai.testStudy.model.Alternativa;
+import br.com.senai.testStudy.model.Disciplina;
+import br.com.senai.testStudy.model.EscolaCliente;
+import br.com.senai.testStudy.model.Materia;
+import br.com.senai.testStudy.model.Professor;
+import br.com.senai.testStudy.model.Prova;
 import br.com.senai.testStudy.model.ProvaAgendada;
 import br.com.senai.testStudy.model.QuestaoProva;
+import br.com.senai.testStudy.model.Turma;
 import br.com.senai.testStudy.util.MetodosBasicos;
 
 @Repository
@@ -24,7 +30,12 @@ public class AlternativaDAO implements MetodosBasicos<Alternativa> {
 			+ "((SELECT max(id_questao) FROM questao_prova), ?, ?)";
 	private static final String BUSCAR_POR_QUESTAO = "select * from alternativa, questao_prova WHERE alternativa.id_questao"
 			+ " = questao_prova.id_questao AND alternativa.id_questao = ?"; 
-	private static final String BUSCAR_POR_PROVA = "select * from alternativa, questao_prova, disciplina, materia, professor, prova, prova_agendada, prova_questao 	WHERE prova_questao.id_questao = questao_prova.id_questao     AND prova_questao.id_prova = prova.id_prova    AND professor.id_professor = prova.id_professor    AND prova.id_prova = prova_agendada.id_prova    AND questao_prova.id_questao = alternativa.id_questao    AND questao_prova.disciplina_questao = disciplina.id_disciplina    AND materia.id_materia = questao_prova.materia_questao    AND prova_agendada.id_prova_agendada = 25;"; 
+	private static final String BUSCAR_POR_PROVA = "select * from alternativa, questao_prova, prova, prova_agendada, prova_questao, disciplina, materia, professor "
+			+ "WHERE prova.id_prova = prova_agendada.id_prova AND prova_questao.id_prova = prova_agendada.id_prova AND prova_questao.id_questao = questao_prova.id_questao "
+			+ "AND questao_prova.disciplina_questao = disciplina.id_disciplina AND materia.id_materia = questao_prova.materia_questao "
+			+ "AND questao_prova.id_questao = alternativa.id_questao AND prova_agendada.id_turma = turma.id_turma"
+			+ " AND prova.id_professor = professor.id_professor AND turma.id_escola = escola_cliente.id_escola_cliente"
+			+ " AND prova_agendada.id_prova_agendada = ? group by alternativa.id_alternativa;"; 
 
 	@Autowired
 	public AlternativaDAO(DataSource dataSource) {
@@ -91,7 +102,7 @@ public class AlternativaDAO implements MetodosBasicos<Alternativa> {
 				a.setIdAlternativa(rs.getInt("id_alternativa"));
 				a.setCerta(rs.getString("certa_prova"));
 				a.setCorpoAlternativa(rs.getString("corpo_alternativa"));
-				a.setQuestaoAlternativa(qp);
+			//	a.setQuestaoAlternativa(qp); TODO
 				alternativas.add(a);
 			}
 			stmt.close();
@@ -105,8 +116,89 @@ public class AlternativaDAO implements MetodosBasicos<Alternativa> {
 	}
 
 	public ProvaAgendada buscarProva(Integer idProvaAgendada) {
-		// TODO Auto-generated method stub
-		return null;
+		ProvaAgendada pa = null;
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(BUSCAR_POR_PROVA);
+			stmt.setInt(1, idProvaAgendada);
+			ResultSet rs = stmt.executeQuery();
+				List<QuestaoProva> lqp = new ArrayList<QuestaoProva>();
+				List<Alternativa> lalt = new ArrayList<Alternativa>();
+				while (rs.next()) {
+					EscolaCliente escola = new EscolaCliente();
+					escola.setIdEmp(rs.getInt("id_escola_cliente"));
+					escola.setNomeEmp(rs.getString("nome_emp"));
+					escola.setEmailEmp(rs.getString("email_emp"));
+					escola.setCnpjEmp(rs.getString("cnpj_emp"));
+					escola.setTelefoneEmp(rs.getString("telefone_emp"));
+					escola.setNomeEmpresarialEmp(rs.getString("razao_social_emp"));
+					
+					Turma t = new Turma();
+					t.setIdTurma(rs.getInt("id_turma"));
+					t.setNomeTurma(rs.getString("nome_turma"));
+					t.setEscolaTurma(escola);
+					
+					Alternativa a = new Alternativa();
+					a.setIdAlternativa(rs.getInt("id_alternativa"));
+					a.setCerta(rs.getString("certa_prova"));
+					a.setCorpoAlternativa(rs.getString("corpo_alternativa"));
+					lalt.add(a);
+					
+					Disciplina d = new Disciplina();
+					d.setIdDisciplina(rs.getInt("id_disciplina"));
+					d.setNomeDisciplina(rs.getString("nome_disciplina"));
+					d.setPadraoDisciplina(rs.getString("padrao_disciplina"));
+					
+					Materia m = new Materia();
+					m.setDisciplina(d);
+					m.setIdMateria(rs.getInt("id_materia"));
+					m.setNomeMateria(rs.getString("nome_materia"));
+									
+					
+					QuestaoProva qp = new QuestaoProva();
+					qp.setIdQuestaoProva(rs.getInt("id_questao"));
+					qp.setTituloQuestao(rs.getString("titulo_questao"));
+					qp.setCorpoQuestao(rs.getString("corpo_questao"));
+					qp.setTipoQuestao(rs.getString("tipo_questao"));
+					qp.setVisualizacaoQuestao(rs.getString("visualizacao_questao"));
+					qp.setUsoQuestao(rs.getInt("uso_questao"));
+					qp.setMateria(m);
+					if (lqp.contains(qp)) {						
+						qp = lqp.get(lqp.indexOf(qp));
+						lqp.remove(qp);
+						qp.setAlternativas(lalt);
+					}else {
+						qp.setAlternativas(lalt);
+					}					
+							
+				
+				Professor prof = new Professor();
+				prof.setNome(rs.getString("nome_professor"));
+				prof.setEmail(rs.getString("email_professor"));
+				prof.setIdProfessor(rs.getInt("id_professor"));
+				prof.setSexo(rs.getString("sexo_professor"));
+				
+				Prova p = new Prova();
+				p.setNomeProva(rs.getString("nome_prova"));
+				p.setIdProva(rs.getInt("id_prova"));
+				p.setDificuldadeATE(rs.getInt("dificuldadeATE"));
+				p.setDificuldadeDE(rs.getInt("dificuldadeDE"));
+				p.setnQuestoes(rs.getInt("n_questoes"));
+				p.setProfessor(prof);
+				
+				pa = new ProvaAgendada();
+				pa.setIdProvaAgendada(rs.getInt("id_prova_agendada"));
+				pa.setDataInicio(rs.getTimestamp("data_inicio").toLocalDateTime());
+				pa.setDataTermino(rs.getTimestamp("data_termino").toLocalDateTime());
+				pa.setDuracao(rs.getInt("duracao_prova"));
+				pa.setProva(p);
+				pa.setTurma(t);
+				}
+			stmt.close();
+			rs.close();
+			return pa;
+		} catch (SQLException erro) {
+			throw new RuntimeException(erro);
+		}
 	}
 }
 

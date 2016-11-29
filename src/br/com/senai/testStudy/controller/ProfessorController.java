@@ -2,6 +2,8 @@ package br.com.senai.testStudy.controller;
 
 import java.io.IOException;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,19 +11,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.com.senai.testStudy.dao.EscolaClienteDAO;
+import br.com.senai.testStudy.dao.LogDAO;
 import br.com.senai.testStudy.dao.ProfessorDAO;
 import br.com.senai.testStudy.model.EscolaCliente;
 import br.com.senai.testStudy.model.Professor;
+import br.com.senai.testStudy.util.Util;
 
 @Controller
 public class ProfessorController {
 	private final ProfessorDAO dao;
 	private final EscolaClienteDAO edao;
+	private final LogDAO ldao;
 
 	@Autowired
-	public ProfessorController(ProfessorDAO dao, EscolaClienteDAO edao) {
+	public ProfessorController(ProfessorDAO dao, EscolaClienteDAO edao, LogDAO ldao) {
 		this.dao = dao;
 		this.edao = edao;
+		this.ldao = ldao;
 	}
 
 	@RequestMapping("newProfessor")
@@ -32,7 +38,7 @@ public class ProfessorController {
 
 	@RequestMapping("adicionamentoProfessor")
 	public String addProfessor(MultipartFile arquivo, Professor prof,
-			EscolaCliente escola) {
+			EscolaCliente escola, HttpSession session) {
 		if (!arquivo.isEmpty()) {
 			try {
 				prof.setFoto(arquivo.getBytes());
@@ -42,12 +48,14 @@ public class ProfessorController {
 		}
 		prof.setEscolaProfessor(escola);
 		dao.adicionar(prof);
+		Util.addLog(session, ldao, this);
 		return "sucessoPage";
 	}
 
 	@RequestMapping("ListagemProfessor")
-	public String listaOfProfessores(Model model) {
+	public String listaOfProfessores(Model model, HttpSession session) {
 		model.addAttribute("LProfs", dao.listar());
+		Util.addLog(session, ldao, this);
 		return "listaProfessor";
 	}
 
@@ -58,9 +66,10 @@ public class ProfessorController {
 	}
 
 	@RequestMapping("removerProfessor")
-	public String removerProfessor(Professor prof) {
+	public String removerProfessor(Professor prof, HttpSession session) {
 		dao.adicionarMorto(prof.getIdProfessor());
 		dao.remover(prof);
+		Util.addLog(session, ldao, this);
 		return "sucessoPage";
 	}
 
@@ -72,7 +81,7 @@ public class ProfessorController {
 
 	@RequestMapping("alterandoFotoDeProf")
 	public String alterarFotoProfessor(MultipartFile arquivo, Professor prof,
-			Model model) {
+			Model model, HttpSession session) {
 		if (!arquivo.isEmpty()) {
 			try {
 				prof.setFoto(arquivo.getBytes());
@@ -81,6 +90,7 @@ public class ProfessorController {
 			}
 		}
 		dao.alterarFoto(prof);
+		Util.addLog(session, ldao, this);
 		model.addAttribute("LProfs", dao.listar());
 		return "listaProfessor";
 	}
@@ -94,10 +104,11 @@ public class ProfessorController {
 
 	@RequestMapping("alterandoProfessor")
 	public String alteraProfessor(Professor prof, EscolaCliente escola,
-			Model model) {
+			Model model, HttpSession session) {
 		prof.setEscolaProfessor(escola);
 		dao.alterar(prof);
 		model.addAttribute("LProfs", dao.listar());
+		Util.addLog(session, ldao, this);
 		return "listaProfessor";
 	}
 }

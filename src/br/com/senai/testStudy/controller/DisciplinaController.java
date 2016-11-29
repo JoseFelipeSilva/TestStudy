@@ -12,6 +12,7 @@ import br.com.senai.testStudy.dao.LogDAO;
 import br.com.senai.testStudy.model.Coordenador;
 import br.com.senai.testStudy.model.Disciplina;
 import br.com.senai.testStudy.model.EscolaCliente;
+import br.com.senai.testStudy.util.Util;
 
 @Controller
 public class DisciplinaController {
@@ -35,6 +36,7 @@ public class DisciplinaController {
 		disc.setPadraoDisciplina("privada");
 		disc.setEscola(c.getEscola());
 		dao.adicionar(disc);
+		Util.addLog(sessao, ldao, this);
 		return "sucesso";
 	}
 	
@@ -48,13 +50,14 @@ public class DisciplinaController {
 	}
 
 	@RequestMapping("listandoDisciplina")
-	public String listando(Model model) {
+	public String listando(Model model, HttpSession session) {
 		model.addAttribute("listaDISC", dao.listar());
+		Util.addLog(session, ldao, this);
 		return "listaDISC";
 	}
 
 	@RequestMapping("alterandoDisc")
-	public String alterando(Model model, Disciplina disciplina) {
+	public String alterando(Model model, Disciplina disciplina ) {
 		model.addAttribute("infoDisc",
 				dao.buscarID(disciplina.getIdDisciplina()));
 		return "formAlterDISC";
@@ -62,14 +65,16 @@ public class DisciplinaController {
 	}
 
 	@RequestMapping("alterarDISC")
-	public String alterar(Disciplina disciplina) {
+	public String alterar(Disciplina disciplina, HttpSession session) {
 		dao.alterar(disciplina);
+		Util.addLog(session, ldao, this);
 		return "sucesso";
 	}
 
 	@RequestMapping("removendoDisc")
-	public String remover(Disciplina disc) {
+	public String remover(Disciplina disc, HttpSession session) {
 		dao.remover(disc);
+		Util.addLog(session, ldao, this);
 		return "sucesso";
 	}
 

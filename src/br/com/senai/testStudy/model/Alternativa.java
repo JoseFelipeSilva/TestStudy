@@ -2,7 +2,6 @@ package br.com.senai.testStudy.model;
 
 public class Alternativa {
 	private Integer idAlternativa;
-	private QuestaoProva questaoAlternativa;
 	private String corpoAlternativa;
 	private String certa;
 
@@ -12,14 +11,6 @@ public class Alternativa {
 
 	public void setIdAlternativa(Integer idAlternativa) {
 		this.idAlternativa = idAlternativa;
-	}
-
-	public QuestaoProva getQuestaoAlternativa() {
-		return questaoAlternativa;
-	}
-
-	public void setQuestaoAlternativa(QuestaoProva questaoAlternativa) {
-		this.questaoAlternativa = questaoAlternativa;
 	}
 
 	public String getCorpoAlternativa() {
