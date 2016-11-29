@@ -19,7 +19,7 @@ public class Util {
 	}
 	public static void addLog(HttpSession sessao, LogDAO logDAO, Object object){
 		Log log = new Log();
-		log.setAcaoUsuario(object.getClass().getName());
+		log.setAcaoUsuario(object.getClass().getName() +"."+Thread.currentThread().getStackTrace()[2].getMethodName());
 			if (sessao.getAttribute("admLogon") != null) {
 				log.setNomeUsuario(((Administrador)sessao.getAttribute("admLogon")).getNome());
 				log.setEmailUsuario(((Administrador)sessao.getAttribute("admLogon")).getEmail());

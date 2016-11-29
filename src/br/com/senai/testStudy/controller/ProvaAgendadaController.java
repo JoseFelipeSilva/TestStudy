@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import br.com.senai.testStudy.dao.LogDAO;
 import br.com.senai.testStudy.dao.ProvaAgendadaDAO;
 import br.com.senai.testStudy.dao.ProvaDAO;
 import br.com.senai.testStudy.dao.QuestaoProvaDAO;
@@ -17,6 +18,7 @@ import br.com.senai.testStudy.model.Professor;
 import br.com.senai.testStudy.model.Prova;
 import br.com.senai.testStudy.model.ProvaAgendada;
 import br.com.senai.testStudy.model.Turma;
+import br.com.senai.testStudy.util.Util;
 
 @Controller
 public class ProvaAgendadaController {
@@ -24,14 +26,16 @@ public class ProvaAgendadaController {
 	private final ProvaDAO pdao;
 	private final TurmaDAO tdao;
 	private final QuestaoProvaDAO qpdao;
+	private final LogDAO ldao;
 
 	@Autowired
 	public ProvaAgendadaController(QuestaoProvaDAO qpdao,
-			TurmaDAO tdao, ProvaAgendadaDAO dao, ProvaDAO pdao) {
+			TurmaDAO tdao, ProvaAgendadaDAO dao, ProvaDAO pdao, LogDAO ldao) {
 		this.dao = dao;
 		this.pdao = pdao;
 		this.tdao = tdao;
 		this.qpdao = qpdao;
+		this.ldao = ldao;
 	}
 
 	@RequestMapping("newProvaAgendada")
@@ -60,10 +64,11 @@ public class ProvaAgendadaController {
 	}
 
 	@RequestMapping("adicionarProvaAgendada")
-	public String adicionarProvaAgendada(Turma t, Prova p, ProvaAgendada pa) {
+	public String adicionarProvaAgendada(Turma t, Prova p, ProvaAgendada pa, HttpSession session) {
 		pa.setProva(p);
 		pa.setTurma(t);
 		dao.adicionar(pa);
+		Util.addLog(session, ldao, this);
 		return "sucessoPage";
 	}
 }

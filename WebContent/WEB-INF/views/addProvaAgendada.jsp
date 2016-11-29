@@ -80,7 +80,7 @@
 
 		<div id="dataTermino">
 			Data de finalização:<br /> <input onclick="dataAtual()" id="minDate"
-				type="datetime-local" value="2016-11-01T00:01:11" name="dataTermino" />
+				type="datetime-local" value="2016-11-01T00:01:01" name="dataTermino" />
 			<br /> <br />
 		</div>
 

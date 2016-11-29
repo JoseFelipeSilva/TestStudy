@@ -81,6 +81,7 @@ public class AdmController {
 	public String sair(HttpSession session) {
 		Util.addLog(session, ldao, this);
 		session.invalidate();
+		Util.addLog(session, ldao, this);
 		return "redirect:index.jsp";
 	}
 
@@ -106,6 +107,7 @@ public class AdmController {
 		}
 		Util.addLog(session, ldao, this);
 		ADMDAO.adicionar(adm);
+		Util.addLog(session, ldao, this);
 		return "sucesso";
 	}
 
@@ -122,8 +124,9 @@ public class AdmController {
 	}
 
 	@RequestMapping("alterandoadm")
-	public String alterando(Integer id, Model model) {
+	public String alterando(Integer id, Model model, HttpSession session) {
 		model.addAttribute("buscaId", ADMDAO.buscarID(id));
+		Util.addLog(session, ldao, this);
 		return "formAlterADM";
 	}
 
@@ -161,6 +164,7 @@ public class AdmController {
 		ADMDAO.alterarFoto(adm);
 		Util.addLog(session, ldao, this);
 		model.addAttribute("listaADM", ADMDAO.listar());
+		Util.addLog(session, ldao, this);
 		return "listaADM";
 	}
 }
