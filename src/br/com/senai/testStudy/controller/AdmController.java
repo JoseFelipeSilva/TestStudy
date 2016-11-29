@@ -49,28 +49,28 @@ public class AdmController {
 		if (ADMDAO.existeADM(adm) != null) {
 			adm = ADMDAO.existeADM(adm);
 			session.setAttribute("admLogon", adm);
-			//Util.addLog(session, ldao, this);
+			Util.addLog(session, ldao, this);
 			return "indexAdm";
 		} else if (adao.existeAluno(aluno) != null) {
 			aluno = adao.existeAluno(aluno);
 			session.setAttribute("alunoLogon", aluno);
 			Util.acessandoNotificacoes(session);
-			//Util.addLog(session, ldao, this);
+			Util.addLog(session, ldao, this);
 			return "indexAluno";
 		} else if (cdao.existeCOORD(coord) != null) {
 			coord = cdao.existeCOORD(coord);
 			session.setAttribute("coordLogon", coord);
-			//Util.addLog(session, ldao, this);
+			Util.addLog(session, ldao, this);
 			return "indexCoordenador";
 		} else if (pdao.existeProf(prof) != null) {
 			prof = pdao.existeProf(prof);
 			session.setAttribute("profLogon", prof);
-			//Util.addLog(session, ldao, this);
+			Util.addLog(session, ldao, this);
 			return "indexProfessor";
 		} else if (edao.existeExaminador(exam) != null) {
 			exam = edao.existeExaminador(exam);
 			session.setAttribute("examLogon", exam);
-			//Util.addLog(session, ldao, this);
+			Util.addLog(session, ldao, this);
 			return "indexExaminador";
 		}else {
 			return "redirect:index.jsp";

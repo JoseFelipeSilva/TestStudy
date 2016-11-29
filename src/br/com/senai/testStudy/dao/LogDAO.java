@@ -15,7 +15,7 @@ import br.com.senai.testStudy.model.Log;
 public class LogDAO {
 	private final Connection CONEXAO;
 	
-	private static final String ADICIONAR = "";
+	private static final String ADICIONAR = "INSERT INTO `log`(nome_usuario, tipo_usuario, email_usuario, acao_usuario, data_acao) VALUES (?, ?, ?, ?, now())";
 	
 	@Autowired
 	public LogDAO(DataSource dataSource){
@@ -30,8 +30,14 @@ public class LogDAO {
 	public void adicionareAcao(Log log){
 		try {
 			PreparedStatement stmt = CONEXAO.prepareStatement(ADICIONAR);
-		} catch (Exception e) {
-			// TODO: handle exception
+			stmt.setString(1, log.getNomeUsuario());
+			stmt.setString(2, log.getTipoUsuario());
+			stmt.setString(3, log.getEmailUsuario());
+			stmt.setString(4, log.getAcaoUsuario());
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
 		}
 	}
 	
