@@ -32,5 +32,17 @@
 			</tr>
 		</tr>
 	</table>
+	
+	<table>
+		<tr>
+			<th>teste</th>
+			<th></th>
+			<tr>
+				<c:forEach items="${provaParaFazer.prova.questoes }" var="qp">
+					<th>${qp.corpoQuestao}</th>
+				</c:forEach>
+				</tr>
+		</tr>
+	</table>
 </body>
 </html>

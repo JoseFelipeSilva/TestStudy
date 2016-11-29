@@ -81,7 +81,6 @@ public class AdmController {
 	public String sair(HttpSession session) {
 		Util.addLog(session, ldao, this);
 		session.invalidate();
-		Util.addLog(session, ldao, this);
 		return "redirect:index.jsp";
 	}
 

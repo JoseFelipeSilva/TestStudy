@@ -5,7 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
@@ -30,12 +33,13 @@ public class AlternativaDAO implements MetodosBasicos<Alternativa> {
 			+ "((SELECT max(id_questao) FROM questao_prova), ?, ?)";
 	private static final String BUSCAR_POR_QUESTAO = "select * from alternativa, questao_prova WHERE alternativa.id_questao"
 			+ " = questao_prova.id_questao AND alternativa.id_questao = ?"; 
-	private static final String BUSCAR_POR_PROVA = "select * from alternativa, questao_prova, prova, prova_agendada, prova_questao, disciplina, materia, professor "
+	private static final String BUSCAR_POR_PROVA = "select * from alternativa, escola_cliente, questao_prova, turma, prova, prova_agendada, prova_questao, disciplina, materia, professor "
 			+ "WHERE prova.id_prova = prova_agendada.id_prova AND prova_questao.id_prova = prova_agendada.id_prova AND prova_questao.id_questao = questao_prova.id_questao "
 			+ "AND questao_prova.disciplina_questao = disciplina.id_disciplina AND materia.id_materia = questao_prova.materia_questao "
 			+ "AND questao_prova.id_questao = alternativa.id_questao AND prova_agendada.id_turma = turma.id_turma"
 			+ " AND prova.id_professor = professor.id_professor AND turma.id_escola = escola_cliente.id_escola_cliente"
 			+ " AND prova_agendada.id_prova_agendada = ? group by alternativa.id_alternativa;"; 
+	private Integer i = 0;
 
 	@Autowired
 	public AlternativaDAO(DataSource dataSource) {
@@ -121,7 +125,8 @@ public class AlternativaDAO implements MetodosBasicos<Alternativa> {
 			PreparedStatement stmt = CONEXAO.prepareStatement(BUSCAR_POR_PROVA);
 			stmt.setInt(1, idProvaAgendada);
 			ResultSet rs = stmt.executeQuery();
-				List<QuestaoProva> lqp = new ArrayList<QuestaoProva>();
+			Map<Integer, QuestaoProva> questoesProvas = new HashMap<Integer, QuestaoProva>();
+				List<QuestaoProva> lqp = new ArrayList<QuestaoProva>(questoesProvas.values());
 				List<Alternativa> lalt = new ArrayList<Alternativa>();
 				while (rs.next()) {
 					EscolaCliente escola = new EscolaCliente();
@@ -153,29 +158,25 @@ public class AlternativaDAO implements MetodosBasicos<Alternativa> {
 					m.setIdMateria(rs.getInt("id_materia"));
 					m.setNomeMateria(rs.getString("nome_materia"));
 									
-					
-					QuestaoProva qp = new QuestaoProva();
-					qp.setIdQuestaoProva(rs.getInt("id_questao"));
-					qp.setTituloQuestao(rs.getString("titulo_questao"));
-					qp.setCorpoQuestao(rs.getString("corpo_questao"));
-					qp.setTipoQuestao(rs.getString("tipo_questao"));
-					qp.setVisualizacaoQuestao(rs.getString("visualizacao_questao"));
-					qp.setUsoQuestao(rs.getInt("uso_questao"));
-					qp.setMateria(m);
-					if (lqp.contains(qp)) {						
-						qp = lqp.get(lqp.indexOf(qp));
-						lqp.remove(qp);
-						qp.setAlternativas(lalt);
-					}else {
-						qp.setAlternativas(lalt);
-					}					
-							
-				
 				Professor prof = new Professor();
 				prof.setNome(rs.getString("nome_professor"));
 				prof.setEmail(rs.getString("email_professor"));
 				prof.setIdProfessor(rs.getInt("id_professor"));
 				prof.setSexo(rs.getString("sexo_professor"));
+				
+				QuestaoProva qp = new QuestaoProva();
+				qp.setIdQuestaoProva(rs.getInt("id_questao"));
+				qp.setTituloQuestao(rs.getString("titulo_questao"));
+				qp.setCorpoQuestao(rs.getString("corpo_questao"));
+				qp.setTipoQuestao(rs.getString("tipo_questao"));
+				qp.setVisualizacaoQuestao(rs.getString("visualizacao_questao"));
+				qp.setUsoQuestao(rs.getInt("uso_questao"));
+				qp.setDificuldade(rs.getInt("dificuldade"));
+				qp.setMateria(m);
+				qp.setAlternativas(lalt);
+				qp.setAutorQuestao(prof);
+				
+				questoesProvas.put(i, qp);		
 				
 				Prova p = new Prova();
 				p.setNomeProva(rs.getString("nome_prova"));
@@ -184,6 +185,7 @@ public class AlternativaDAO implements MetodosBasicos<Alternativa> {
 				p.setDificuldadeDE(rs.getInt("dificuldadeDE"));
 				p.setnQuestoes(rs.getInt("n_questoes"));
 				p.setProfessor(prof);
+				p.setQuestoes(questoesProvas.values().stream().collect(Collectors.toList()));
 				
 				pa = new ProvaAgendada();
 				pa.setIdProvaAgendada(rs.getInt("id_prova_agendada"));
@@ -192,6 +194,7 @@ public class AlternativaDAO implements MetodosBasicos<Alternativa> {
 				pa.setDuracao(rs.getInt("duracao_prova"));
 				pa.setProva(p);
 				pa.setTurma(t);
+				i++;
 				}
 			stmt.close();
 			rs.close();

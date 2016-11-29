@@ -1,6 +1,9 @@
 package br.com.senai.testStudy.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
@@ -18,6 +21,7 @@ import br.com.senai.testStudy.dao.TurmaDAO;
 import br.com.senai.testStudy.model.Professor;
 import br.com.senai.testStudy.model.Prova;
 import br.com.senai.testStudy.model.ProvaAgendada;
+import br.com.senai.testStudy.model.QuestaoProva;
 import br.com.senai.testStudy.model.Turma;
 import br.com.senai.testStudy.util.Util;
 
@@ -60,7 +64,22 @@ public class ProvaAgendadaController {
 			if (provaAgendada2.getIdProvaAgendada() == provaAgendada
 					.getIdProvaAgendada()) {
 				provaAgendada = idao.buscarProva(provaAgendada.getIdProvaAgendada());
-				System.out.println(provaAgendada);
+				List<QuestaoProva>questoesNaoRepetidas = new ArrayList<>();
+				questoesNaoRepetidas.add(provaAgendada.getProva().getQuestoes().get(0));
+				for (int i = 0; i < provaAgendada.getProva().getQuestoes().size(); i++) {
+					for (int j = 0; j < provaAgendada.getProva().getQuestoes().size(); j++) {
+						if (!provaAgendada.getProva().getQuestoes().get(i).getIdQuestaoProva().equals(questoesNaoRepetidas.get(j).getIdQuestaoProva())) {
+							questoesNaoRepetidas.add(provaAgendada.getProva().getQuestoes().get(i));
+						}
+						
+					}
+				}
+				
+				provaAgendada.getProva().getQuestoes().clear();
+				for (int i = 0; i < questoesNaoRepetidas.size(); i++) {
+					provaAgendada.getProva().getQuestoes().add(questoesNaoRepetidas.get(i));
+				}
+				
 				session.setAttribute("provaParaFazer", provaAgendada);
 			}
 
