@@ -26,26 +26,31 @@ public class Util {
 				log.setNomeUsuario(((Administrador)sessao.getAttribute(atributo)).getNome());
 				log.setEmailUsuario(((Administrador)sessao.getAttribute(atributo)).getEmail());
 				log.setTipoUsuario(sessao.getAttribute(atributo).getClass().getName());
+				break;
 			}
 			if (sessao.getAttribute(atributo).getClass() == Aluno.class) {
 				log.setNomeUsuario(((Aluno)sessao.getAttribute(atributo)).getNomeAluno());
 				log.setEmailUsuario(((Aluno)sessao.getAttribute(atributo)).getEmail());
 				log.setTipoUsuario(sessao.getAttribute(atributo).getClass().getName());
+				break;
 			}
 			if (sessao.getAttribute(atributo).getClass() == Coordenador.class) {
 				log.setNomeUsuario(((Coordenador)sessao.getAttribute(atributo)).getNome());
 				log.setEmailUsuario(((Coordenador)sessao.getAttribute(atributo)).getEmail());
 				log.setTipoUsuario(sessao.getAttribute(atributo).getClass().getName());
+				break;
 			}
 			if (sessao.getAttribute(atributo).getClass() == Examinador.class) {
 				log.setNomeUsuario(((Examinador)sessao.getAttribute(atributo)).getNome());
 				log.setEmailUsuario(((Examinador)sessao.getAttribute(atributo)).getEmail());
 				log.setTipoUsuario(sessao.getAttribute(atributo).getClass().getName());
+				break;
 			}
 			if (sessao.getAttribute(atributo).getClass() == Professor.class) {
 				log.setNomeUsuario(((Professor)sessao.getAttribute(atributo)).getNome());
 				log.setEmailUsuario(((Professor)sessao.getAttribute(atributo)).getEmail());
 				log.setTipoUsuario(sessao.getAttribute(atributo).getClass().getName());
+				break;
 			}
 			
 		}
