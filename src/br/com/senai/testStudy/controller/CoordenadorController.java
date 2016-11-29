@@ -2,6 +2,8 @@ package br.com.senai.testStudy.controller;
 
 import java.io.IOException;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,18 +12,22 @@ import org.springframework.web.multipart.MultipartFile;
 
 import br.com.senai.testStudy.dao.CoordenadorDAO;
 import br.com.senai.testStudy.dao.EscolaClienteDAO;
+import br.com.senai.testStudy.dao.LogDAO;
 import br.com.senai.testStudy.model.Coordenador;
 import br.com.senai.testStudy.model.EscolaCliente;
+import br.com.senai.testStudy.util.Util;
 
 @Controller
 public class CoordenadorController {
 	private final CoordenadorDAO dao;
 	private final EscolaClienteDAO edao;
+	private final LogDAO ldao;
 
 	@Autowired
-	public CoordenadorController(EscolaClienteDAO edao, CoordenadorDAO dao) {
+	public CoordenadorController(EscolaClienteDAO edao, CoordenadorDAO dao, LogDAO ldao) {
 		this.dao = dao;
 		this.edao = edao;
+		this.ldao = ldao;
 	}
 
 	@RequestMapping("newCoordenador")
@@ -32,7 +38,7 @@ public class CoordenadorController {
 
 	@RequestMapping("adicionamentoCoordenador")
 	public String addCoordenador(EscolaCliente escola, Coordenador coord,
-			MultipartFile arquivo) {
+			MultipartFile arquivo, HttpSession session) {
 		if (!arquivo.isEmpty()) {
 			try {
 				coord.setFoto(arquivo.getBytes());
@@ -42,6 +48,7 @@ public class CoordenadorController {
 		}
 		coord.setEscola(escola);
 		dao.adicionar(coord);
+		Util.addLog(session, ldao, this);
 		return "sucessoPage";
 	}
 	
@@ -51,16 +58,18 @@ public class CoordenadorController {
 	}
 
 	@RequestMapping("listagemCoordenador")
-	public String listaOfCoordenadores(Model model) {
+	public String listaOfCoordenadores(Model model, HttpSession session) {
 		model.addAttribute("LCoord", dao.listar());
+		Util.addLog(session, ldao, this);
 		return "listaCoordenador";
 	}
 
 	@RequestMapping("removerCoordenador")
-	public String removerCoordenador(Model model, Coordenador coord) {
+	public String removerCoordenador(Model model, Coordenador coord, HttpSession session) {
 		dao.adicionaMorto(coord.getIdCoord());
 		dao.remover(coord);
 		model.addAttribute("LCoord", dao.listar());
+		Util.addLog(session, ldao, this);
 		return "listaCoordenador";
 	}
 
@@ -69,15 +78,17 @@ public class CoordenadorController {
 			EscolaCliente escola) {
 		model.addAttribute("coord", dao.buscarID(coord.getIdCoord()));
 		model.addAttribute("LSchools", edao.listar());
+		
 		return "alteraCoordenador";
 	}
 
 	@RequestMapping("alterandoCoordenador")
 	public String alterarCoordenador(Model model, Coordenador coord,
-			EscolaCliente escola) {
+			EscolaCliente escola, HttpSession session) {
 		coord.setEscola(escola);
 		dao.alterar(coord);
 		model.addAttribute("LCoord", dao.listar());
+		Util.addLog(session, ldao, this);
 		return "listaCoordenador";
 	}
 
@@ -95,7 +106,7 @@ public class CoordenadorController {
 
 	@RequestMapping("alterandoFotoDeCoord")
 	public String alterandoPhotoCoordenador(Model model, MultipartFile arquivo,
-			Coordenador coord) {
+			Coordenador coord, HttpSession session) {
 		if (!arquivo.isEmpty()) {
 			try {
 				coord.setFoto(arquivo.getBytes());
@@ -104,6 +115,7 @@ public class CoordenadorController {
 			}
 		}
 		dao.alterarPhoto(coord);
+		Util.addLog(session, ldao, this);
 		model.addAttribute("LCoord", dao.listar());
 		return "listaCoordenador";
 	}

@@ -23,6 +23,7 @@ public class AlternativaDAO implements MetodosBasicos<Alternativa> {
 			+ "((SELECT max(id_questao) FROM questao_prova), ?, ?)";
 	private static final String BUSCAR_POR_QUESTAO = "select * from alternativa, questao_prova WHERE alternativa.id_questao"
 			+ " = questao_prova.id_questao AND alternativa.id_questao = ?"; 
+	private static final String BUSCAR_POR_PROVA = "select * from alternativa, questao_prova, disciplina, materia, professor, prova, prova_questao WHERE questao_prova.id_questao = alternativa.id_questao AND questao_prova.disciplina_questao = disciplina.id_disciplina AND materia.id_materia = questao_prova.materia_questao group by alternativa.id_alternativa;"; 
 
 	@Autowired
 	public AlternativaDAO(DataSource dataSource) {

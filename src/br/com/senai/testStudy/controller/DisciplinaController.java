@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import br.com.senai.testStudy.dao.DisciplinaDAO;
+import br.com.senai.testStudy.dao.LogDAO;
 import br.com.senai.testStudy.model.Coordenador;
 import br.com.senai.testStudy.model.Disciplina;
 import br.com.senai.testStudy.model.EscolaCliente;
@@ -15,10 +16,12 @@ import br.com.senai.testStudy.model.EscolaCliente;
 @Controller
 public class DisciplinaController {
 	private final DisciplinaDAO dao;
+	private final LogDAO ldao;
 
 	@Autowired
-	public DisciplinaController(DisciplinaDAO dao) {
+	public DisciplinaController(DisciplinaDAO dao, LogDAO ldao) {
 		this.dao = dao;
+		this.ldao = ldao;
 	}
 
 	@RequestMapping("formDisciplina")
