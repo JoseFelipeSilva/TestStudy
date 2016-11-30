@@ -199,7 +199,10 @@ public class QuestaoProvaController {
 		prova.setDificuldadeATE(dificuldadeATE);
 		prova.setNomeProva(nomeProva);
 		prova.setnQuestoes(nQuestoes);
-		// PDAO.adicionar(prova);
+		Professor p = new Professor();
+		p = (Professor) session.getAttribute("profLogon");
+		prova.setProfessor(p);
+		PDAO.adicionar(prova);
 		modelo.setAttribute("prova", prova);
 		return "addProvaPasso2";
 	}

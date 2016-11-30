@@ -32,13 +32,13 @@ public class AlternativaDAO implements MetodosBasicos<Alternativa> {
 	private static final String ADICIONAR = "INSERT INTO alternativa (id_questao, corpo_alternativa, certa_prova) VALUES"
 			+ "((SELECT max(id_questao) FROM questao_prova), ?, ?)";
 	private static final String BUSCAR_POR_QUESTAO = "select * from alternativa, questao_prova WHERE alternativa.id_questao"
-			+ " = questao_prova.id_questao AND alternativa.id_questao = ?"; 
+			+ " = questao_prova.id_questao AND alternativa.id_questao = ?";
 	private static final String BUSCAR_POR_PROVA = "select * from alternativa, escola_cliente, questao_prova, turma, prova, prova_agendada, prova_questao, disciplina, materia, professor "
 			+ "WHERE prova.id_prova = prova_agendada.id_prova AND prova_questao.id_prova = prova_agendada.id_prova AND prova_questao.id_questao = questao_prova.id_questao "
 			+ "AND questao_prova.disciplina_questao = disciplina.id_disciplina AND materia.id_materia = questao_prova.materia_questao "
 			+ "AND questao_prova.id_questao = alternativa.id_questao AND prova_agendada.id_turma = turma.id_turma"
 			+ " AND prova.id_professor = professor.id_professor AND turma.id_escola = escola_cliente.id_escola_cliente"
-			+ " AND prova_agendada.id_prova_agendada = ? group by alternativa.id_alternativa;"; 
+			+ " AND prova_agendada.id_prova_agendada = ? group by alternativa.id_alternativa"; 
 	private Integer i = 0;
 
 	@Autowired
@@ -97,16 +97,11 @@ public class AlternativaDAO implements MetodosBasicos<Alternativa> {
 			stmt.setInt(1, idQuestao);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				QuestaoProva qp = new QuestaoProva();
-				qp.setCorpoQuestao(rs.getString("corpo_questao"));
-				qp.setIdQuestaoProva(rs.getInt("id_questao"));
-				qp.setDificuldade(rs.getInt("dificuldade"));
-				
 				Alternativa a = new Alternativa();
 				a.setIdAlternativa(rs.getInt("id_alternativa"));
 				a.setCerta(rs.getString("certa_prova"));
 				a.setCorpoAlternativa(rs.getString("corpo_alternativa"));
-			//	a.setQuestaoAlternativa(qp); TODO
+
 				alternativas.add(a);
 			}
 			stmt.close();

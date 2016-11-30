@@ -12,12 +12,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.sun.org.apache.bcel.internal.generic.LSTORE;
+
 import br.com.senai.testStudy.dao.AlternativaDAO;
 import br.com.senai.testStudy.dao.LogDAO;
 import br.com.senai.testStudy.dao.ProvaAgendadaDAO;
 import br.com.senai.testStudy.dao.ProvaDAO;
 import br.com.senai.testStudy.dao.QuestaoProvaDAO;
 import br.com.senai.testStudy.dao.TurmaDAO;
+import br.com.senai.testStudy.model.Alternativa;
 import br.com.senai.testStudy.model.Professor;
 import br.com.senai.testStudy.model.Prova;
 import br.com.senai.testStudy.model.ProvaAgendada;
@@ -60,30 +63,24 @@ public class ProvaAgendadaController {
 			ProvaAgendada provaAgendada) {
 		List<ProvaAgendada> notificacao = (List<ProvaAgendada>) session
 				.getAttribute("notificacoes");
-		for (ProvaAgendada provaAgendada2 : notificacao) {
-			if (provaAgendada2.getIdProvaAgendada() == provaAgendada
-					.getIdProvaAgendada()) {
-				provaAgendada = idao.buscarProva(provaAgendada.getIdProvaAgendada());
-				List<QuestaoProva>questoesNaoRepetidas = new ArrayList<>();
-				questoesNaoRepetidas.add(provaAgendada.getProva().getQuestoes().get(0));
-				for (int i = 0; i < provaAgendada.getProva().getQuestoes().size(); i++) {
-					for (int j = 0; j < provaAgendada.getProva().getQuestoes().size(); j++) {
-						if (!provaAgendada.getProva().getQuestoes().get(i).getIdQuestaoProva().equals(questoesNaoRepetidas.get(j).getIdQuestaoProva())) {
-							questoesNaoRepetidas.add(provaAgendada.getProva().getQuestoes().get(i));
-						}
-						
-					}
-				}
-				
-				provaAgendada.getProva().getQuestoes().clear();
-				for (int i = 0; i < questoesNaoRepetidas.size(); i++) {
-					provaAgendada.getProva().getQuestoes().add(questoesNaoRepetidas.get(i));
-				}
-				
+		List<QuestaoProva>questoes = new ArrayList<QuestaoProva>();
+		for (ProvaAgendada provaAgendada2 : notificacao) {			
+				if (provaAgendada2.getIdProvaAgendada() == provaAgendada.getIdProvaAgendada()) {
+	  				provaAgendada = dao.buscarID(provaAgendada.getIdProvaAgendada());
+	 				session.setAttribute("provaParaFazer", provaAgendada);
+	 				questoes = qpdao.listarQuestoesDaProva(provaAgendada.getProva().getIdProva());
+	 				model.addAttribute("QuestoesDaProvaParaFazer", questoes);
+	 				provaAgendada.getProva().setQuestoes(questoes);
+	 				for (int i = 0; i < questoes.size(); i++) {
+	 						provaAgendada.getProva().getQuestoes().get(i).setAlternativas(idao.listarPorQuestao(questoes.get(i).getIdQuestaoProva()));
+	 				}
+	 				
+	  			} 
 				session.setAttribute("provaParaFazer", provaAgendada);
-			}
+			
 
 		}
+		Util.addLog(session, ldao, this);
 		return "resumoDaProva";
 	}
 
@@ -96,4 +93,94 @@ public class ProvaAgendadaController {
 		Util.addLog(session, ldao, this);
 		return "sucessoPage";
 	}
+	
+	@RequestMapping("resolverProva")
+	public String resolverProva(Model modelo, HttpSession session, ProvaAgendada provaAgendada){
+		provaAgendada = (ProvaAgendada) session.getAttribute("provaparaFazer");		
+		
+		modelo.addAttribute("questao", provaAgendada.getProva().getQuestoes().get(0));
+		if (provaAgendada.getProva().getQuestoes().get(0).getAlternativas() == null) {
+			// TODO volta pra cá
+		}
+		
+		
+		return "";
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*provaAgendada = idao.buscarProva(provaAgendada.getIdProvaAgendada());
+List<QuestaoProva>questoesNaoRepetidas = new ArrayList<>();
+questoesNaoRepetidas.add(provaAgendada.getProva().getQuestoes().get(0));
+Integer count = 0;
+for (int i = 0; i < provaAgendada.getProva().getQuestoes().size(); i++) {
+	if (questoesNaoRepetidas.size() > 0) {
+		for (int j = 0; j < questoesNaoRepetidas.size(); j++) {
+			if (provaAgendada.getProva().getQuestoes().get(i).equals(questoesNaoRepetidas.get(j))) {
+				count += 1;
+			}
+			if (j == (questoesNaoRepetidas.size() - 1)) {
+				if (count == 0) {
+					questoesNaoRepetidas.add(provaAgendada.getProva().getQuestoes().get(i));
+				}else{
+					count = 0;
+				}
+			}
+		}
+	} else{
+		questoesNaoRepetidas.add(provaAgendada.getProva().getQuestoes().get(i));
+	}
+}
+
+for (int i = 0; i < provaAgendada.getProva().getQuestoes().size(); i++) {
+	for (int j = 0; j < provaAgendada.getProva().getQuestoes().size(); j++) {
+		if (!provaAgendada.getProva().getQuestoes().get(i).getIdQuestaoProva().equals(questoesNaoRepetidas.get(j).getIdQuestaoProva())) {
+			questoesNaoRepetidas.add(provaAgendada.getProva().getQuestoes().get(j));
+		}
+		
+	}
+}
+
+
+provaAgendada.getProva().getQuestoes().clear();
+for (int i = 0; i < questoesNaoRepetidas.size(); i++) {
+	provaAgendada.getProva().getQuestoes().add(questoesNaoRepetidas.get(i));
+	System.out.println(questoesNaoRepetidas.get(i).getIdQuestaoProva());
+}
+*/

@@ -29,7 +29,6 @@
 		<property name="username" value="root"></property>
 		<property name="password" value="root"></property>
 		<property name="MaxTotal" value="20"></property>
-		<property name="maxIdle" value="1" />
 		
 	</bean>
 
