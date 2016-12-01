@@ -19,36 +19,32 @@ public class Util {
 	}
 	public static void addLog(HttpSession sessao, LogDAO logDAO, Object object){
 		Log log = new Log();
-		log.setAcaoUsuario(object.getClass().getName());
-		while (sessao.getAttributeNames().hasMoreElements()) {
-			String atributo = (String) sessao.getAttributeNames().nextElement();
-			if (sessao.getAttribute(atributo).getClass() == Administrador.class) {
-				log.setNomeUsuario(((Administrador)sessao.getAttribute(atributo)).getNome());
-				log.setEmailUsuario(((Administrador)sessao.getAttribute(atributo)).getEmail());
-				log.setTipoUsuario(sessao.getAttribute(atributo).getClass().getName());
+		log.setAcaoUsuario(object.getClass().getName() +"."+Thread.currentThread().getStackTrace()[2].getMethodName());
+			if (sessao.getAttribute("admLogon") != null) {
+				log.setNomeUsuario(((Administrador)sessao.getAttribute("admLogon")).getNome());
+				log.setEmailUsuario(((Administrador)sessao.getAttribute("admLogon")).getEmail());
+				log.setTipoUsuario(sessao.getAttribute("admLogon").getClass().getName());
 			}
-			if (sessao.getAttribute(atributo).getClass() == Aluno.class) {
-				log.setNomeUsuario(((Aluno)sessao.getAttribute(atributo)).getNomeAluno());
-				log.setEmailUsuario(((Aluno)sessao.getAttribute(atributo)).getEmail());
-				log.setTipoUsuario(sessao.getAttribute(atributo).getClass().getName());
+			if (sessao.getAttribute("alunoLogon") != null) {
+				log.setNomeUsuario(((Aluno)sessao.getAttribute("alunoLogon")).getNomeAluno());
+				log.setEmailUsuario(((Aluno)sessao.getAttribute("alunoLogon")).getEmail());
+				log.setTipoUsuario(sessao.getAttribute("alunoLogon").getClass().getName());
 			}
-			if (sessao.getAttribute(atributo).getClass() == Coordenador.class) {
-				log.setNomeUsuario(((Coordenador)sessao.getAttribute(atributo)).getNome());
-				log.setEmailUsuario(((Coordenador)sessao.getAttribute(atributo)).getEmail());
-				log.setTipoUsuario(sessao.getAttribute(atributo).getClass().getName());
+			if (sessao.getAttribute("coordLogon") != null) {
+				log.setNomeUsuario(((Coordenador)sessao.getAttribute("coordLogon")).getNome());
+				log.setEmailUsuario(((Coordenador)sessao.getAttribute("coordLogon")).getEmail());
+				log.setTipoUsuario(sessao.getAttribute("coordLogon").getClass().getName());
 			}
-			if (sessao.getAttribute(atributo).getClass() == Examinador.class) {
-				log.setNomeUsuario(((Examinador)sessao.getAttribute(atributo)).getNome());
-				log.setEmailUsuario(((Examinador)sessao.getAttribute(atributo)).getEmail());
-				log.setTipoUsuario(sessao.getAttribute(atributo).getClass().getName());
+			if (sessao.getAttribute("examLogon") != null) {
+				log.setNomeUsuario(((Examinador)sessao.getAttribute("examLogon")).getNome());
+				log.setEmailUsuario(((Examinador)sessao.getAttribute("examLogon")).getEmail());
+				log.setTipoUsuario(sessao.getAttribute("examLogon").getClass().getName());
 			}
-			if (sessao.getAttribute(atributo).getClass() == Professor.class) {
-				log.setNomeUsuario(((Professor)sessao.getAttribute(atributo)).getNome());
-				log.setEmailUsuario(((Professor)sessao.getAttribute(atributo)).getEmail());
-				log.setTipoUsuario(sessao.getAttribute(atributo).getClass().getName());
+			if (sessao.getAttribute("profLogon") != null) {
+				log.setNomeUsuario(((Professor)sessao.getAttribute("profLogon")).getNome());
+				log.setEmailUsuario(((Professor)sessao.getAttribute("profLogon")).getEmail());
+				log.setTipoUsuario(sessao.getAttribute("profLogon").getClass().getName());
 			}
-			
-		}
 		logDAO.adicionareAcao(log);
 	}
 }

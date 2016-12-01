@@ -1,6 +1,7 @@
 package br.com.senai.testStudy.model;
 
 import java.sql.Date;
+import java.util.List;
 
 public class QuestaoProva {
 	private Integer idQuestaoProva;
@@ -20,6 +21,7 @@ public class QuestaoProva {
 									// relação ao examinador (pendente, vista,
 									// aceita, rejeitada...)
 	private Professor autorQuestao;
+	private List<Alternativa> alternativas;
 
 	public Professor getAutorQuestao() {
 		return autorQuestao;
@@ -115,6 +117,14 @@ public class QuestaoProva {
 
 	public void setTipoQuestao(String tipoQuestao) {
 		this.tipoQuestao = tipoQuestao;
+	}
+
+	public List<Alternativa> getAlternativas() {
+		return alternativas;
+	}
+
+	public void setAlternativas(List<Alternativa> alternativas) {
+		this.alternativas = alternativas;
 	}
 
 }

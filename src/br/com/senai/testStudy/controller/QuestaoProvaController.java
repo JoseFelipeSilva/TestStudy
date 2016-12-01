@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import br.com.senai.testStudy.dao.DisciplinaDAO;
+import br.com.senai.testStudy.dao.LogDAO;
 import br.com.senai.testStudy.dao.ProvaDAO;
 import br.com.senai.testStudy.dao.QuestaoProvaDAO;
 import br.com.senai.testStudy.model.Disciplina;
@@ -22,19 +23,22 @@ import br.com.senai.testStudy.model.Materia;
 import br.com.senai.testStudy.model.Professor;
 import br.com.senai.testStudy.model.Prova;
 import br.com.senai.testStudy.model.QuestaoProva;
+import br.com.senai.testStudy.util.Util;
 
 @Controller
 public class QuestaoProvaController {
 	private final QuestaoProvaDAO DAO;
 	private final ProvaDAO PDAO;
 	private final DisciplinaDAO DDAO;
+	private final LogDAO ldao;
 	
 
 	@Autowired
-	public QuestaoProvaController(DisciplinaDAO DDAO, QuestaoProvaDAO DAO, ProvaDAO PDAO) {
+	public QuestaoProvaController(DisciplinaDAO DDAO, QuestaoProvaDAO DAO, ProvaDAO PDAO, LogDAO ldao) {
 		this.DAO = DAO;
 		this.PDAO = PDAO;
 		this.DDAO = DDAO;
+		this.ldao = ldao;
 	}
 
 	@RequestMapping("formQP")
@@ -73,6 +77,7 @@ public class QuestaoProvaController {
 
 			return "formCadALT";
 		}
+		Util.addLog(sessao, ldao, this);
 		return "sucesso";
 	}
 
@@ -80,6 +85,7 @@ public class QuestaoProvaController {
 	public String listandoQP(Model modelo, Professor p, HttpSession sessao) {
 		p = (Professor) sessao.getAttribute("profLogon");
 		modelo.addAttribute("qp", DAO.listarLocais(p.getIdProfessor()));
+		Util.addLog(sessao, ldao, this);
 		return "listaQP";
 	}
 
@@ -90,8 +96,9 @@ public class QuestaoProvaController {
 	}
 
 	@RequestMapping("alteraQP")
-	public String alterarQP(QuestaoProva qp) {
+	public String alterarQP(QuestaoProva qp, HttpSession session) {
 		DAO.alterar(qp);
+		Util.addLog(session, ldao, this);
 		return "sucesso";
 	}
 
@@ -192,7 +199,10 @@ public class QuestaoProvaController {
 		prova.setDificuldadeATE(dificuldadeATE);
 		prova.setNomeProva(nomeProva);
 		prova.setnQuestoes(nQuestoes);
-		// PDAO.adicionar(prova);
+		Professor p = new Professor();
+		p = (Professor) session.getAttribute("profLogon");
+		prova.setProfessor(p);
+		PDAO.adicionar(prova);
 		modelo.setAttribute("prova", prova);
 		return "addProvaPasso2";
 	}

@@ -11,17 +11,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.com.senai.testStudy.dao.ExaminadorDAO;
+import br.com.senai.testStudy.dao.LogDAO;
 import br.com.senai.testStudy.model.Disciplina;
 import br.com.senai.testStudy.model.Examinador;
 import br.com.senai.testStudy.model.QuestaoProva;
+import br.com.senai.testStudy.util.Util;
 
 @Controller
 public class ExamController {
 	private final ExaminadorDAO dao;
+	private final LogDAO ldao;
 
 	@Autowired
-	public ExamController(ExaminadorDAO dao) {
+	public ExamController(ExaminadorDAO dao, LogDAO ldao) {
 		this.dao = dao;
+		this.ldao = ldao;
 	}
 
 	@RequestMapping("formExam")
@@ -40,7 +44,7 @@ public class ExamController {
 	}
 
 	@RequestMapping("adicionaExam")
-	public String addExam(Examinador exam, MultipartFile arquivo, Disciplina d) {
+	public String addExam(Examinador exam, MultipartFile arquivo, Disciplina d, HttpSession session) {
 		exam.setDisciplinaExaminador(d);
 		if (!arquivo.isEmpty()) {
 			try {
@@ -50,12 +54,14 @@ public class ExamController {
 			}
 		}
 		dao.adicionar(exam);
+		Util.addLog(session, ldao, this);
 		return "sucesso";
 	}
 
 	@RequestMapping("listandoExam")
-	public String lista(Model model) {
+	public String lista(Model model, HttpSession session) {
 		model.addAttribute("listaEXAM", dao.listar());
+		Util.addLog(session, ldao, this);
 		return "listaEXAM";
 	}
 
@@ -66,15 +72,17 @@ public class ExamController {
 	}
 
 	@RequestMapping("alteraExam")
-	public String alterar(Examinador exam) {
+	public String alterar(Examinador exam, HttpSession session) {
 		dao.alterar(exam);
+		Util.addLog(session, ldao, this);
 		return "sucesso";
 	}
 
 	@RequestMapping("removeexam")
-	public String remover(Examinador exam) {
+	public String remover(Examinador exam, HttpSession session) {
 		dao.adicionarMorto(exam.getIdExaminador());
 		dao.remover(exam);
+		Util.addLog(session, ldao, this);
 		return "sucesso";
 	}
 
@@ -86,7 +94,7 @@ public class ExamController {
 
 	@RequestMapping("alterandoFotoDeExaminador")
 	public String alteraFotoExaminador(Model model, Examinador exam,
-			MultipartFile arquivo) {
+			MultipartFile arquivo, HttpSession session) {
 		if (!arquivo.isEmpty()) {
 			try {
 				exam.setFoto(arquivo.getBytes());
@@ -95,6 +103,7 @@ public class ExamController {
 			}
 		}
 		dao.alterarFoto(exam);
+		Util.addLog(session, ldao, this);
 		model.addAttribute("listaEXAM", dao.listar());
 		return "listaEXAM";
 	}
@@ -123,9 +132,10 @@ public class ExamController {
 
 	// MÉTODO RESPONSÁVEL POR ALTERAR O STATUS DA QUESTÃO
 	@RequestMapping("alteraStatus")
-	public String alterStatus(QuestaoProva qp, HttpSession s, Examinador e) {
+	public String alterStatus(QuestaoProva qp, HttpSession s, Examinador e, HttpSession session) {
 		e = (Examinador) s.getAttribute("examLogon");		
 		dao.alteraStatus(qp, e.getIdExaminador());
+		Util.addLog(session, ldao, this);
 		return "sucessoPage";
 	}
 	// MÉTODO RESPONSÁVEL POR LISTAR TODAS AS QUESTÕES ANTIGAS A SEREM ANALISADAS PELO
@@ -134,13 +144,15 @@ public class ExamController {
 	public String pendenciasAntigasExam(Examinador exam, HttpSession sessao, Model modelo){
 		exam = (Examinador) sessao.getAttribute("examLogon");
 		modelo.addAttribute("pendencias", dao.listarPendenciasAntigas(exam.getIdExaminador()));		
+		Util.addLog(sessao, ldao, this);
 		return "listaQuestoesPendentesEXAM";
 	}
 	
 	@RequestMapping("alterandoStatusAntigo")
-	public String alterandoAntiga(QuestaoProva qp, Model modelo){
+	public String alterandoAntiga(QuestaoProva qp, Model modelo, HttpSession session){
 		modelo.addAttribute("infoAlternativa", dao.buscarAlter(qp.getIdQuestaoProva()));
 		modelo.addAttribute("infoQuestao", dao.buscarQuestaoAntigaID(qp.getIdQuestaoProva()));
+		Util.addLog(session, ldao, this);
 		return "formAlterStatusQP";
 	}
 }

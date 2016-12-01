@@ -30,6 +30,7 @@ DROP TABLE IF EXISTS coordenador;
 DROP TABLE IF EXISTS materia;
 DROP TABLE IF EXISTS disciplina;
 DROP TABLE IF EXISTS log;
+DROP TABLE IF EXISTS fazendo_prova;
 DROP TABLE IF EXISTS alternativa_simulado;
 DROP TABLE IF EXISTS questao_simulado;
 DROP TABLE IF EXISTS prova_disciplina;
@@ -300,6 +301,19 @@ certa_prova VARCHAR(1) NOT NULL,
 FOREIGN KEY(id_questao) REFERENCES questao_prova (id_questao)
 );
 
+CREATE TABLE IF NOT EXISTS fazendo_prova(
+	id_fazendo_prova INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    id_aluno INTEGER NOT NULL,
+    id_questao_prova INTEGER NOT NULL,
+    resposta TEXT,
+    id_alternativa INTEGER,
+    id_prova_agendada INTEGER,
+    FOREIGN KEY (id_prova_agendada) REFERENCES prova_agendada(id_prova_agendada),
+    FOREIGN KEY(id_aluno)REFERENCES aluno(id_aluno),
+    FOREIGN KEY(id_questao_prova) REFERENCES questao_prova(id_questao),
+    FOREIGN KEY(id_alternativa) REFERENCES alternativa(id_alternativa)
+);
+
 CREATE TABLE IF NOT EXISTS questao_simulado (
 id_questao_simulado INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
 corpo_questao_simulado TEXT NOT NULL,
@@ -388,6 +402,8 @@ DROP COLUMN `id_aluno_antigo`;
 ALTER TABLE `teststudy`.`turma_morto` 
 ADD COLUMN `nome_turma_morto` VARCHAR(50) NOT NULL AFTER `id_escola_morto`;
 
+ALTER TABLE `teststudy`.`log` 
+CHANGE COLUMN `tipo_usuario` `tipo_usuario` VARCHAR(150) NOT NULL ;
 
 
 INSERT INTO administrador(sexo_adm,

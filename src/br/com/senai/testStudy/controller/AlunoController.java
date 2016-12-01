@@ -13,21 +13,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.com.senai.testStudy.dao.AlunoDAO;
+import br.com.senai.testStudy.dao.LogDAO;
 import br.com.senai.testStudy.dao.ProvaAgendadaDAO;
 import br.com.senai.testStudy.dao.TurmaDAO;
 import br.com.senai.testStudy.model.Aluno;
 import br.com.senai.testStudy.model.ProvaAgendada;
 import br.com.senai.testStudy.model.Turma;
+import br.com.senai.testStudy.util.Util;
 
 @Controller
 public class AlunoController {
 	private final AlunoDAO dao;
 	private final TurmaDAO tdao;
+	private final LogDAO ldao;
 
 	@Autowired
-	public AlunoController(AlunoDAO dao, TurmaDAO tdao) {
+	public AlunoController(AlunoDAO dao, TurmaDAO tdao, LogDAO ldao) {
 		this.dao = dao;
 		this.tdao = tdao;
+		this.ldao = ldao;
 	}
 
 	@RequestMapping("newAluno")
@@ -37,7 +41,7 @@ public class AlunoController {
 	}
 
 	@RequestMapping("adicionarAluno")
-	public String adicionarAluno(Aluno aluno, Turma turma, MultipartFile arquivo) {
+	public String adicionarAluno(Aluno aluno, Turma turma, MultipartFile arquivo, HttpSession session) {
 		if (!arquivo.isEmpty()) {
 			try {
 				aluno.setFotoAluno(arquivo.getBytes());
@@ -47,19 +51,22 @@ public class AlunoController {
 		}
 		aluno.setTurmaAluno(turma);
 		dao.adicionar(aluno);
+		Util.addLog(session, ldao, this);
 		return "sucessoPage";
 	}
 
 	@RequestMapping("ListagemAluno")
-	public String listarAlunos(Model model) {
+	public String listarAlunos(Model model, HttpSession session) {
 		model.addAttribute("LAlunos", dao.listar());
+		Util.addLog(session, ldao, this);
 		return "listaAluno";
 	}
 
 	@RequestMapping("removerAluno")
-	public String removerAluno(Aluno aluno, Model model) {
+	public String removerAluno(Aluno aluno, Model model, HttpSession session) {
 		dao.adicionaMorto(aluno.getIdAluno());
 		dao.remover(aluno);
+		Util.addLog(session, ldao, this);
 		model.addAttribute("LAlunos", dao.listar());
 		return "listaAluno";
 	}
@@ -78,10 +85,11 @@ public class AlunoController {
 	}
 
 	@RequestMapping("alteracaoAluno")
-	public String alteracaoAluno(Model model, Aluno aluno, Turma turma) {
+	public String alteracaoAluno(Model model, Aluno aluno, Turma turma, HttpSession session) {
 		aluno.setTurmaAluno(turma);
 		dao.alterar(aluno);
 		model.addAttribute("LAlunos", dao.listar());
+		Util.addLog(session, ldao, this);
 		return "listaAluno";
 	}
 
@@ -93,7 +101,7 @@ public class AlunoController {
 
 	@RequestMapping("alterandoFotoDeAluno")
 	public String alterarFotoDoAluno(MultipartFile arquivo, Aluno aluno,
-			Model model) {
+			Model model, HttpSession session) {
 		if (!arquivo.isEmpty()) {
 			try {
 				aluno.setFotoAluno(arquivo.getBytes());
@@ -102,6 +110,7 @@ public class AlunoController {
 			}
 		}
 		dao.alterarPhoto(aluno);
+		Util.addLog(session, ldao, this);
 		model.addAttribute("LAlunos", dao.listar());
 		return "listaAluno";
 	}

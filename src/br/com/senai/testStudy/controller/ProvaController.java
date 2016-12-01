@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import br.com.senai.testStudy.dao.LogDAO;
 import br.com.senai.testStudy.dao.MateriaDAO;
 import br.com.senai.testStudy.dao.ProfessorDAO;
 import br.com.senai.testStudy.dao.ProvaDAO;
@@ -19,6 +20,7 @@ import br.com.senai.testStudy.model.Materia;
 import br.com.senai.testStudy.model.Professor;
 import br.com.senai.testStudy.model.Prova;
 import br.com.senai.testStudy.model.QuestaoProva;
+import br.com.senai.testStudy.util.Util;
 
 @Controller
 public class ProvaController {
@@ -26,13 +28,15 @@ public class ProvaController {
 	private final ProfessorDAO pdao;
 	private final QuestaoProvaDAO qdao;
 	private final MateriaDAO mdao;
+	private final LogDAO ldao;
 
 	@Autowired
-	public ProvaController(ProvaDAO dao, ProfessorDAO pdao, QuestaoProvaDAO qdao, MateriaDAO mdao) {
+	public ProvaController(ProvaDAO dao, ProfessorDAO pdao, QuestaoProvaDAO qdao, MateriaDAO mdao, LogDAO ldao) {
 		this.dao = dao;
 		this.pdao = pdao;
 		this.qdao = qdao;
 		this.mdao = mdao;
+		this.ldao = ldao;
 	}
 
 	@RequestMapping("teste")
@@ -69,9 +73,10 @@ public class ProvaController {
 	}
 
 	@RequestMapping("adicionarProva")
-	public String addPagina(Professor prof, Prova prova) {
+	public String addPagina(Professor prof, Prova prova, HttpSession session) {
 		prova.setProfessor(prof);
 		dao.adicionar(prova);
+		Util.addLog(session, ldao, this);
 		return "sucessoPage";
 	}
 
@@ -79,6 +84,7 @@ public class ProvaController {
 	public String listaDeProvas(Model model, HttpSession sessao) {
 		Professor p = (Professor) sessao.getAttribute("profLogon");
 		model.addAttribute("LProvas", dao.listar(p.getIdProfessor()));
+		Util.addLog(sessao, ldao, this);
 		return "listaProva";
 	}
 
@@ -88,6 +94,7 @@ public class ProvaController {
 		Professor p = (Professor) sessao.getAttribute("profLogon");
 		model.addAttribute("LProvas", dao.listar(p.getIdProfessor()));
 		model.addAttribute("LProvas", dao.listar(p.getIdProfessor()));
+		Util.addLog(sessao, ldao, this);
 		return "listaProva";
 	}
 
@@ -106,9 +113,10 @@ public class ProvaController {
 	}
 
 	@RequestMapping("alterandoProva")
-	public String alterandoProva(Model model, Prova prova, Professor prof) {
+	public String alterandoProva(Model model, Prova prova, Professor prof, HttpSession session) {
 		prova.setProfessor(prof);
 		dao.alterar(prova);
+		Util.addLog(session, ldao, this);
 		model.addAttribute("LProvas", dao.listar(prof.getIdProfessor()));
 		return "listaProva";
 	}

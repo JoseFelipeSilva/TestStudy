@@ -16,6 +16,22 @@
 		var ano = hoje.getFullYear();
 		var hora = hoje.getHours();
 		var minutos = hoje.getMinutes();
+		
+		if(hora == "1" || hora == "2" 
+			   || hora == "3" || hora == "4"
+			   || hora == "5" || hora == "6"
+			   || hora == "7" || hora == "8"
+			   || hora == "9" || hora == "0"){
+			hora = "0" + hora;
+		}
+		
+		if(minutos == "1" || minutos == "2" 
+			   || minutos == "3" || minutos == "4"
+			   || minutos == "5" || minutos == "6"
+			   || minutos == "7" || minutos == "8"
+			   || minutos == "9" || minutos == "0"){
+			minutos = "0" + minutos;
+		}
 		if (dia < 10) {
 			dia = '0' + dia
 		}
@@ -59,12 +75,12 @@
 	<form action="adicionarProvaAgendada">
 		<div id="dataInicio">
 			Data de inicio:<br /> <input id="minDateTwo" type="datetime-local"
-				value="2016-11-01T00:00:01" name="dataInicio" /> <br /> <br />
+				value="2016-11-29T00:00:01" name="dataInicio" /> <br /> <br />
 		</div>
 
 		<div id="dataTermino">
 			Data de finalização:<br /> <input onclick="dataAtual()" id="minDate"
-				type="datetime-local" value="2016-11-01T00:00:01" name="dataTermino" />
+				type="datetime-local" value="2016-11-01T00:01:01" name="dataTermino" />
 			<br /> <br />
 		</div>
 
