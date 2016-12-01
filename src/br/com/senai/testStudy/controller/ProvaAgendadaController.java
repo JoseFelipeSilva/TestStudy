@@ -29,8 +29,8 @@ public class ProvaAgendadaController {
 	private final QuestaoProvaDAO qpdao;
 
 	@Autowired
-	public ProvaAgendadaController(QuestaoProvaDAO qpdao, AlternativaDAO adao, TurmaDAO tdao, ProvaAgendadaDAO dao,
-			ProvaDAO pdao) {
+	public ProvaAgendadaController(QuestaoProvaDAO qpdao, AlternativaDAO adao,
+			TurmaDAO tdao, ProvaAgendadaDAO dao, ProvaDAO pdao) {
 		this.dao = dao;
 		this.pdao = pdao;
 		this.tdao = tdao;
@@ -39,32 +39,34 @@ public class ProvaAgendadaController {
 	}
 
 	@RequestMapping("newProvaAgendada")
-	public String addPageProvaAgendada(Model model, HttpSession session, Professor p) {
-		p = (Professor)session.getAttribute("profLogon");
+	public String addPageProvaAgendada(Model model, HttpSession session,
+			Professor p) {
+		p = (Professor) session.getAttribute("profLogon");
 		model.addAttribute("LProvas", pdao.listar(p.getIdProfessor()));
 		model.addAttribute("LTurmas", tdao.listar());
 		return "addProvaAgendada";
 	}
-	
+
 	@RequestMapping("fazerProvaAgendada")
-	public String fazerProva(Model model, HttpSession session, ProvaAgendada provaAgendada) {
-		List<ProvaAgendada> notificacao = (List<ProvaAgendada>) session.getAttribute("notificacoes");
+	public String fazerProva(Model model, HttpSession session,
+			ProvaAgendada provaAgendada) {
+		List<ProvaAgendada> notificacao = (List<ProvaAgendada>) session
+				.getAttribute("notificacoes");
 		for (ProvaAgendada provaAgendada2 : notificacao) {
-<<<<<<< HEAD
-			if (provaAgendada2.getIdProvaAgendada() == provaAgendada.getIdProvaAgendada()) {
-				provaAgendada = dao.buscarID(provaAgendada.getIdProvaAgendada());
+
+			if (provaAgendada2.getIdProvaAgendada() == provaAgendada
+					.getIdProvaAgendada()) {
+				provaAgendada = dao
+						.buscarID(provaAgendada.getIdProvaAgendada());
 				session.setAttribute("provaParaFazer", provaAgendada);
-				model.addAttribute("QuestoesDaProvaParaFazer", qpdao.listarQuestoesDaProva(provaAgendada.getProva().getIdProva()));
-=======
-			if (provaAgendada2.getIdProvaAgendada() == id) {
-				
-				
->>>>>>> branch 'master' of https://github.com/JoseFelipeSilva/TestStudy
+				model.addAttribute("QuestoesDaProvaParaFazer", qpdao
+						.listarQuestoesDaProva(provaAgendada.getProva()
+								.getIdProva()));
 			}
 		}
-		
-	
+
 		return "resumoDaProva";
+
 	}
 
 	@RequestMapping("adicionarProvaAgendada")
