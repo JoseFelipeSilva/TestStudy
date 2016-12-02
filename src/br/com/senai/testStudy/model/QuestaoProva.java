@@ -111,8 +111,8 @@ public class QuestaoProva {
 		this.tituloQuestao = tituloQuestao;
 	}
 
-	public String getTipoQuestao() {
-		return tipoQuestao;
+	public String getTipoQuestao() { 
+		return tipoQuestao; 
 	}
 
 	public void setTipoQuestao(String tipoQuestao) {

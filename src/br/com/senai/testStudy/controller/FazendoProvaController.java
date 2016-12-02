@@ -21,14 +21,35 @@ public class FazendoProvaController {
 	}
 	
 	@RequestMapping("salvaRespostas")
-	public String salvaRespostas(Alternativa alt, Integer i, Model modelo, ProvaAgendada provaAgendada, HttpSession session){
+	public String salvaRespostas(Alternativa alt, Integer i, Model modelo, ProvaAgendada provaAgendada, HttpSession session, Integer cronometro, String escolhaBotao){
 		provaAgendada = (ProvaAgendada) session.getAttribute("provaParaFazer");	
-		Integer count = (Integer) session.getAttribute("count");
-		count = count + 1;
-		session.setAttribute("questao", provaAgendada.getProva().getQuestoes().get(count));		
-		session.setAttribute("alternativas", provaAgendada.getProva().getQuestoes().get(count).getAlternativas());
-		session.setAttribute("nQuestoes", provaAgendada.getProva().getnQuestoes());
-		session.setAttribute("count", count);
-		return "resolucaoDeProva"; 
+		if(cronometro > 0){
+			Integer count = (Integer) session.getAttribute("count");
+			// verifica se o botão pressionado foi voltar ou avançar, pois em um caso add +1 ao contador, no outro subtrai
+			if (escolhaBotao.equals("voltar")) {
+				if (count == 0) {
+					
+				}else{
+					count = count - 1;
+				}
+				
+			}else if(escolhaBotao.equals("proxima")){
+				count = count + 1;
+			}while (provaAgendada.getProva().getQuestoes().size() > count) {
+				session.setAttribute("questao", provaAgendada.getProva().getQuestoes().get(count));		
+				session.setAttribute("alternativas", provaAgendada.getProva().getQuestoes().get(count).getAlternativas());
+				session.setAttribute("nQuestoes", provaAgendada.getProva().getnQuestoes());
+				session.setAttribute("count", count);
+				session.setAttribute("duracao", cronometro);
+				return "resolucaoDeProva"; 
+			}
+			modelo.addAttribute("mensagemErro", "Você finalizou a prova");
+			return "erroAoFazerProva";
+			
+		}else{
+			modelo.addAttribute("mensagemErro", "Tempo de prova esgotado");
+			return "erroAoFazerProva";
+		}
+		
 	}
 }
