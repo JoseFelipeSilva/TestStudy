@@ -7,14 +7,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.ui.Model;
 
-import br.com.senai.testStudy.controller.AlternativaController;
 import br.com.senai.testStudy.model.Disciplina;
 import br.com.senai.testStudy.model.Materia;
 import br.com.senai.testStudy.model.Professor;

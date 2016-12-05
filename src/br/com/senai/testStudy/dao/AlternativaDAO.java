@@ -121,7 +121,6 @@ public class AlternativaDAO implements MetodosBasicos<Alternativa> {
 			stmt.setInt(1, idProvaAgendada);
 			ResultSet rs = stmt.executeQuery();
 			Map<Integer, QuestaoProva> questoesProvas = new HashMap<Integer, QuestaoProva>();
-				List<QuestaoProva> lqp = new ArrayList<QuestaoProva>(questoesProvas.values());
 				List<Alternativa> lalt = new ArrayList<Alternativa>();
 				while (rs.next()) {
 					EscolaCliente escola = new EscolaCliente();

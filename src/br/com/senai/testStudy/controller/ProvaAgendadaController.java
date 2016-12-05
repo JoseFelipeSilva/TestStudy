@@ -2,10 +2,7 @@ package br.com.senai.testStudy.controller;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
@@ -14,15 +11,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.sun.org.apache.bcel.internal.generic.LSTORE;
-
 import br.com.senai.testStudy.dao.AlternativaDAO;
 import br.com.senai.testStudy.dao.LogDAO;
 import br.com.senai.testStudy.dao.ProvaAgendadaDAO;
 import br.com.senai.testStudy.dao.ProvaDAO;
 import br.com.senai.testStudy.dao.QuestaoProvaDAO;
 import br.com.senai.testStudy.dao.TurmaDAO;
-import br.com.senai.testStudy.model.Alternativa;
 import br.com.senai.testStudy.model.Professor;
 import br.com.senai.testStudy.model.Prova;
 import br.com.senai.testStudy.model.ProvaAgendada;
@@ -105,16 +99,17 @@ public class ProvaAgendadaController {
 	public String resolverProva(Model modelo, HttpSession session, ProvaAgendada provaAgendada){
 		provaAgendada = (ProvaAgendada) session.getAttribute("provaParaFazer");	
 		LocalDateTime hoje = LocalDateTime.now();
-		Integer dia, mes, ano, hora, minuto;
-		dia = hoje.getDayOfMonth();
-		mes = hoje.getMonthValue();
-		ano = hoje.getYear();
-		hora = hoje.getHour();
-		minuto = hoje.getMinute();
+//		Integer dia, mes, ano, hora, minuto;
+//		dia = hoje.getDayOfMonth();
+//		mes = hoje.getMonthValue();
+//		ano = hoje.getYear();
+//		hora = hoje.getHour();
+//		minuto = hoje.getMinute();
 		
-		if (provaAgendada.getDataInicio().getYear() == ano) {
-			if(provaAgendada.getDataInicio().getMonthValue() == mes){
-				if(provaAgendada.getDataInicio().getDayOfMonth() < dia && provaAgendada.getDataTermino().getDayOfMonth() > dia){		
+		// comparacao para saber se a data esta entre (antes, depois ou exatamente)
+		if ((provaAgendada.getDataInicio().isAfter(hoje)||provaAgendada.getDataInicio().isEqual(hoje)) && (provaAgendada.getDataTermino().isBefore(hoje)||provaAgendada.getDataTermino().isEqual(hoje))) {
+//			if(provaAgendada.getDataInicio().getMonthValue() == mes){
+//				if(provaAgendada.getDataInicio().getDayOfMonth() < dia && provaAgendada.getDataTermino().getDayOfMonth() > dia){		
 							Integer count = 0;		
 							session.setAttribute("questao", provaAgendada.getProva().getQuestoes().get(0));		
 							session.setAttribute("alternativas", provaAgendada.getProva().getQuestoes().get(0).getAlternativas());
@@ -122,12 +117,12 @@ public class ProvaAgendadaController {
 							session.setAttribute("count", count);
 							session.setAttribute("duracao", provaAgendada.getDuracao());
 							return "resolucaoDeProva"; 
-				}
-				modelo.addAttribute("mensagemErro", "Prova fora da data");
-				return "erroAoFazerProva";
-			}
-			modelo.addAttribute("mensagemErro", "Prova fora da data");
-			return "erroAoFazerProva";
+//				}
+//				modelo.addAttribute("mensagemErro", "Prova fora da data");
+//				return "erroAoFazerProva";
+//			}
+//			modelo.addAttribute("mensagemErro", "Prova fora da data");
+//			return "erroAoFazerProva";
 		}
 		modelo.addAttribute("mensagemErro", "Prova fora da data");
 		return "erroAoFazerProva";

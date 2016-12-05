@@ -5,8 +5,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import br.com.senai.testStudy.controller.AlunoController;
-
 public class AutorizaLogin extends HandlerInterceptorAdapter {
 
 	@Override

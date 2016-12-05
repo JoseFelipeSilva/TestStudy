@@ -1,8 +1,6 @@
 package br.com.senai.testStudy.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -14,10 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import br.com.senai.testStudy.dao.AlunoDAO;
 import br.com.senai.testStudy.dao.LogDAO;
-import br.com.senai.testStudy.dao.ProvaAgendadaDAO;
 import br.com.senai.testStudy.dao.TurmaDAO;
 import br.com.senai.testStudy.model.Aluno;
-import br.com.senai.testStudy.model.ProvaAgendada;
 import br.com.senai.testStudy.model.Turma;
 import br.com.senai.testStudy.util.Util;
 

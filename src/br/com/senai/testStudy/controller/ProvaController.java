@@ -1,6 +1,5 @@
 package br.com.senai.testStudy.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -16,7 +15,6 @@ import br.com.senai.testStudy.dao.ProfessorDAO;
 import br.com.senai.testStudy.dao.ProvaDAO;
 import br.com.senai.testStudy.dao.QuestaoProvaDAO;
 import br.com.senai.testStudy.model.Disciplina;
-import br.com.senai.testStudy.model.Materia;
 import br.com.senai.testStudy.model.Professor;
 import br.com.senai.testStudy.model.Prova;
 import br.com.senai.testStudy.model.QuestaoProva;

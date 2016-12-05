@@ -10,10 +10,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-
-
 import br.com.senai.testStudy.model.FazendoProva;
-import br.com.senai.testStudy.util.MetodosBasicos;
 
 @Repository
 public class FazendoProvaDAO  {

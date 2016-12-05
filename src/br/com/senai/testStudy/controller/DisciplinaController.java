@@ -11,7 +11,6 @@ import br.com.senai.testStudy.dao.DisciplinaDAO;
 import br.com.senai.testStudy.dao.LogDAO;
 import br.com.senai.testStudy.model.Coordenador;
 import br.com.senai.testStudy.model.Disciplina;
-import br.com.senai.testStudy.model.EscolaCliente;
 import br.com.senai.testStudy.util.Util;
 
 @Controller
