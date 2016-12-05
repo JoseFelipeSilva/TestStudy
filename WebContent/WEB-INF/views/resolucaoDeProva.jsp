@@ -12,10 +12,23 @@
 	// Tempo em segundos
 	var tempo = ${duracao};
 	function start() {
-
 		if ((tempo - 1) >= 0) {
+			// pega os minutos
+			var min = parseInt(tempo/60);
+			// pega os segundos
+			
+			 if(min < 10){
+				min = "0"+min;
+				min = min.substr(0, 2);
+			}
+			if(seg <=9){
+				seg = "0"+seg;
+			}
+
+			var seg = tempo%60;
 			tempo = tempo - 1;
-			document.getElementById("contador").value = tempo;
+			horaImprimivel = min + ':' + seg;
+			document.getElementById("contador").value = horaImprimivel;
 			setTimeout('start();', 1000);
 		} else {
 			tempo = 0;

@@ -34,7 +34,6 @@ public class ProvaAgendadaController {
 	private final AlternativaDAO idao;
 
 	@Autowired
-
 	public ProvaAgendadaController(QuestaoProvaDAO qpdao, TurmaDAO tdao,
 			ProvaAgendadaDAO dao, ProvaDAO pdao, LogDAO ldao,
 			AlternativaDAO idao) {
@@ -62,23 +61,30 @@ public class ProvaAgendadaController {
 		List<ProvaAgendada> notificacao = (List<ProvaAgendada>) session
 				.getAttribute("notificacoes");
 
-		List<QuestaoProva>questoes = new ArrayList<QuestaoProva>();
-		for (ProvaAgendada provaAgendada2 : notificacao) {			
-				if (provaAgendada2.getIdProvaAgendada() == provaAgendada.getIdProvaAgendada()) {
-	  				provaAgendada = dao.buscarID(provaAgendada.getIdProvaAgendada());
-	 				session.setAttribute("provaParaFazer", provaAgendada);
-	 				questoes = qpdao.listarQuestoesDaProva(provaAgendada.getProva().getIdProva());
-	 				model.addAttribute("QuestoesDaProvaParaFazer", questoes);
-	 				provaAgendada.getProva().setQuestoes(questoes);
-	 				for (int i = 0; i < questoes.size(); i++) {
-	 						provaAgendada.getProva().getQuestoes().get(i).setAlternativas(idao.listarPorQuestao(questoes.get(i).getIdQuestaoProva()));
-	 				}
-	 				
-	  			} 
+		List<QuestaoProva> questoes = new ArrayList<QuestaoProva>();
+		for (ProvaAgendada provaAgendada2 : notificacao) {
+			if (provaAgendada2.getIdProvaAgendada() == provaAgendada
+					.getIdProvaAgendada()) {
+				provaAgendada = dao
+						.buscarID(provaAgendada.getIdProvaAgendada());
 				session.setAttribute("provaParaFazer", provaAgendada);
-			}
+				questoes = qpdao.listarQuestoesDaProva(provaAgendada.getProva()
+						.getIdProva());
+				model.addAttribute("QuestoesDaProvaParaFazer", questoes);
+				provaAgendada.getProva().setQuestoes(questoes);
+				for (int i = 0; i < questoes.size(); i++) {
+					provaAgendada
+							.getProva()
+							.getQuestoes()
+							.get(i)
+							.setAlternativas(
+									idao.listarPorQuestao(questoes.get(i)
+											.getIdQuestaoProva()));
+				}
 
-		
+			}
+			session.setAttribute("provaParaFazer", provaAgendada);
+		}
 
 		Util.addLog(session, ldao, this);
 		return "resumoDaProva";
@@ -94,67 +100,41 @@ public class ProvaAgendadaController {
 		Util.addLog(session, ldao, this);
 		return "sucessoPage";
 	}
-	
+
 	@RequestMapping("resolverProva")
-	public String resolverProva(Model modelo, HttpSession session, ProvaAgendada provaAgendada){
-		provaAgendada = (ProvaAgendada) session.getAttribute("provaParaFazer");	
+	public String resolverProva(Model modelo, HttpSession session,
+			ProvaAgendada provaAgendada) {
+		provaAgendada = (ProvaAgendada) session.getAttribute("provaParaFazer");
 		LocalDateTime hoje = LocalDateTime.now();
-//		Integer dia, mes, ano, hora, minuto;
-//		dia = hoje.getDayOfMonth();
-//		mes = hoje.getMonthValue();
-//		ano = hoje.getYear();
-//		hora = hoje.getHour();
-//		minuto = hoje.getMinute();
-		
-		// comparacao para saber se a data esta entre (antes, depois ou exatamente)
-		if ((provaAgendada.getDataInicio().isAfter(hoje)||provaAgendada.getDataInicio().isEqual(hoje)) && (provaAgendada.getDataTermino().isBefore(hoje)||provaAgendada.getDataTermino().isEqual(hoje))) {
-//			if(provaAgendada.getDataInicio().getMonthValue() == mes){
-//				if(provaAgendada.getDataInicio().getDayOfMonth() < dia && provaAgendada.getDataTermino().getDayOfMonth() > dia){		
-							Integer count = 0;		
-							session.setAttribute("questao", provaAgendada.getProva().getQuestoes().get(0));		
-							session.setAttribute("alternativas", provaAgendada.getProva().getQuestoes().get(0).getAlternativas());
-							session.setAttribute("nQuestoes", provaAgendada.getProva().getnQuestoes());
-							session.setAttribute("count", count);
-							session.setAttribute("duracao", provaAgendada.getDuracao());
-							return "resolucaoDeProva"; 
-//				}
-//				modelo.addAttribute("mensagemErro", "Prova fora da data");
-//				return "erroAoFazerProva";
-//			}
-//			modelo.addAttribute("mensagemErro", "Prova fora da data");
-//			return "erroAoFazerProva";
+		Integer dia, mes, ano, hora, minuto;
+		dia = hoje.getDayOfMonth();
+		mes = hoje.getMonthValue();
+		ano = hoje.getYear();
+		hora = hoje.getHour();
+		minuto = hoje.getMinute();
+
+		if (provaAgendada.getDataInicio().getYear() == ano) {
+			if (provaAgendada.getDataInicio().getMonthValue() == mes) {
+				if (provaAgendada.getDataInicio().getDayOfMonth() <= dia
+						&& provaAgendada.getDataTermino().getDayOfMonth() >= dia) {
+					Integer count = 0;
+					session.setAttribute("questao", provaAgendada.getProva()
+							.getQuestoes().get(0));
+					session.setAttribute("alternativas", provaAgendada
+							.getProva().getQuestoes().get(0).getAlternativas());
+					session.setAttribute("nQuestoes", provaAgendada.getProva()
+							.getnQuestoes());
+					session.setAttribute("count", count);
+					session.setAttribute("duracao", provaAgendada.getDuracao() * 60);
+					return "resolucaoDeProva";
+				}
+				modelo.addAttribute("mensagemErro", "Prova fora da data");
+				return "erroAoFazerProva";
+			}
+			modelo.addAttribute("mensagemErro", "Prova fora da data");
+			return "erroAoFazerProva";
 		}
 		modelo.addAttribute("mensagemErro", "Prova fora da data");
 		return "erroAoFazerProva";
 	}
 }
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

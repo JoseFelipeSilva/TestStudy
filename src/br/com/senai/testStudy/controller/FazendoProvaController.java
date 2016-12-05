@@ -21,9 +21,12 @@ public class FazendoProvaController {
 	}
 	
 	@RequestMapping("salvaRespostas")
-	public String salvaRespostas(Alternativa alt, Integer i, Model modelo, ProvaAgendada provaAgendada, HttpSession session, Integer cronometro, String escolhaBotao){
+	public String salvaRespostas(Alternativa alt, Integer i, Model modelo, ProvaAgendada provaAgendada, HttpSession session, String cronometro, String escolhaBotao){
 		provaAgendada = (ProvaAgendada) session.getAttribute("provaParaFazer");	
-		if(cronometro > 0){
+		String[] cronometroSeparado = cronometro.split(":");
+		Integer min = Integer.valueOf(cronometroSeparado[0]);
+		Integer seg = Integer.valueOf(cronometroSeparado[1]);
+		if(min > 0){
 			Integer count = (Integer) session.getAttribute("count");
 			// verifica se o botão pressionado foi voltar ou avançar, pois em um caso add +1 ao contador, no outro subtrai
 			if (escolhaBotao.equals("voltar")) {
@@ -40,7 +43,7 @@ public class FazendoProvaController {
 				session.setAttribute("alternativas", provaAgendada.getProva().getQuestoes().get(count).getAlternativas());
 				session.setAttribute("nQuestoes", provaAgendada.getProva().getnQuestoes());
 				session.setAttribute("count", count);
-				session.setAttribute("duracao", cronometro);
+				session.setAttribute("duracao", (min * 60) + seg);
 				return "resolucaoDeProva"; 
 			}
 			modelo.addAttribute("mensagemErro", "Você finalizou a prova");
