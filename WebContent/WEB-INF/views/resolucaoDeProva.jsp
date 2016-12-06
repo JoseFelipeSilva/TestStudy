@@ -39,7 +39,7 @@
 	function botao(botaoSelecionado) {
 		var escolha = botaoSelecionado.value;
 		document.getElementById("escolhaBotao").value = escolha;
-
+		
 	}
 
 	/* 
@@ -128,6 +128,8 @@
 			<p>Numero de questões: ${nQuestoes + 1}</p>
 			<input type="hidden" value="l" id="escolhaBotao" name="escolhaBotao">
 			<p>
+			
+			<input type="hidden" name="alternativaSelecionada">
 				<strong>Corpo da questão</strong>
 			<p>
 			<p>${questao.corpoQuestao }</p>
@@ -136,7 +138,7 @@
 			</p>
 			<c:forEach items="${alternativas }" var="alt">
 				<input type="radio" value="${alt.idAlternativa }"
-					name="idAlternativa"> ${alt.corpoAlternativa }
+					name="altSelecionada"> ${alt.corpoAlternativa }
 			</c:forEach>
 			<br> <input type="text" id="contador" name="cronometro">
 			<input type="submit" value="proxima"

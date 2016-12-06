@@ -39,6 +39,7 @@ public class AlternativaDAO implements MetodosBasicos<Alternativa> {
 			+ "AND questao_prova.id_questao = alternativa.id_questao AND prova_agendada.id_turma = turma.id_turma"
 			+ " AND prova.id_professor = professor.id_professor AND turma.id_escola = escola_cliente.id_escola_cliente"
 			+ " AND prova_agendada.id_prova_agendada = ? group by alternativa.id_alternativa"; 
+	private static final String BUSCA_ID = "select * from alternativa WHERE id_alternativa = ?";
 	private Integer i = 0;
 
 	@Autowired
@@ -85,8 +86,22 @@ public class AlternativaDAO implements MetodosBasicos<Alternativa> {
 
 	@Override
 	public Alternativa buscarID(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		Alternativa alt = new Alternativa();
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(BUSCA_ID);
+			stmt.setInt(1, id);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				alt.setIdAlternativa(rs.getInt("id_alternativa"));
+				alt.setCerta(rs.getString("certa_prova"));
+				alt.setCorpoAlternativa("corpo_alternativa");
+			}
+			rs.close();
+			stmt.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return alt;
 	}
 	
 	// método responsável por buscar as alternativas de acordo com o id da questão

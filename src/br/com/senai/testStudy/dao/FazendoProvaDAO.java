@@ -18,6 +18,7 @@ public class FazendoProvaDAO  {
 	private static final String ADICIONAR = "INSERT INTO fazendo_prova (id_aluno, id_questao_prova, resposta, id_alternativa, id_prova_agendada)"
 			+ "VALUES(?, ?, ?, ?, ?)";
 	
+	
 	@Autowired
 	public FazendoProvaDAO (DataSource dataSource){
 		try {
@@ -28,7 +29,7 @@ public class FazendoProvaDAO  {
 	}
 
 
-	public void adicionar(FazendoProva fazendoProva, Integer i, Integer j) {
+	public void adicionar(FazendoProva fazendoProva, Integer i) {
 		try {
 			PreparedStatement stmt = CONEXAO.prepareStatement(ADICIONAR);
 			stmt.setInt(1, fazendoProva.getAluno().getIdAluno());
