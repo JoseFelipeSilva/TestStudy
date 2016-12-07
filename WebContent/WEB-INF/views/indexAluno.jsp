@@ -45,10 +45,11 @@ function aparecerProvas() {
 		<a href="fazerProvaAgendada?idProvaAgendada=${i.idProvaAgendada}">${i.prova.nomeProva }</a>
 		</div>
 		</c:forEach>
+		
 	</div>
 	<!-- -------------------------------------------------------------------------------------------------------------- -->
 	<br /><br /><br />
-	
+	<p><a href="gerarEstatisticas">Visualizar estatísticas</a></p>
 	<!-- Navigation -->
     <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
     <nav id="sidebar-wrapper">

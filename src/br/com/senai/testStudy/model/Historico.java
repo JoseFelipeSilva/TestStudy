@@ -1,15 +1,17 @@
 package br.com.senai.testStudy.model;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Historico {
 	private Integer idHistorico;
 	private Aluno aluno;
 	private Prova prova;
 	private Double notaProva;
-	private Date dataProvaHistorico;
+	private LocalDateTime dataProvaHistorico;
 	private Double notaSimulado;
-	private Date dataSimuladoHistorico;
+	private LocalDateTime dataSimuladoHistorico;
 
 	public Integer getIdHistorico() {
 		return idHistorico;
@@ -43,11 +45,11 @@ public class Historico {
 		this.notaProva = notaProva;
 	}
 
-	public Date getDataProvaHistorico() {
+	public LocalDateTime getDataProvaHistorico() {
 		return dataProvaHistorico;
 	}
 
-	public void setDataProvaHistorico(Date dataProvaHistorico) {
+	public void setDataProvaHistorico(LocalDateTime dataProvaHistorico) {
 		this.dataProvaHistorico = dataProvaHistorico;
 	}
 
@@ -59,11 +61,11 @@ public class Historico {
 		this.notaSimulado = notaSimulado;
 	}
 
-	public Date getDataSimuladoHistorico() {
+	public LocalDateTime getDataSimuladoHistorico() {
 		return dataSimuladoHistorico;
 	}
 
-	public void setDataSimuladoHistorico(Date dataSimuladoHistorico) {
+	public void setDataSimuladoHistorico(LocalDateTime dataSimuladoHistorico) {
 		this.dataSimuladoHistorico = dataSimuladoHistorico;
 	}
 

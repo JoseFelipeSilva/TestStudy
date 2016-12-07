@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import br.com.senai.testStudy.dao.AlternativaDAO;
 import br.com.senai.testStudy.dao.FazendoProvaDAO;
+import br.com.senai.testStudy.dao.HistoricoDAO;
 import br.com.senai.testStudy.dao.LogDAO;
 import br.com.senai.testStudy.model.Alternativa;
 import br.com.senai.testStudy.model.Aluno;
 import br.com.senai.testStudy.model.FazendoProva;
+import br.com.senai.testStudy.model.Historico;
 import br.com.senai.testStudy.model.ProvaAgendada;
 import br.com.senai.testStudy.util.Util;
 
@@ -25,13 +27,15 @@ public class FazendoProvaController {
 	private final FazendoProvaDAO DAO;
 	private final LogDAO LDAO;
 	private final AlternativaDAO ADAO;
+	private final HistoricoDAO HDAO;
 	List<String> certaOuErrada = new ArrayList<String>();
 	@Autowired
 	public FazendoProvaController(FazendoProvaDAO DAO, LogDAO LDAO,
-			AlternativaDAO ADAO) {
+			AlternativaDAO ADAO, HistoricoDAO HDAO) {
 		this.DAO = DAO;
 		this.LDAO = LDAO;
 		this.ADAO = ADAO;
+		this.HDAO = HDAO;
 	}
 
 	@RequestMapping("salvaRespostas")
@@ -105,8 +109,49 @@ public class FazendoProvaController {
 		}
 		nota = nota/certasOuErradas.size();
 		nota = nota*100;
-		System.out.println(nota);
-		return "";
+		session.setAttribute("nota", nota);
+		Aluno a = new Aluno();
+		Historico h = new Historico();
+		a = (Aluno) session.getAttribute("alunoLogon");
+		ProvaAgendada provaAgendada = (ProvaAgendada) session.getAttribute("provaParaFazer");
+		
+		h.setAluno(a);
+		h.setNotaProva(nota);
+		h.setProva(provaAgendada.getProva());
+		h.setNotaSimulado(0.0);
+		HDAO.adicionar(h);
+		Util.addLog(session, LDAO, this);
+		return "relatorio";
+	}
+	
+	@RequestMapping("gerarEstatisticas")
+	public String gerarEstatistica(HttpSession session, Model model){
+		Historico h = new Historico();
+		Aluno a = new Aluno();
+		Integer provasFeitas = null;
+		a = (Aluno) session.getAttribute("alunoLogon");
+		h.setAluno(a);
+		List<Historico> dados = HDAO.buscaPorAluno(h);
+		
+		return "paginaEstatistica";
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
