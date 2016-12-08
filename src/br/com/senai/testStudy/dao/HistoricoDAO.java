@@ -34,9 +34,10 @@ public class HistoricoDAO implements MetodosBasicos<Historico> {
 			+ "h.id_aluno, h.id_prova, p.nome_prova, p.id_prova, a.nome_aluno, a.id_aluno FROM historico AS h, prova AS p, aluno AS a WHERE "
 			+ "h.id_prova = p.id_prova AND h.id_aluno = a.id_aluno AND h.id_historico = ?";
 	private final static String EXCLUIR = "DELETE FROM historico WHERE id_historico = ?";
-	private final static String BUSCAR_POR_ALUNO = "SELECT * FROM historico, aluno, prova, turma, escola_cliente, professor"
-			+ " WHERE aluno.id_aluno = historico.id_aluno AND professor.id_professor = prova.id_professor AND historico.id_prova"
-			+ " = prova.id_prova AND escola_cliente.id_escola_cliente = turma.id_escola AND turma.id_turma = aluno.id_turma AND aluno.id_aluno = ?";
+	private final static String BUSCA_MAIOR_50 = "select count((nota_prova)) from historico where nota_prova > 50";
+	private final static String BUSCA_MENOR_50 = "select count((nota_prova)) from historico where nota_prova < 50";
+	private final static String BUSCA_ESTE_ANO = "select count((nota_prova)) from historico where (year(data_prova_historico)=year(now()))";
+	private final static String BUSCA_TOTAIS = "select count((nota_prova)) from historico";
 
 	// CONEXAO
 	private final Connection CONEXAO;
@@ -181,79 +182,67 @@ public class HistoricoDAO implements MetodosBasicos<Historico> {
 		}
 	}
 	
-	public List<Historico> buscaPorAluno(Historico h){
-		List<Historico> historicos = new ArrayList<Historico>();
+	public Integer buscarMaior(){
+		Integer notaMaior50 = null;
 		try {
-			PreparedStatement stmt = CONEXAO.prepareStatement(BUSCAR_POR_ALUNO);
-			stmt.setInt(1, h.getAluno().getIdAluno());
+			PreparedStatement stmt = CONEXAO.prepareStatement(BUSCA_MAIOR_50);
 			ResultSet rs = stmt.executeQuery();
-			while (rs.next()) {
-				Prova p = new Prova();
-				Aluno a = new Aluno();
-				Turma t = new Turma();
-				Professor prof = new Professor();
-				EscolaCliente e = new EscolaCliente();
-				h = new Historico();
-				
-				e.setIdEmp(rs.getInt("id_escola_cliente"));
-				e.setNomeEmp(rs.getString("nome_emp"));
-				e.setEmailEmp(rs.getString("email_emp"));
-				e.setCnpjEmp(rs.getString("cnpj_emp"));
-				e.setTelefoneEmp(rs.getString("telefone_emp"));
-				e.setNomeEmpresarialEmp(rs.getString("razao_social_emp"));
-				
-				t.setIdTurma(rs.getInt("id_turma"));
-				t.setNomeTurma(rs.getString("nome_turma"));
-				t.setEscolaTurma(e);
-				
-				a.setIdAluno(rs.getInt("id_aluno"));
-				a.setNomeAluno(rs.getString("nome_aluno"));
-				a.setEmail(rs.getString("email_aluno"));
-				a.setSenha(rs.getString("senha_aluno"));
-				a.setSexoAluno(rs.getString("sexo_aluno"));
-				a.setRgAluno(rs.getString("rg_aluno"));
-				a.setNascAluno(rs.getDate("nascimento_aluno"));
-				a.setFotoAluno(rs.getBytes("foto_aluno"));
-				a.setTurmaAluno(t);
-				
-				prof.setIdProfessor(rs.getInt("id_professor"));
-				prof.setNome(rs.getString("nome_professor"));
-				prof.setEmail(rs.getString("email_professor"));
-				prof.setSenha(rs.getString("senha_professor"));
-				prof.setCpf(rs.getString("cpf_professor"));
-				prof.setRg(rs.getString("rg_professor"));
-				prof.setSexo(rs.getString("sexo_professor"));
-				prof.setFoto(rs.getBytes("foto_professor"));
-				prof.setNascimento(rs.getDate("nascimento_professor"));
-				prof.setEscolaProfessor(e);
-				
-				p.setDificuldadeDE(rs.getInt("dificuldade"));
-				p.setNomeProva(rs.getString("nome_prova"));
-				p.setnQuestoes(rs.getInt("n_questoes"));
-				p.setIdProva(rs.getInt("id_prova"));
-				p.setCriacaoProva(rs.getDate("data_prova"));
-				p.setProfessor(prof);
-				
-				h.setAluno(a);
-				h.setNotaProva(rs.getDouble("nota_prova"));
-				h.setProva(p);
-				h.setNotaSimulado(rs.getDouble("nota_simulado"));
-				h.setIdHistorico(rs.getInt("id_historico"));
-				h.setDataProvaHistorico(rs.getTimestamp("data_simulado_historico").toLocalDateTime());
-				h.setDataSimuladoHistorico(rs.getTimestamp("data_simulado_historico").toLocalDateTime());
-				
-				historicos.add(h);			
-				
-				// TODO alterar isso pra isso
-				//select count((nota_prova)) from historico where nota_prova > 50;
-				//select count((nota_prova)) from historico where nota_prova < 50;
-				//select count((nota_prova)) from historico where (year(data_prova_historico)=year(now()));
+			if (rs.next()) {
+				notaMaior50 = rs.getInt("count((nota_prova))");
 			}
 			stmt.close();
-			rs.close();
+			
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
-		return historicos;
+		return notaMaior50;
+	}
+	
+	public Integer buscarMenor(){
+		Integer notaMenor50 = null;
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(BUSCA_MENOR_50);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				notaMenor50 = rs.getInt("count((nota_prova))");
+			}
+			stmt.close();
+			
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return notaMenor50;
+	}
+	
+	public Integer buscaProvasEsteAno(){
+		Integer provasEsteAno = null;
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(BUSCA_TOTAIS);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				provasEsteAno = rs.getInt("count((nota_prova))");
+			}
+			stmt.close();
+			
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return provasEsteAno;
+	}
+	
+	public Integer buscarProvasTotais(){
+		Integer provasTotais = null;
+		try {
+			PreparedStatement stmt = CONEXAO.prepareStatement(BUSCA_ESTE_ANO);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				provasTotais = rs.getInt("count((nota_prova))");
+			}
+			stmt.close();
+			
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return provasTotais;
 	}
 }

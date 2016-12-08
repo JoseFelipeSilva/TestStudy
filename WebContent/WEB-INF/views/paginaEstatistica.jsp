@@ -10,6 +10,10 @@
 ${demo.css}
 		</style>
 		<script type="text/javascript">
+		var totais = ${provasTotais};
+		var esteAno = ${provasEsteAno};
+		var maior = ${maiorQue50};
+		var menor = ${menorQue50};
 $(function () {
     // Create the chart
     Highcharts.chart('container', {
@@ -54,16 +58,16 @@ $(function () {
             colorByPoint: true,
             data: [{
                 name: 'Provas feitas',
-                y: 10,
+                y: totais,
             }, {
                 name: 'Provas Feitas este ano',
-                y: 5,
+                y: esteAno,
             }, {
                 name: 'Quantidade de notas acima de 50',
-                y: 3,
+                y: maior,
             },{
             	name: 'Quantidade de notas Abaixo de 50',
-            	y:4,
+            	y:menor,
            
             }]
         }],

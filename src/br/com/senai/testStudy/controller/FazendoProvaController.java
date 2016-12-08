@@ -131,8 +131,15 @@ public class FazendoProvaController {
 		Integer provasFeitas = null;
 		a = (Aluno) session.getAttribute("alunoLogon");
 		h.setAluno(a);
-		List<Historico> dados = HDAO.buscaPorAluno(h);
+		Integer maior = HDAO.buscarMaior();
+		Integer menor = HDAO.buscarMenor();
+		Integer provasEsteAno = HDAO.buscaProvasEsteAno();
+		Integer provasTotais = HDAO.buscarProvasTotais();
 		
+		model.addAttribute("maiorQue50", maior);
+		model.addAttribute("menorQue50", menor);
+		model.addAttribute("provasEsteAno", provasEsteAno);
+		model.addAttribute("provasTotais", provasTotais);
 		return "paginaEstatistica";
 	}
 
