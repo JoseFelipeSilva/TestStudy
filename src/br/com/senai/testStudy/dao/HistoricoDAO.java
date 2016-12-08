@@ -24,7 +24,7 @@ import br.com.senai.testStudy.util.MetodosBasicos;
 @Repository
 public class HistoricoDAO implements MetodosBasicos<Historico> {
 	private final static String ADD = "INSERT INTO historico (id_aluno, id_prova, nota_prova, data_prova_historico, nota_simulado, "
-			+ "data_simulado_historico) VALUES (?, ?, ?, now(), ?, ?)";
+			+ "data_simulado_historico) VALUES (?, ?, ?, now(), ?, now())";
 	private final static String ALTERAR = "UPDATE historico SET id_aluno = ?, id_prova = ?, nota_prova = ?, data_prova_historico = ?, "
 			+ "nota_simulado = ?, data_simulado_historico = ? WHERE id_historico = ?";
 	private final static String LISTAR = "SELECT h.id_historico, h.nota_prova, h.data_prova_historico, h.nota_simulado, h.data_simulado_historico, "
@@ -55,12 +55,10 @@ public class HistoricoDAO implements MetodosBasicos<Historico> {
 	public void adicionar(Historico historico) {
 		try {
 			PreparedStatement stmt = CONEXAO.prepareStatement(ADD);
-			Timestamp dI = Timestamp.valueOf(historico.getDataSimuladoHistorico());
 			stmt.setInt(1, historico.getAluno().getIdAluno());
 			stmt.setInt(2, historico.getProva().getIdProva());
 			stmt.setDouble(3, historico.getNotaProva());
 			stmt.setDouble(4, historico.getNotaSimulado());
-			stmt.setTimestamp(5, dI);
 
 			stmt.execute();
 			stmt.close();
@@ -244,10 +242,7 @@ public class HistoricoDAO implements MetodosBasicos<Historico> {
 				
 				historicos.add(h);			
 				
-				// TODO alterar isso pra isso
-				//select count((nota_prova)) from historico where nota_prova > 50;
-				//select count((nota_prova)) from historico where nota_prova < 50;
-				//select count((nota_prova)) from historico where (year(data_prova_historico)=year(now()));
+				
 			}
 			stmt.close();
 			rs.close();
